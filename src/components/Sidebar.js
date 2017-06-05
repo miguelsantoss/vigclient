@@ -16,26 +16,26 @@ const MenuItem = ({ meta, children, ...rest }) => (
 );
 
 MenuItem.propTypes = {
-  activeClassName: PropTypes.string,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  meta: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
+    activeClassName: PropTypes.string,
+    children: PropTypes.node,
+    className: PropTypes.string,
+    meta: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired,
 };
 
 MenuItem.defaultProps = {
-  activeClassName: 'active',
-  className: 'item',
+    activeClassName: 'active',
+    className: 'item',
 };
 
 const selectedItemLabel = <span style={{ color: '#35bdb2', float: 'right' }}>Press Enter</span>;
 
 class Sidebar extends Component {
     static propTypes = {
-      match: PropTypes.object.isRequired,
-      location: PropTypes.object.isRequired,
-      history: PropTypes.object.isRequired,
-      style: PropTypes.object,
+        match: PropTypes.object.isRequired,
+        location: PropTypes.object.isRequired,
+        history: PropTypes.object.isRequired,
+        style: PropTypes.object,
     }
     state = { query: '' }
     render () {
