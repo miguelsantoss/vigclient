@@ -1,20 +1,14 @@
-import React from 'react'
-import {
-  BrowserRouter,
-  Route,
-  Redirect,
-  Switch,
-} from 'react-router-dom'
-import Layout from './components/Layout'
-import Audits from './pages/Audits'
-import Machines from './pages/Machines'
-import Home from './pages/Home'
-import Login from './pages/Login'
-import PageNotFound from './pages/PageNotFound'
+import React from 'react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Layout from './components/Layout';
+import Audits from './pages/Audits';
+import Machines from './pages/Machines';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import PageNotFound from './pages/PageNotFound';
 
 const Router = () => (
   <BrowserRouter>
-    <Switch>
       <Layout>
         <Switch>
           <Route exact path='/' component={Home} />
@@ -24,8 +18,7 @@ const Router = () => (
           <Route exact path='/*' component={PageNotFound} />
         </Switch>
       </Layout>
-    </Switch>
   </BrowserRouter>
-)
+);
 
 export default Router;

@@ -1,10 +1,10 @@
-import React from 'react'
-import { Grid, Segment, Header, Icon } from 'semantic-ui-react'
+import React from 'react';
+
 
 const PageNotFound = () => (
   <div>
     <h1>Page not found 404</h1>
   </div>
-)
+);
 
-export default PageNotFound
+export default PageNotFound;
