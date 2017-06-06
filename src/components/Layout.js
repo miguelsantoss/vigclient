@@ -3,18 +3,36 @@ import Sidebar from './Sidebar';
 import Appbar from './Appbar';
 import { Grid } from 'semantic-ui-react';
 
-const style = {
-    marginLeft: '150px',
+const style = {};
+const sidebarWidth = 220;
+
+style.grid = {
+    marginLeft: sidebarWidth + 'px',
     marginRight: '50px',
     paddingLeft: '50px'
 };
+
+style.menu = {
+  position: 'fixed',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  width: sidebarWidth,
+  paddingBottom: '1em',
+  // match menu background
+  // prevents a white background when items are filtered out by search
+  background: '#1B1C1D',
+  overflowY: 'scroll',
+}
+
+
 export default class Layout extends Component {
     render () {
         return (
         <div>
             <Appbar />
-            <Sidebar />
-            <Grid style={style}>
+            <Sidebar style={style.menu}/>
+            <Grid style={style.grid}>
                 <Grid.Row>
                     <Grid.Column>
                         {this.props.children}
