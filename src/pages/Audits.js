@@ -1,7 +1,8 @@
 import React from 'react';
 import { Icon, Table } from 'semantic-ui-react';
 
-const Audits = ({ match }) => (
+const Audits = ({ match, props }) => {
+  return (
     <Table celled>
       <Table.Header>
         <Table.Row>
@@ -12,7 +13,7 @@ const Audits = ({ match }) => (
       </Table.Header>
       <Table.Body>
         <Table.Row positive>
-          <Table.Cell>Delta</Table.Cell>
+          <Table.Cell>Delta {match.params.id}</Table.Cell>
           <Table.Cell>
             <Icon name='checkmark' />
             Completed
@@ -44,5 +45,6 @@ const Audits = ({ match }) => (
       </Table.Body>
     </Table>
 );
+}
 
 export default Audits;

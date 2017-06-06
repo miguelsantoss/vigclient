@@ -31,7 +31,7 @@ export default class Layout extends Component {
         return (
         <div>
             <Appbar />
-            <Sidebar style={style.menu}/>
+            <Sidebar audits={this.props.audits} style={style.menu}/>
             <Grid style={style.grid}>
                 <Grid.Row>
                     <Grid.Column>
