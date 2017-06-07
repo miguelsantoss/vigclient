@@ -9,7 +9,10 @@ export default class AppBar extends Component {
     render () {
         const { activeItem } = this.state;
         return (
-          <Menu inverted>
+          <Menu inverted style={this.props.style}>
+            <Menu.Item name='user' >
+              {this.props.client.name}
+            </Menu.Item>
             <Menu.Item position='right' name='user' active={activeItem === 'browse'} onClick={this.handleItemClick} as={NavLink} to='/login'>
               Log Out
             </Menu.Item>

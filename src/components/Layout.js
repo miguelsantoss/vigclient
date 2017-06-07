@@ -6,8 +6,16 @@ import { Grid } from 'semantic-ui-react';
 const style = {};
 const sidebarWidth = 220;
 
+style.main = {
+    marginLeft: sidebarWidth,
+}
+
+style.appbar = {
+    borderRadius: 0,
+}
+
 style.grid = {
-    marginLeft: sidebarWidth + 'px',
+    //marginLeft: sidebarWidth + 'px',
     marginRight: '50px',
     paddingLeft: '50px'
 };
@@ -30,15 +38,17 @@ export default class Layout extends Component {
     render () {
         return (
         <div>
-            <Appbar />
             <Sidebar audits={this.props.audits} style={style.menu}/>
-            <Grid style={style.grid}>
-                <Grid.Row>
-                    <Grid.Column>
-                        {this.props.children}
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+            <div style={style.main}>
+                <Appbar style={style.appbar} client={this.props.client} />
+                <Grid style={style.grid}>
+                    <Grid.Row>
+                        <Grid.Column>
+                            {this.props.children}
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </div>
         </div>
         );
     }

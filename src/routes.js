@@ -37,7 +37,7 @@ let MachinesWrapper = ({match}) => {
 
 const Router = () => (
   <BrowserRouter>
-      <Layout audits={props.client.audits}>
+      <Layout client={props.client} audits={props.client.audits}>
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/login' component={Login} />
@@ -211,7 +211,7 @@ props.client = {
       ]
     },
     {
-      "id": "", 
+      "id": "3", 
       "client_id": "1",
       "serial_number": "17IN_0003",
       "initiated_at": "2017-03-01",

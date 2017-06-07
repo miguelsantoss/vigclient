@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import _ from 'lodash';
+import moment from 'moment';
 
 //import { Icon, Divider } from 'semantic-ui-react';
 import { Menu, Image } from 'semantic-ui-react';
@@ -17,11 +18,29 @@ import logo from './assets/logo.png';
           // </Menu.Item>
           // <Divider />
 
+export const auditType = [
+  'EXTERNAL',
+  'INTERNAL',
+  'WEB'
+]
+
 class Sidebar extends Component {
-    audits_menus = _.map((audit) => {
-      console.log(audit);
-      return (<h1>audit</h1>);
-    }, this.props.audits)
+    renderAudits = () => {
+      const { audits } = this.props;
+      // Sort audits by data iniciated
+      // FIXME: use closed_at date in the sort too - deal with NULL
+      let auditsByDate = audits.sort((a,b) => moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'));
+      // Map each audit into a Menu item element
+      const auditsRender = _.map(auditsByDate, (audit) => {
+        return (
+          <Menu.Item key={audit.id} as={NavLink} to={'/audits/'+audit.id} activeClassName='active'>
+          {'Audit ' + audit.id + '-' + audit.serial_number}
+          </Menu.Item>
+        );
+      })
+      return auditsRender;
+    }
+
     render () {
       const { style } = this.props;
       return (
@@ -34,12 +53,9 @@ class Sidebar extends Component {
           <Menu.Item>
             <Menu.Header>Audits</Menu.Header>
             <Menu.Menu>
-              <Menu.Item as={NavLink} to='/audits/1' activeClassName='active'>Audit 1</Menu.Item>
-              <Menu.Item as={NavLink} to='/audits/2' activeClassName='active'>Audit 2</Menu.Item>
-              {this.audits_menus}
+              {this.renderAudits()}
             </Menu.Menu>
           </Menu.Item>
-
         </Menu>
       );
     }
