@@ -22,7 +22,7 @@ let AuditsWrapper = ({match}) => {
       audit = Object.assign({}, audits[i]);
     }
   }
-  return (<Audits match={match} props={audit} />);
+  return (<Audits match={match} {...audit} />);
 }
 
 let MachinesWrapper = ({match}) => {
@@ -100,7 +100,7 @@ props.client = {
       "updated_at": "2017-05-21 18:35:01",
       "category": "web",
       "closed_at": "NULL",
-      "scan": [
+      "page": [
         {
           "id": "1",
           "url": "www.example_one.com",

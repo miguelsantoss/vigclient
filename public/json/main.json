@@ -47,7 +47,7 @@
       "updated_at": "2017-05-21 18:35:01",
       "category": "web",
       "closed_at": "NULL",
-      "scan": [
+      "page": [
         {
           "id": "1",
           "url": "www.example_one.com",

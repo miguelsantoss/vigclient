@@ -16,8 +16,9 @@ style.appbar = {
 
 style.grid = {
     //marginLeft: sidebarWidth + 'px',
-    marginRight: '50px',
-    paddingLeft: '50px'
+    marginLeft: 0,
+    paddingRight: '15px',
+    paddingLeft: '0px'
 };
 
 style.menu = {
