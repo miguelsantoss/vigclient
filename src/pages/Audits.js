@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
 
@@ -8,7 +9,7 @@ class Audits extends Component {
     return _.map(scans, (scan) => {
         return (
         <Table.Row key={scan.id}>
-          <Table.Cell>{scan.id}</Table.Cell>
+          <Table.Cell><Link to={'/scan/'+scan.id}>{scan.id}</Link></Table.Cell>
           <Table.Cell>{scan.category}</Table.Cell>
           <Table.Cell>{scan.network}</Table.Cell>
         </Table.Row>
@@ -68,7 +69,6 @@ class Audits extends Component {
     }
   }
   render() {
-    console.log(this.props);
     return (
       <div>
         <h1>Audit {this.props.id} Serial Number: {this.props.serial_number}</h1>

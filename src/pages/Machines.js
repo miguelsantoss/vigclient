@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 
 class Machines extends Component {
@@ -65,7 +66,7 @@ class Machines extends Component {
     return _.map(vulnerabilities, (vuln) => {
         return (
         <Table.Row key={vuln.id}>
-          <Table.Cell>{vuln.id}</Table.Cell>
+          <Table.Cell><Link to={'/vulnerability/'+vuln.id}>{vuln.id}</Link></Table.Cell>
           <Table.Cell>{vuln.title}</Table.Cell>
           <Table.Cell>{vuln.category}</Table.Cell>
           <Table.Cell>{vuln.risk_factor}</Table.Cell>

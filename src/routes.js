@@ -6,8 +6,10 @@ import Machines from './pages/Machines';
 import Scan from './pages/Scan';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Vulnerability from './pages/Vulnerability';
 import PageNotFound from './pages/PageNotFound';
 
+import machinesJSON from './json/machines.json';
 import portsJSON from './json/ports.json';
 import vulnsJSON from './json/vulnerabilities';
 
@@ -19,7 +21,7 @@ const props = {
 let AuditsWrapper = ({match}) => {
   // Pass the audit's info
   let audit = {};
-  const audits = props.client.audits;
+  const { audits } = props.client;
   for(let i = 0; i < audits.length; i++) {
     if(audits[i].id === match.params.id) {
       // ES6 Deep Copy object
@@ -64,7 +66,48 @@ let MachinesWrapper = ({match}) => {
 
 let ScanWrapper = ({match}) => {
   let scan = {};
-  return (<Scan match={match} props={scan} />);
+  let machines = [];
+
+  const { audits } = props.client;
+  for(let i = 0; i < audits.length; i++) {
+    if(audits[i].page) {
+      
+    }
+    else if(audits[i].scan) {
+      for(let j = 0; j < audits[i].scan.length; j++) {
+        if(audits[i].scan[j].id === match.params.id) {
+          scan = Object.assign({}, audits[i].scan[j]);
+        }
+      }
+    }
+  }
+
+  for(let i = 0; i < machinesJSON.length; i++) {
+    if(machinesJSON[i].scan_id === parseInt(match.params.id, 10)) {
+      machines.push(machinesJSON[i]);
+    }
+  }
+  // FIXME HANDLE REDIRECT LIKE THE REST
+  // NOT DONE YET BECAUSE SCANS 1/2 DONT HAVE MACHINES
+  // AND SCAN 10 DOESNT HAVE INFO
+  return (<Scan match={match} scan={scan} machines={machines}/>);
+}
+
+let VulnerabilityWrapper = ({match}) => {
+  // Pass the audit's info
+  let vuln = {};
+  const id = parseInt(match.params.id, 10);
+  for(let i = 0; i < vulnsJSON.length; i++) {
+    if(vulnsJSON[i].id === id) {
+      vuln = vulnsJSON[i];
+    }
+  }
+  // If Audit doesn't exist, redirect to 404 error page
+  if(Object.keys(vuln).length === 0) {
+    //return (<Audits match={match} {...audit} />);
+    return (<Redirect to={{ pathname: '/404', state: { from: match.url } }}/>);
+  }
+  return (<Vulnerability match={match} vuln={vuln} />);
 }
 
 const Router = () => (
@@ -73,9 +116,10 @@ const Router = () => (
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/login' component={Login} />
-          <Route path='/audit/:id' component={AuditsWrapper} />
           <Route path='/scan/:id' component={ScanWrapper} />
+          <Route path='/audit/:id' component={AuditsWrapper} />
           <Route path='/machine/:id' component={MachinesWrapper} />
+          <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
           <Route exact path='/*' component={PageNotFound} />
         </Switch>
       </Layout>
