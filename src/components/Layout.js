@@ -11,11 +11,11 @@ style.main = {
 }
 
 style.appbar = {
-    borderRadius: 0,
+    borderradius: 0,
 }
 
 style.grid = {
-    //marginLeft: sidebarWidth + 'px',
+    //marginleft: siddebarWidth + 'px',
     marginLeft: 0,
     paddingRight: '15px',
     paddingLeft: '0px'

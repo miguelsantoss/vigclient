@@ -8,6 +8,9 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
 
+import portsJSON from './json/ports.json';
+import vulnsJSON from './json/vulnerabilities';
+
 const props = {
 
 };
@@ -33,17 +36,30 @@ let AuditsWrapper = ({match}) => {
 
 let MachinesWrapper = ({match}) => {
   let machine = {};
+  let ports = [];
+  let vulnerabilities = [];
+
+  const id = parseInt(match.params.id, 10);
   for(let i = 0; i < machines.length; i++) {
-    if(machines[i].id === match.params.id) {
+    if(machines[i].id === id) {
       machine = Object.assign({}, machines[i]);
     }
   }
 
-  if(Object.keys(machine).length === 0) {
-    return (<Machines match={match} props={machine} />);
-    //return (<Redirect to={{ pathname: '/404', state: { from: match.url } }}/>);
+  for(let i = 0; i < portsJSON.length; i++) {
+    if(portsJSON[i].machine_id === id) {
+      ports.push(portsJSON[i]);
+    }
+    if(vulnsJSON[i].machine_id === id) {
+      vulnerabilities.push(vulnsJSON[i]);
+    }
   }
-  return (<Machines match={match} props={machine} />);
+
+  if(Object.keys(machine).length === 0) {
+    // return (<Machines match={match} machine={machine} />);
+    return (<Redirect to={{ pathname: '/not-found', state: { from: match.url } }}/>);
+  }
+  return (<Machines match={match} machine={machine} ports={ports} vulnerabilities={vulnerabilities}/>);
 }
 
 let ScanWrapper = ({match}) => {

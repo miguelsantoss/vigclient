@@ -68,10 +68,12 @@ class Audits extends Component {
     }
   }
   render() {
+    console.log(this.props);
     return (
       <div>
-        <h1>{'Audit ' + this.props.id + ' Serial Number: ' + this.props.serial_number}</h1>
-        <h2>{'category: ' + this.props.category }</h2>
+        <h1>Audit {this.props.id} Serial Number: {this.props.serial_number}</h1>
+        <h2>category: {this.props.category}</h2>
+        <h3>{this.props.initiated_at} - {this.props.closed_at === 'NULL' ? 'present' : this.props.closed_at}</h3>
         {this.renderScans()}
         {this.renderWebScans()}
       </div>
