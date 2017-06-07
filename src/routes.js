@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Layout from './components/Layout';
 import Audits from './pages/Audits';
 import Machines from './pages/Machines';
+import Scan from './pages/Scan';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
@@ -22,6 +23,11 @@ let AuditsWrapper = ({match}) => {
       audit = Object.assign({}, audits[i]);
     }
   }
+  // If Audit doesn't exist, redirect to 404 error page
+  if(Object.keys(audit).length === 0) {
+    //return (<Audits match={match} {...audit} />);
+    return (<Redirect to={{ pathname: '/404', state: { from: match.url } }}/>);
+  }
   return (<Audits match={match} {...audit} />);
 }
 
@@ -32,7 +38,17 @@ let MachinesWrapper = ({match}) => {
       machine = Object.assign({}, machines[i]);
     }
   }
+
+  if(Object.keys(machine).length === 0) {
+    return (<Machines match={match} props={machine} />);
+    //return (<Redirect to={{ pathname: '/404', state: { from: match.url } }}/>);
+  }
   return (<Machines match={match} props={machine} />);
+}
+
+let ScanWrapper = ({match}) => {
+  let scan = {};
+  return (<Scan match={match} props={scan} />);
 }
 
 const Router = () => (
@@ -41,8 +57,9 @@ const Router = () => (
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/login' component={Login} />
-          <Route path='/audits/:id' component={AuditsWrapper} />
-          <Route path='/machines/:id' component={MachinesWrapper} />
+          <Route path='/audit/:id' component={AuditsWrapper} />
+          <Route path='/scan/:id' component={ScanWrapper} />
+          <Route path='/machine/:id' component={MachinesWrapper} />
           <Route exact path='/*' component={PageNotFound} />
         </Switch>
       </Layout>

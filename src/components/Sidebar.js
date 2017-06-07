@@ -33,7 +33,7 @@ class Sidebar extends Component {
       // Map each audit into a Menu item element
       const auditsRender = _.map(auditsByDate, (audit) => {
         return (
-          <Menu.Item key={audit.id} as={NavLink} to={'/audits/'+audit.id} activeClassName='active'>
+          <Menu.Item key={audit.id} as={NavLink} to={'/audit/'+audit.id} activeClassName='active'>
           {'Audit ' + audit.id + '-' + audit.serial_number}
           </Menu.Item>
         );
