@@ -44,7 +44,7 @@ class Sidebar extends Component {
     render () {
       const { style } = this.props;
       return (
-        <Menu vertical fixed='left' inverted style={{...style}}>
+        <Menu vertical fixed='left' inverted style={style}>
           <Image src={logo} size='small' />
 
           <Menu.Item>

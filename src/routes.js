@@ -1,5 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import history from './history';
+
+// Components to Render Routes
 import Layout from './components/Layout';
 import Audits from './pages/Audits';
 import Machines from './pages/Machines';
@@ -9,6 +12,7 @@ import Login from './pages/Login';
 import Vulnerability from './pages/Vulnerability';
 import PageNotFound from './pages/PageNotFound';
 
+// Hard Coded Data to test
 import machinesJSON from './json/machines.json';
 import portsJSON from './json/ports.json';
 import vulnsJSON from './json/vulnerabilities';
@@ -110,9 +114,9 @@ let VulnerabilityWrapper = ({match}) => {
   return (<Vulnerability match={match} vuln={vuln} />);
 }
 
-const Router = () => (
-  <BrowserRouter>
-      <Layout client={props.client} audits={props.client.audits}>
+const RouterWrapper = () => (
+  <Router history={history}>
+      <Layout history={history.location} client={props.client} audits={props.client.audits}>
         <Switch>
           <Route exact path='/' component={Home} />
           <Route path='/login' component={Login} />
@@ -123,10 +127,10 @@ const Router = () => (
           <Route exact path='/*' component={PageNotFound} />
         </Switch>
       </Layout>
-  </BrowserRouter>
+  </Router>
 );
 
-export default Router;
+export default RouterWrapper;
 
 props.client = {
   "id": "1",
