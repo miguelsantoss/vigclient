@@ -4,14 +4,14 @@ import Appbar from './Appbar';
 import { Grid } from 'semantic-ui-react';
 
 const style = {};
-const sidebarWidth = 220;
+const sidebarWidth = 200;
 
 style.main = {
     marginLeft: sidebarWidth,
 }
 
 style.appbar = {
-    borderradius: 0,
+    borderRadius: 0,
 }
 
 style.grid = {
@@ -31,7 +31,7 @@ style.menu = {
   // match menu background
   // prevents a white background when items are filtered out by search
   background: '#1B1C1D',
-  overflowY: 'scroll',
+  //overflowY: 'scroll',
 }
 
 
