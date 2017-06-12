@@ -1,2 +1,1 @@
-# Vigilante
-Audits Viewer
+# vigclient
