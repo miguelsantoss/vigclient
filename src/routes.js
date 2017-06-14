@@ -119,12 +119,14 @@ const RouterWrapper = () => (
     <Switch>
       <Route path='/login' component={Login} />
       <Layout history={history.location} client={props.client} audits={props.client.audits}>
-        <Route exact path='/' component={Home} />
-        <Route path='/scan/:id' component={ScanWrapper} />
-        <Route path='/audit/:id' component={AuditsWrapper} />
-        <Route path='/machine/:id' component={MachinesWrapper} />
-        <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
-        <Route exact path='/*' component={PageNotFound} />
+        <Switch>
+          <Route exact path='/' component={Home} />
+          <Route path='/scan/:id' component={ScanWrapper} />
+          <Route path='/audit/:id' component={AuditsWrapper} />
+          <Route path='/machine/:id' component={MachinesWrapper} />
+          <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
+          <Route component={PageNotFound} status={404}/>
+        </Switch>
       </Layout>
     </Switch>
   </Router>
