@@ -7,7 +7,7 @@ const style = {};
 
 style.back = {
     height: '100vh',
-    background: '#455A64',
+    background: '#37474F',
     paddingTop: '10%'
 };
 
