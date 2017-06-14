@@ -8,7 +8,7 @@ import Audits from './pages/Audits';
 import Machines from './pages/Machines';
 import Scan from './pages/Scan';
 import Home from './pages/Home';
-import Login from './pages/Login';
+import Login from './components/Login';
 import Vulnerability from './pages/Vulnerability';
 import PageNotFound from './pages/PageNotFound';
 
@@ -116,17 +116,17 @@ let VulnerabilityWrapper = ({match}) => {
 
 const RouterWrapper = () => (
   <Router history={history}>
+    <Switch>
+      <Route path='/login' component={Login} />
       <Layout history={history.location} client={props.client} audits={props.client.audits}>
-        <Switch>
-          <Route exact path='/' component={Home} />
-          <Route path='/login' component={Login} />
-          <Route path='/scan/:id' component={ScanWrapper} />
-          <Route path='/audit/:id' component={AuditsWrapper} />
-          <Route path='/machine/:id' component={MachinesWrapper} />
-          <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
-          <Route exact path='/*' component={PageNotFound} />
-        </Switch>
+        <Route exact path='/' component={Home} />
+        <Route path='/scan/:id' component={ScanWrapper} />
+        <Route path='/audit/:id' component={AuditsWrapper} />
+        <Route path='/machine/:id' component={MachinesWrapper} />
+        <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
+        <Route exact path='/*' component={PageNotFound} />
       </Layout>
+    </Switch>
   </Router>
 );
 
