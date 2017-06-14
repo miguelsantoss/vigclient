@@ -8,7 +8,7 @@ const style = {};
 style.back = {
     height: '100vh',
     background: '#455A64',
-    paddingTop: '10rem'
+    paddingTop: '10%'
 };
 
 style.card = {
