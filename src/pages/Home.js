@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Grid, Container, Segment } from 'semantic-ui-react';
 
 import Piechart from '../components/Piechart.js';
+import Linechart from '../components/Linechart.js';
 
 class Home extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>All vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.allVulns} donut={false}/>
+                  <Piechart data={this.props.visData.allVulns} donut={false} id='piechart-all-vulnerabilities'/>
                 </Container>
               </Segment>
             </Grid.Column>
@@ -28,7 +29,25 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>Latest vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.latestVulns} donut={true} />
+                  <Piechart data={this.props.visData.latestVulns} donut={true} id='piechart-recent-vulnerabilities'/>
+                </Container>
+              </Segment>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+              <Segment>
+                <Container textAlign='center'>
+                  <h1>All vulnerabilities:</h1>
+                  <Linechart data={this.props.visData.allVulns} id='linechart-all-vulnerabilities'/>
+                </Container>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column>
+              <Segment>
+                <Container textAlign='center'>
+                  <h1>Latest vulnerabilities:</h1>
+                  <Linechart data={this.props.visData.latestVulns} id='linechart-recent-vulnerabilities'/>
                 </Container>
               </Segment>
             </Grid.Column>

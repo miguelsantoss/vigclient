@@ -10,11 +10,10 @@ class Piechart extends Component {
     this.state = {
       width: 250,
       height: 250,
-      id: 'piechart-all-data',
+      id: props.id ? props.id : 'piechart',
       data: props.data,
       donut: props.donut,
     }
-    console.log(props);
     this.initializeD3 = this.initializeD3.bind(this);
   }
 
