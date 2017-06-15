@@ -12,6 +12,7 @@ class Piechart extends Component {
       height: 250,
       id: 'piechart-all-data',
       data: props.data,
+      donut: props.donut,
     }
     console.log(props);
     this.initializeD3 = this.initializeD3.bind(this);
@@ -43,7 +44,7 @@ class Piechart extends Component {
     const color = scaleOrdinal([BLUE, GREEN, YELLOW, RED]);
 
     const piechart = d3Shape.pie().sort(null).value(d => d);
-    const path = d3Shape.arc().outerRadius(radius - 10).innerRadius(0);
+    const path = d3Shape.arc().outerRadius(radius - 10).innerRadius(this.state.donut ? radius/2 : 0);
     const label = d3Shape.arc().outerRadius(radius - 40).innerRadius(radius - 40);
 
     const arc = g.selectAll('.arc').data(piechart(data)).enter().append('g').attr('class', 'arc');

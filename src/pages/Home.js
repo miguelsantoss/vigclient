@@ -20,7 +20,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>All vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.allVulns}/>
+                  <Piechart data={this.props.visData.allVulns} donut={false}/>
                 </Container>
               </Segment>
             </Grid.Column>
@@ -28,7 +28,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>Latest vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.latestVulns}/>
+                  <Piechart data={this.props.visData.latestVulns} donut={true} />
                 </Container>
               </Segment>
             </Grid.Column>
