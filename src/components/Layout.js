@@ -51,7 +51,6 @@ class Layout extends Component {
         // this is not good
         const route = history.location.pathname.split('/');
         if(route[1] !== undefined) {
-            console.log(route[1]);
             if(route[1] === 'audit') {
                 this.setState({
                     history: {
