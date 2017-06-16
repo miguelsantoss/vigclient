@@ -9,12 +9,12 @@ const style = {};
 const sidebarWidth = 200;
 
 style.main = {
-    marginLeft: sidebarWidth,
-}
+    marginLeft: sidebarWidth
+};
 
 style.appbar = {
     borderRadius: 0,
-}
+};
 
 style.grid = {
     //marginleft: siddebarWidth + 'px',
@@ -24,17 +24,14 @@ style.grid = {
 };
 
 style.menu = {
-  position: 'fixed',
-  top: 0,
-  bottom: 0,
-  left: 0,
-  width: sidebarWidth,
-  paddingBottom: '1em',
-  // match menu background
-  // prevents a white background when items are filtered out by search
-  background: '#1B1C1D',
-  //overflowY: 'scroll',
-}
+    position: 'fixed',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: sidebarWidth,
+    paddingBottom: '1em',
+    background: '#1B1C1D'
+};
 
 class Layout extends Component {
     state = {
@@ -42,9 +39,9 @@ class Layout extends Component {
             audit: '',
             scan: '',
             machine: '',
-            vuln: '',
-        },
-    }
+            vuln: ''
+        }
+    };
 
     componentWillReceiveProps () {
         // This is a hack -- pass history prop just to force update
@@ -109,13 +106,13 @@ class Layout extends Component {
             <Breadcrumb>
                 <Breadcrumb.Section><Link to='/'>Home</Link></Breadcrumb.Section>
                 { history.audit && <Breadcrumb.Divider icon='right angle' /> }
-                { history.audit && <Breadcrumb.Section><Link to={'/audit/'+history.audit}>Audit {history.audit}</Link></Breadcrumb.Section> }
+                { history.audit && <Breadcrumb.Section><Link to={'/audit/' + history.audit}>Audit {history.audit}</Link></Breadcrumb.Section> }
                 { history.scan && <Breadcrumb.Divider icon='right angle' /> }
-                { history.scan && <Breadcrumb.Section><Link to={'/scan/'+history.scan}>Scan {history.scan}</Link></Breadcrumb.Section> }
+                { history.scan && <Breadcrumb.Section><Link to={'/scan/' + history.scan}>Scan {history.scan}</Link></Breadcrumb.Section> }
                 { history.machine && <Breadcrumb.Divider icon='right angle' /> }
-                { history.machine && <Breadcrumb.Section><Link to={'/machine/'+history.machine}>Machine {history.machine}</Link></Breadcrumb.Section> }
+                { history.machine && <Breadcrumb.Section><Link to={'/machine/' + history.machine}>Machine {history.machine}</Link></Breadcrumb.Section> }
                 { history.vuln && <Breadcrumb.Divider icon='right angle' /> }
-                { history.vuln && <Breadcrumb.Section><Link to={'/vulnerability/'+history.vuln}>Vulnerability {history.vuln}</Link></Breadcrumb.Section> }
+                { history.vuln && <Breadcrumb.Section><Link to={'/vulnerability/' + history.vuln}>Vulnerability {history.vuln}</Link></Breadcrumb.Section> }
             </Breadcrumb>
         );
     }
