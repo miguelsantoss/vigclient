@@ -46,57 +46,58 @@ class Layout extends Component {
         },
     }
 
-    componentWillReceiveProps() {
+    componentWillReceiveProps () {
         // This is a hack -- pass history prop just to force update
         // this is not good
         const route = history.location.pathname.split('/');
-        if(route[1] !== undefined) {
-            if(route[1] === 'audit') {
-                this.setState({
-                    history: {
-                        audit: route[2],
-                        scan: '',
-                        machine: '',
-                        vuln: '',
-                    }
-                });
-            }
-            else if(route[1] === 'scan') {
-                this.setState({
-                    history: {
-                        ...this.state.history,
-                        scan: route[2],
-                        machine: '',
-                        vuln: '',
-                    }
-                })
-            }
-            else if(route[1] === 'machine') {
-                this.setState({
-                    history: {
-                        ...this.state.history,
-                        machine: route[2],
-                        vuln: '',
-                    }
-                })
-            }
-            else if(route[1] === 'vulnerability') {
-                this.setState({
-                    history: {
-                        ...this.state.history,
-                        vuln: route[2],
-                    }
-                })
-            }
-            else if(route[1] === '') {
-                this.setState({
-                    history: {
-                        audit: '',
-                        scan: '',
-                        machine: '',
-                        vuln: '',
-                    }
-                })
+        if (route[1] !== undefined) {
+            switch (route[1]) {
+                case 'audit':
+                    this.setState({
+                        history: {
+                            audit: route[2],
+                            scan: '',
+                            machine: '',
+                            vuln: ''
+                        }
+                    });
+                    break;
+                case 'scan':
+                    this.setState({
+                        history: {
+                            ...this.state.history,
+                            scan: route[2],
+                            machine: '',
+                            vuln: ''
+                        }
+                    });
+                    break;
+                case 'machine':
+                    this.setState({
+                        history: {
+                            ...this.state.history,
+                            machine: route[2],
+                            vuln: ''
+                        }
+                    });
+                    break;
+                case 'vulnerability':
+                    this.setState({
+                        history: {
+                            ...this.state.history,
+                            vuln: route[2]
+                        }
+                    });
+                    break;
+                default:
+                    this.setState({
+                        history: {
+                            audit: '',
+                            scan: '',
+                            machine: '',
+                            vuln: ''
+                        }
+                    });
             }
         }
     }
