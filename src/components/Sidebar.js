@@ -8,16 +8,6 @@ import moment from 'moment';
 import { Menu, Image } from 'semantic-ui-react';
 import logo from './assets/logo.png';
 
-          // <Menu.Item name='audits' as={NavLink} to='/audits/2'>
-          //   <Icon name='browser' />
-          //   Audits
-          // </Menu.Item>
-          // <Menu.Item name='machines' as={NavLink} to='/machines/1'>
-          //   <Icon name='computer' />
-          //   Machines
-          // </Menu.Item>
-          // <Divider />
-
 export const auditType = [
   'EXTERNAL',
   'INTERNAL',

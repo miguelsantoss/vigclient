@@ -14,14 +14,14 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Link to='/scan/10'>SCAN 10 LINK - only one with machines</Link>
         <Grid>
+          <Link to='/scan/10'>SCAN 10 LINK - only one with machines</Link>
           <Grid.Row columns={2}>
             <Grid.Column>
               <Segment>
                 <Container textAlign='center'>
                   <h1>All vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.allVulns} donut={false} id='piechart-all-vulnerabilities'/>
+                  <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities'/>
                 </Container>
               </Segment>
             </Grid.Column>
@@ -29,7 +29,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>Latest vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.latestVulns} donut={true} id='piechart-recent-vulnerabilities'/>
+                  <Piechart data={this.props.visData.latestVulns} donut id='piechart-recent-vulnerabilities'/>
                 </Container>
               </Segment>
             </Grid.Column>
