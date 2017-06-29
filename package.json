@@ -5,6 +5,7 @@
   "dependencies": {
     "body-parser": "^1.17.2",
     "compression": "^1.6.2",
+    "cross-env": "^5.0.1",
     "d3": "^4.9.1",
     "history": "^4.6.1",
     "lodash": "^4.17.4",
@@ -73,10 +74,10 @@
     "why-did-you-update": "^0.0.8"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "start:server": "NODE_ENV=development babel-node src/server.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "start": "babel-node scripts/start.js",
+    "start:server": "cross-env NODE_ENV=development & babel-node src/server.js",
+    "build": "babel-node scripts/build.js",
+    "test": "babel-node scripts/test.js --env=jsdom"
   },
   "babel": {
     "presets": [
