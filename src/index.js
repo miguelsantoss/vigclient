@@ -45,7 +45,6 @@ const store = configureStore(preloadedState);
 //   whyDidYouUpdate(React);
 // }
 
-
 // eslint-disable-next-line no-undef
 const mountNode = document.getElementById('root');
 // eslint-disable-next-line react/no-render-return-value
