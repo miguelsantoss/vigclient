@@ -11,7 +11,13 @@ module.exports = {
   },
 
   // Database
-  databaseUrl: process.env.DATABASE_URL || 'sqlite:database.sqlite',
+  databaseUrl: process.env.DATABASE_URL || 'localhost',
+  database: {
+    username: 'root',
+    password: 'DRC-89-VIGILANTE',
+    databaseDev: 'drc_app_development',
+    databaseTest: 'drc_app_test',
+  },
 
   // Web analytics
   analytics: {
