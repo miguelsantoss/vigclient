@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { routerMiddleware } from 'react-router-redux';
 
 import 'semantic-ui-css/semantic.min.css';
 
@@ -12,13 +13,14 @@ import rootReducer from './reducers';
 const configureStore = (initialState) => {
   const thunkApplied = applyMiddleware(thunk);
   const loggerRedux = applyMiddleware(logger);
+  const routerRedux = applyMiddleware(routerMiddleware);
   let middlewares = null;
 
   if (process.env.NODE_ENV === 'production') {
-    middlewares = compose(thunkApplied);
+    middlewares = compose(thunkApplied, routerRedux);
   } else {
     // composeWithDevTools if needed
-    middlewares = compose(thunkApplied, loggerRedux);
+    middlewares = compose(thunkApplied, routerRedux, loggerRedux);
   }
 
   return createStore(rootReducer, initialState, middlewares);

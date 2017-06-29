@@ -87,7 +87,8 @@ Audits.propTypes = {
   serial_number: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
   initiated_at: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
   closed_at: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
-  page: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  // eslint-disable-next-line react/forbid-prop-types
+  page: PropTypes.oneOf([PropTypes.array, PropTypes.object]),
 };
 
 Audits.defaultProps = {

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import { ConnectedRouter } from 'react-router-redux';
 import history from './history';
 
 // Components to Render Routes
@@ -17,7 +18,7 @@ import HomeWrapper from './components/containers/HomeWrapper';
 import * as jsonData from './jsonData';
 
 const RouterWrapper = () => (
-  <Router history={history}>
+  <ConnectedRouter history={history}>
     <Switch>
       <Route path='/login' component={Login} />
       <Layout
@@ -35,7 +36,7 @@ const RouterWrapper = () => (
         </Switch>
       </Layout>
     </Switch>
-  </Router>
+  </ConnectedRouter>
 );
 
 export default RouterWrapper;
