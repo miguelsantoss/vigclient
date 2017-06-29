@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Grid, Container, Segment } from 'semantic-ui-react';
 
-import Piechart from '../components/Piechart.js';
-import Linechart from '../components/Linechart.js';
+import Piechart from '../components/Piechart';
+import Linechart from '../components/Linechart';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-    }
+    };
   }
   render() {
     return (
@@ -21,7 +22,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>All vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities'/>
+                  <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
@@ -29,7 +30,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>Latest vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.latestVulns} donut id='piechart-recent-vulnerabilities'/>
+                  <Piechart data={this.props.visData.latestVulns} donut id='piechart-recent-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
@@ -39,7 +40,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>All vulnerabilities:</h1>
-                  <Linechart data={this.props.visData.allVulns} id='linechart-all-vulnerabilities'/>
+                  <Linechart data={this.props.visData.allVulns} id='linechart-all-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
@@ -47,7 +48,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>Latest vulnerabilities:</h1>
-                  <Linechart data={this.props.visData.latestVulns} id='linechart-recent-vulnerabilities'/>
+                  <Linechart data={this.props.visData.latestVulns} id='linechart-recent-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
@@ -57,6 +58,10 @@ class Home extends Component {
     );
   }
 }
+
+Home.propTypes = {
+  visData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
 
 export default Home;
 

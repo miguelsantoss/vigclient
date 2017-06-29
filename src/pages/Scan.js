@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Table } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 
 class Scan extends Component {
-  renderMachineList = () => {
+  renderMachineList() {
     return (
       <div>
         <h4>Machine List:</h4>
@@ -26,23 +27,21 @@ class Scan extends Component {
     );
   }
 
-  renderMachineEntry = () => {
+  renderMachineEntry() {
     const { machines } = this.props;
-    return _.map(machines, (machine) => {
-      return (
-        <Table.Row key={machine.id}>
-          <Table.Cell><Link to={'/machine/'+machine.id}>{machine.id}</Link></Table.Cell>
-          <Table.Cell>{machine.hostname}</Table.Cell>
-          <Table.Cell>{machine.ip_address}</Table.Cell>
-          <Table.Cell>{machine.os_family}</Table.Cell>
-          <Table.Cell>{machine.operating_system}</Table.Cell>
-        </Table.Row>
-      );
-    });
+    return _.map(machines, machine => (
+      <Table.Row key={machine.id}>
+        <Table.Cell><Link to={`/machine/${machine.id}`}>{machine.id}</Link></Table.Cell>
+        <Table.Cell>{machine.hostname}</Table.Cell>
+        <Table.Cell>{machine.ip_address}</Table.Cell>
+        <Table.Cell>{machine.os_family}</Table.Cell>
+        <Table.Cell>{machine.operating_system}</Table.Cell>
+      </Table.Row>
+    ));
   }
 
   render() {
-    return(
+    return (
       <div>
         <h1>This is Scan {this.props.match.params.id}</h1>
         <h3>category: {this.props.scan.category}</h3>
@@ -52,5 +51,11 @@ class Scan extends Component {
     );
   }
 }
+
+Scan.propTypes = {
+  match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  scan: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  machines: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+};
 
 export default Scan;

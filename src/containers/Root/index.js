@@ -5,12 +5,12 @@ import Router from '../../routes';
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    {Router}
+    <Router />
   </Provider>
 );
 
 Root.propTypes = {
-  store: PropTypes.object.isRequired
+  store: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
 export default Root;

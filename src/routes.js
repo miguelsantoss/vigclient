@@ -20,14 +20,18 @@ const RouterWrapper = () => (
   <Router history={history}>
     <Switch>
       <Route path='/login' component={Login} />
-      <Layout history={history.location} client={jsonData.props.client} audits={jsonData.props.client.audits}>
+      <Layout
+        history={history.location}
+        client={jsonData.props.client}
+        audits={jsonData.props.client.audits}
+      >
         <Switch>
           <Route exact path='/' component={HomeWrapper} />
           <Route path='/scan/:id' component={ScanWrapper} />
           <Route path='/audit/:id' component={AuditsWrapper} />
           <Route path='/machine/:id' component={MachinesWrapper} />
           <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
-          <Route component={PageNotFound} status={404}/>
+          <Route component={PageNotFound} status={404} />
         </Switch>
       </Layout>
     </Switch>

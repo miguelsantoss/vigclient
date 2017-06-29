@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -6,29 +7,25 @@ import _ from 'lodash';
 class Audits extends Component {
   renderScanEntries = () => {
     const scans = this.props.scan;
-    return _.map(scans, (scan) => {
-        return (
-        <Table.Row key={scan.id}>
-          <Table.Cell><Link to={'/scan/'+scan.id}>{scan.id}</Link></Table.Cell>
-          <Table.Cell>{scan.category}</Table.Cell>
-          <Table.Cell>{scan.network}</Table.Cell>
-        </Table.Row>
-      );
-    });
+    return _.map(scans, scan => (
+      <Table.Row key={scan.id}>
+        <Table.Cell><Link to={`/scan/${scan.id}`}>{scan.id}</Link></Table.Cell>
+        <Table.Cell>{scan.category}</Table.Cell>
+        <Table.Cell>{scan.network}</Table.Cell>
+      </Table.Row>
+    ));
   }
   renderPageScanEntries = () => {
     const pageScan = this.props.page;
-    return _.map(pageScan, (page) => {
-        return (
-        <Table.Row key={page.id}>
-          <Table.Cell>{page.id}</Table.Cell>
-          <Table.Cell>{page.url}</Table.Cell>
-        </Table.Row>
-      );
-    });
+    return _.map(pageScan, page => (
+      <Table.Row key={page.id}>
+        <Table.Cell>{page.id}</Table.Cell>
+        <Table.Cell>{page.url}</Table.Cell>
+      </Table.Row>
+    ));
   }
-  renderScans = () => {
-    if(this.props.scan) {
+  renderScans() {
+    if (this.props.scan) {
       return (
         <div>
           <h4>Network scans:</h4>
@@ -45,11 +42,12 @@ class Audits extends Component {
             </Table.Body>
           </Table>
         </div>
-      )
+      );
     }
+    return null;
   }
-  renderWebScans = () => {
-    if(this.props.page) {
+  renderWebScans() {
+    if (this.props.page) {
       return (
         <div>
           <h4>Web scans:</h4>
@@ -65,8 +63,9 @@ class Audits extends Component {
             </Table.Body>
           </Table>
         </div>
-      )
+      );
     }
+    return null;
   }
   render() {
     return (
@@ -80,5 +79,19 @@ class Audits extends Component {
     );
   }
 }
+
+Audits.propTypes = {
+  scan: PropTypes.array, // eslint-disable-line react/forbid-prop-types, react/require-default-props
+  id: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  category: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  serial_number: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  initiated_at: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  closed_at: PropTypes.string.isRequired, // eslint-disable-line react/forbid-prop-types
+  page: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+};
+
+Audits.defaultProps = {
+  page: undefined,
+};
 
 export default Audits;

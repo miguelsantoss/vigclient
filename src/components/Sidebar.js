@@ -1,54 +1,58 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import _ from 'lodash';
 import moment from 'moment';
 
-//import { Icon, Divider } from 'semantic-ui-react';
+// import { Icon, Divider } from 'semantic-ui-react';
 import { Menu, Image } from 'semantic-ui-react';
 import logo from './assets/logo.png';
 
 export const auditType = [
   'EXTERNAL',
   'INTERNAL',
-  'WEB'
-]
+  'WEB',
+];
 
 class Sidebar extends Component {
-    renderAudits = () => {
-      const { audits } = this.props;
-      // Sort audits by data iniciated
-      // FIXME: use closed_at date in the sort too - deal with NULL
-      let auditsByDate = audits.sort((a,b) => moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'));
-      // Map each audit into a Menu item element
-      const auditsRender = _.map(auditsByDate, (audit) => {
-        return (
-          <Menu.Item key={audit.id} as={NavLink} to={'/audit/'+audit.id} activeClassName='active'>
-          {'Audit ' + audit.id + '-' + audit.serial_number}
-          </Menu.Item>
-        );
-      })
-      return auditsRender;
-    }
-
-    render () {
-      const { style } = this.props;
-      return (
-        <Menu vertical fixed='left' inverted style={style}>
-          <Image src={logo} size='small' />
-
-          <Menu.Item>
-            <Menu.Header as={NavLink} to='/' activeClassName='active'>DRC Vigilante</Menu.Header>
-          </Menu.Item>
-          <Menu.Item>
-            <Menu.Header>Audits</Menu.Header>
-            <Menu.Menu>
-              {this.renderAudits()}
-            </Menu.Menu>
-          </Menu.Item>
-        </Menu>
-      );
-    }
+  renderAudits() {
+    const { audits } = this.props;
+    // Sort audits by data iniciated
+    // FIXME: use closed_at date in the sort too - deal with NULL
+    const auditsByDate = audits.sort((a, b) => moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'));
+    // Map each audit into a Menu item element
+    const auditsRender = _.map(auditsByDate, audit => (
+      <Menu.Item key={audit.id} as={NavLink} to={`/audit/${audit.id}`} activeClassName='active'>
+        {`Audit${audit.id}-${audit.serial_number}`}
+      </Menu.Item>
+    ));
+    return auditsRender;
   }
+
+  render() {
+    const { style } = this.props;
+    return (
+      <Menu vertical fixed='left' inverted style={style}>
+        <Image src={logo} size='small' />
+
+        <Menu.Item>
+          <Menu.Header as={NavLink} to='/' activeClassName='active'>DRC Vigilante</Menu.Header>
+        </Menu.Item>
+        <Menu.Item>
+          <Menu.Header>Audits</Menu.Header>
+          <Menu.Menu>
+            {this.renderAudits()}
+          </Menu.Menu>
+        </Menu.Item>
+      </Menu>
+    );
+  }
+}
+
+Sidebar.propTypes = {
+  audits: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
 
 export default withRouter(Sidebar);
