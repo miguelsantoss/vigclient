@@ -11,10 +11,11 @@ module.exports = {
   },
 
   // Database
-  databaseUrl: process.env.DATABASE_URL || 'localhost',
+  databaseUrl: process.env.DATABASE_URL || '192.168.1.53',
   database: {
     username: 'root',
-    password: 'DRC-89-VIGILANTE',
+    // password: 'DRC-89-VIGILANTE',
+    password: '',
     databaseDev: 'drc_app_development',
     databaseTest: 'drc_app_test',
   },
