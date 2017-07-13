@@ -30,7 +30,6 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>Latest vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.latestVulns} donut id='piechart-recent-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
