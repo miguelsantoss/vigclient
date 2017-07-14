@@ -5,8 +5,9 @@ import * as d3Sel from 'd3-selection';
 import * as d3Scale from 'd3-scale';
 import * as d3Shape from 'd3-shape';
 import * as d3Format from 'd3-format';
-import * as d3Tsv from 'd3-dsv';
 import * as d3Req from 'd3-request';
+
+import './piechart.css';
 
 class Piechart extends Component {
 
@@ -14,8 +15,8 @@ class Piechart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      width: 250,
-      height: 250,
+      width: 500,
+      height: 500,
       id: props.id ? props.id : 'piechart',
       donut: props.donut,
     };
@@ -23,7 +24,7 @@ class Piechart extends Component {
   }
 
   componentWillMount() {
-    const t1 = d3Req.tsv('https://bl.ocks.org/mbhall88/raw/b2504f8f3e384de4ff2b9dfa60f325e2/species.tsv', (error, data) => {
+    d3Req.tsv('species.tsv', (error, data) => {
       if (error) throw error;
       this.setState({ ...this.state, data }, () => this.initializeD3());
     });
@@ -41,8 +42,8 @@ class Piechart extends Component {
 
     // Set up constructors for making donut. See https://github.com/d3/d3-shape/blob/master/README.md
     const radius = Math.min(width, height) / 2;
-    const cornerRadius = 3;
-    const padAngle = 0.015;
+    const cornerRadius = 2;
+    const padAngle = 0.02;
 
     // Set up format options
     const floatFormat = d3Format.format('.4r');
@@ -59,7 +60,7 @@ class Piechart extends Component {
     // between outer and inner radius will dictate the thickness of the donut
     const arc = d3Shape.arc()
         .outerRadius(radius * 0.8)
-        .innerRadius(radius * 0.6)
+        .innerRadius(radius * 0.5)
         .cornerRadius(cornerRadius)
         .padAngle(padAngle);
 
@@ -80,9 +81,8 @@ class Piechart extends Component {
     const midAngle = d => d.startAngle + ((d.endAngle - d.startAngle) / 2);
     const toolTipHTML = (dataArg) => {
       let tip = '';
-      let i = 0;
 
-      for (const key in Object.keys(dataArg.data)) {
+      Object.keys(dataArg.data).forEach((key, i) => {
         // if value is a number, format it as a percentage
         const value = (!isNaN(parseFloat(dataArg.data[key]))) ?
           percentFormat(dataArg.data[key]) : dataArg.data[key];
@@ -92,8 +92,7 @@ class Piechart extends Component {
         // tspan effectively imitates a line break.
         if (i === 0) tip += `<tspan x="0">'${key}': '${value}</tspan>`;
         else tip += `<tspan x="0" dy="1.2em">${key}: ${value}</tspan>`;
-        i += 1;
-      }
+      });
 
       return tip;
     };
@@ -109,7 +108,7 @@ class Piechart extends Component {
 
         svg.append('circle')
           .attr('class', 'toolCircle')
-          .attr('r', radius * 0.55) // radius of tooltip circle
+          .attr('r', radius * 0.45) // radius of tooltip circle
           .style('fill', colour(dataArg.data[category])) // colour based on category mouse is over
           .style('fill-opacity', 0.35);
       });
@@ -133,8 +132,8 @@ class Piechart extends Component {
       .attr('fill', d => colour(d.data[category]))
       .attr('d', arc);
 
-    const label = labels.selectAll('text')
-      .data(pie(data))
+    const label = labels.datum(data).selectAll('text')
+      .data(pie)
     .enter()
       .append('text')
       .attr('dy', '.35em')
@@ -153,8 +152,8 @@ class Piechart extends Component {
 
     // add lines connecting labels to slice. A polyline creates
     // straight lines connecting several points
-    const polyline = lines.selectAll('polyline')
-        .data(pie(data))
+    const polyline = lines.datum(data).selectAll('polyline')
+        .data(pie)
       .enter()
         .append('polyline')
         .attr('points', (d) => {
@@ -165,7 +164,14 @@ class Piechart extends Component {
         });
 
     // add tooltip to mouse events on slices and labels
-    d3Sel.selectAll('.labelName text, .slices path').call(toolTip);
+    svg.selectAll('.labelName text, .slices path').call(toolTip);
+
+    this.setState({
+      ...this.state,
+      d3Viz: {
+        svg, path, label, polyline,
+      },
+    });
   }
 
   render() {
