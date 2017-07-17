@@ -11,7 +11,7 @@ module.exports = {
   },
 
   // Database
-  databaseUrl: process.env.DATABASE_URL || '192.168.1.53',
+  databaseUrl: process.env.DATABASE_URL || '172.19.1.18',
   database: {
     username: 'root',
     // password: 'DRC-89-VIGILANTE',

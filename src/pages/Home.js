@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Grid, Container, Segment } from 'semantic-ui-react';
 
-import Piechart from '../components/Piechart';
+import Piechart from '../components/Piechart/index';
 import Linechart from '../components/Linechart';
 
 class Home extends Component {
@@ -30,7 +30,7 @@ class Home extends Component {
               <Segment>
                 <Container textAlign='center'>
                   <h1>Latest vulnerabilities:</h1>
-                  <Piechart data={this.props.visData.latestVulns} donut id='piechart-recent-vulnerabilities' />
+                  <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
