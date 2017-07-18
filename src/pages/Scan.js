@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Table } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 import _ from 'lodash';
+
+import { Link } from 'react-router-dom';
+import { Table, Grid, Segment, Icon, Container, Header } from 'semantic-ui-react';
+import Piechart from '../components/Piechart/index';
 
 class Scan extends Component {
   renderMachineList() {
     return (
       <div>
-        <h4>Machine List:</h4>
+        <h4>
+          <Icon inline size="small" name="laptop" />
+          MACHINE LIST
+        </h4>
         <Table celled>
           <Table.Header>
             <Table.Row>
@@ -42,12 +47,28 @@ class Scan extends Component {
 
   render() {
     return (
-      <div>
-        <h1>This is Scan {this.props.match.params.id}</h1>
-        <h3>category: {this.props.scan.category}</h3>
-        <h3>network: {this.props.scan.network}</h3>
-        {this.renderMachineList()}
-      </div>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={10}>
+            <Segment>
+              {this.renderMachineList()}
+            </Segment>
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <Segment>
+              <h1>This is Scan {this.props.match.params.id}</h1>
+              <h3>category: {this.props.scan.category}</h3>
+              <h3>network: {this.props.scan.network}</h3>
+            </Segment>
+            <Segment>
+              <Container>
+                <Header>Vulnerabilities</Header>
+                <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' />
+              </Container>
+            </Segment>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     );
   }
 }
