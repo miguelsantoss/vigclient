@@ -1,12 +1,12 @@
 import express from 'express';
-import path from 'path';
 import bodyParser from 'body-parser';
+import morgan from 'morgan';
 
 import users from './routes/users';
 import auth from './routes/auth';
 import events from './routes/events';
 
-//APP
+// APP
 let app = express();
 
 app.use(bodyParser.json());
@@ -14,5 +14,11 @@ app.use(bodyParser.json());
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/events', events);
+
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+} else if (process.env.NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+}
 
 app.listen(8080, () => console.log('running on localhost:8080'));
