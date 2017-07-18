@@ -43,12 +43,13 @@ router.post('/', (req, res) => {
   validateInput(req.body, commonValidations).then(({ errors, isValid }) => {
     if (isValid) {
       const { username, password, email } = req.body;
-      const passwordDigest = bcrypt.hashSync(password, 10);
+      // eslint-disable-next-line camelcase
+      const password_digest = bcrypt.hashSync(password, 10);
 
       User.forge({
-        username, email, passwordDigest,
+        username, email, password_digest,
       }, { hasTimestamps: true }).save()
-          .then((/* users */) => res.json({ success: true }))
+          .then(() => res.json({ success: true }))
           .catch(err => res.status(500).json({ error: err }));
     } else {
       res.status(400).json(errors);
