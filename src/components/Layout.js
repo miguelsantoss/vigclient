@@ -152,7 +152,6 @@ Layout.propTypes = {
     PropTypes.element,
   ]).isRequired,
   client: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  history: PropTypes.object.isRequired  
 };
 
 export default Layout;

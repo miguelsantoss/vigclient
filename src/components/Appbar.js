@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { Menu, icon } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { logout } from  '../actions/authActions';
 import PropTypes from 'prop-types';
 
