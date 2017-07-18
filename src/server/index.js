@@ -7,7 +7,7 @@ import auth from './routes/auth';
 import events from './routes/events';
 
 // APP
-let app = express();
+const app = express();
 
 app.use(bodyParser.json());
 
@@ -21,4 +21,5 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('combined'));
 }
 
+// eslint-disable-next-line no-console
 app.listen(8080, () => console.log('running on localhost:8080'));

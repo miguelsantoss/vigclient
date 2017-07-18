@@ -3,7 +3,7 @@ import config from '../config';
 import User from '../models/user';
 
 export default (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers.authorization;
   let token;
 
   if (authHeader) {
@@ -17,10 +17,10 @@ export default (req, res, next) => {
       } else {
         User.query({
           where: { id: decoded.id },
-          select: ['email', 'id', 'username']
-        }).fetch().then(user => {
+          select: ['email', 'id', 'username'],
+        }).fetch().then((user) => {
           if (!user) {
-            res.status(404).json({ error: 'User does not Exist!' }); 
+            res.status(404).json({ error: 'User does not Exist!' });
           } else {
             req.currentUser = user;
             next();
@@ -30,7 +30,7 @@ export default (req, res, next) => {
     });
   } else {
     res.status(403).json({
-      error: 'No Token!'
+      error: 'No Token!',
     });
   }
-}
+};

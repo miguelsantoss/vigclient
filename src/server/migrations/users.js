@@ -1,14 +1,12 @@
-
-exports.up = function(knex, Promise) {
-  return knex.schema.createTable('clientusers', function(table) {
+// eslint-disable-next-line no-unused-vars
+exports.up = (knex, Promise) =>
+  knex.schema.createTable('clientusers', (table) => {
     table.increments();
     table.string('username').notNullable().unique();
     table.string('email').notNullable().unique();
     table.string('password_digest').notNullable();
     table.timestamps();
-  }); 
-};
+  });
 
-exports.down = function(knex, Promise) {
-  return knex.schema.dropTable('clientUsers');
-};
+// eslint-disable-next-line no-unused-vars
+exports.down = (knex, Promise) => knex.schema.dropTable('clientUsers');
