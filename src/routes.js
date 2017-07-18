@@ -1,11 +1,10 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
-import history from './history';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-// Components to Render Routes
+import SignupPage from './components/Signup/SignupPage';
+import LoginPage from './components/Login/LoginPage';
+import NewEventPage from './components/events/NewEventPage';
 import Layout from './components/Layout';
-import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
 
 import AuditsWrapper from './components/containers/AuditsWrapper';
@@ -14,20 +13,19 @@ import ScanWrapper from './components/containers/ScanWrapper';
 import VulnerabilityWrapper from './components/containers/VulnerabilityWrapper';
 import HomeWrapper from './components/containers/HomeWrapper';
 
-// Hard Coded Data to test
+import requireAuth from './utils/requireAuth';
+
 import * as jsonData from './jsonData';
 
-const RouterWrapper = () => (
-  <ConnectedRouter history={history}>
+export default (
+  <BrowserRouter>
     <Switch>
-      <Route path='/login' component={Login} />
-      <Layout
-        history={history.location}
-        client={jsonData.props.client}
-        audits={jsonData.props.client.audits}
-      >
+      <Route path='/login'component={LoginPage} />
+      <Route path='/signup'component={SignupPage} />
+      <Layout client={jsonData.props.client} audits={jsonData.props.client.audits}>
         <Switch>
           <Route exact path='/' component={HomeWrapper} />
+          <Route path='/new-event'component={requireAuth(NewEventPage)} />
           <Route path='/scan/:id' component={ScanWrapper} />
           <Route path='/audit/:id' component={AuditsWrapper} />
           <Route path='/machine/:id' component={MachinesWrapper} />
@@ -36,7 +34,5 @@ const RouterWrapper = () => (
         </Switch>
       </Layout>
     </Switch>
-  </ConnectedRouter>
+  </BrowserRouter>
 );
-
-export default RouterWrapper;

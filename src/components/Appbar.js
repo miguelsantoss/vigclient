@@ -1,14 +1,34 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { Menu, Icon } from 'semantic-ui-react';
+import { Menu, icon } from 'semantic-ui-react';
+import { logout } from  '../actions/authActions';
+import PropTypes from 'prop-types';
 
 class AppBar extends Component {
-  state = {}
-  handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+  logout(e){
+    e.preventDefault();
+    this.props.logout();
+  }
 
   render() {
-    const { activeItem } = this.state;
+    const { isAuth } = this.props.auth;
+    
+    const userLink = (
+      <Menu.Item position='right' name='user'>
+        <Link to='/login' onClick={this.logout.bind(this)}>Logout</Link>
+      </Menu.Item>
+    );
+  
+    const guestLink = (
+      <Menu.Item position='right' name='user'>
+        <Link to='/signup'>Signup</Link>
+        <Link to='/login'>login</Link>
+      </Menu.Item>
+    );
+
     return (
       <Menu fixed='top' inverted borderless style={this.props.style}>
         <Menu.Item>
@@ -21,20 +41,26 @@ class AppBar extends Component {
             </span>
           </Menu.Header>
         </Menu.Item>
-        <Menu.Item name='user' active>
-          {this.props.client.name}
+        <Menu.Item name='user' >
+        <Link to='/'>{this.props.client.name}</Link>
         </Menu.Item>
-        <Menu.Item position='right' name='user' active={activeItem === 'browse'} onClick={this.handleItemClick} as={NavLink} to='/login'>
-          <span>Log Out</span>
-        </Menu.Item>
+        { isAuth ? userLink : guestLink }
       </Menu>
     );
   }
 }
 
 AppBar.propTypes = {
-  client: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  client: PropTypes.object.isRequired, 
+  style: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
-export default AppBar;
+function mapStateToProps(state) {
+  return {
+      auth: state.auth
+  };
+}
+
+export default connect(mapStateToProps, { logout })(AppBar);

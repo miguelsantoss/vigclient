@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { Grid, Breadcrumb } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import browserHistory from '../history';
 import Sidebar from './Sidebar';
 import Appbar from './Appbar';
+import MessageList from './messages/MessageList';
+import browserHistory from '../history';
 
 const style = {};
 const sidebarWidth = 200;
@@ -122,7 +123,7 @@ class Layout extends Component {
   render() {
     return (
       <div>
-        <Appbar style={style.appbar} client={this.props.client} />
+        <Appbar style={style.appbar} client={this.props.client} history={this.props.history} />
         <Sidebar audits={this.props.audits} style={style.menu} />
         <div style={style.main}>
           <Grid style={style.grid}>
@@ -133,6 +134,7 @@ class Layout extends Component {
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
+                <MessageList />
                 {this.props.children}
               </Grid.Column>
             </Grid.Row>
@@ -150,6 +152,7 @@ Layout.propTypes = {
     PropTypes.element,
   ]).isRequired,
   client: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  history: PropTypes.object.isRequired  
 };
 
 export default Layout;
