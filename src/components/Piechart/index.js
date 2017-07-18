@@ -16,8 +16,8 @@ class Piechart extends Component {
     super(props);
     this.state = {
       dimensions: {
-        width: 510,
-        height: 300,
+        width: 370,
+        height: 250,
       },
       id: props.id ? props.id : 'piechart',
       donut: props.donut,
