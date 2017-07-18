@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import { Menu } from 'semantic-ui-react';
+import { Menu, Icon } from 'semantic-ui-react';
 
 class AppBar extends Component {
   state = {}
@@ -10,12 +10,22 @@ class AppBar extends Component {
   render() {
     const { activeItem } = this.state;
     return (
-      <Menu inverted style={this.props.style}>
-        <Menu.Item name='user' >
+      <Menu fixed='top' inverted borderless style={this.props.style}>
+        <Menu.Item>
+          <Menu.Header as={NavLink} to='/'>
+            <span style={{ fontSize: 18 }}>
+              DRC
+              <span style={{ color: 'red' }}>
+                VIGILANTE
+              </span>
+            </span>
+          </Menu.Header>
+        </Menu.Item>
+        <Menu.Item name='user' active>
           {this.props.client.name}
         </Menu.Item>
         <Menu.Item position='right' name='user' active={activeItem === 'browse'} onClick={this.handleItemClick} as={NavLink} to='/login'>
-          Log Out
+          <span>Log Out</span>
         </Menu.Item>
       </Menu>
     );

@@ -14,24 +14,26 @@ style.main = {
 };
 
 style.appbar = {
-  borderRadius: 0,
+  // background: '#1d2b69',
+  background: '#2d5f8b',
 };
 
 style.grid = {
   // marginleft: siddebarWidth + 'px',
   marginLeft: 0,
+  marginTop: 49,
   paddingRight: '15px',
   paddingLeft: '0px',
+  background: '#ecf0f5',
 };
 
 style.menu = {
   position: 'fixed',
-  top: 0,
-  bottom: 0,
-  left: 0,
+  top: 49,
   width: sidebarWidth,
   paddingBottom: '1em',
-  background: '#1B1C1D',
+  // background: '#394694',
+  background: '#4276a4',
 };
 
 class Layout extends Component {
@@ -120,9 +122,9 @@ class Layout extends Component {
   render() {
     return (
       <div>
+        <Appbar style={style.appbar} client={this.props.client} />
         <Sidebar audits={this.props.audits} style={style.menu} />
         <div style={style.main}>
-          <Appbar style={style.appbar} client={this.props.client} />
           <Grid style={style.grid}>
             <Grid.Row>
               <Grid.Column>

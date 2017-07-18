@@ -12,8 +12,16 @@ const HomeWrapper = () => {
     // eslint-disable-next-line no-plusplus
     vulns[riskFactor - 1] = vulns[riskFactor - 1] ? ++vulns[riskFactor - 1] : 1;
   }
-  visData.allVulns = vulns;
-  visData.latestVulns = vulns;
+  const vulnerabilityData = [];
+  for (let i = 0; i < vulns.length; i += 1) {
+    const vulnTypeData = {
+      riskFactor: i + 1,
+      numberVulnerabilities: vulns[i],
+    };
+    vulnerabilityData.push(vulnTypeData);
+  }
+  visData.allVulns = vulnerabilityData;
+  visData.latestVulns = vulnerabilityData;
   return (<Home visData={visData} />);
 };
 

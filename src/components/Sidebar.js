@@ -6,8 +6,7 @@ import _ from 'lodash';
 import moment from 'moment';
 
 // import { Icon, Divider } from 'semantic-ui-react';
-import { Menu, Image } from 'semantic-ui-react';
-import logo from './assets/logo.png';
+import { Menu } from 'semantic-ui-react';
 
 export const auditType = [
   'EXTERNAL',
@@ -34,10 +33,8 @@ class Sidebar extends Component {
     const { style } = this.props;
     return (
       <Menu vertical fixed='left' inverted style={style}>
-        <Image src={logo} size='small' />
-
-        <Menu.Item>
-          <Menu.Header as={NavLink} to='/' activeClassName='active'>DRC Vigilante</Menu.Header>
+        <Menu.Item as={NavLink} to='/' activeClassName=''>
+          <strong>Client Profile</strong>
         </Menu.Item>
         <Menu.Item>
           <Menu.Header>Audits</Menu.Header>
