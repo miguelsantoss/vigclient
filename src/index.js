@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import { createStore, applyMiddleware, compose } from 'redux';
+import jwtDecode from 'jwt-decode';
 import { routerMiddleware } from 'react-router-redux';
 
 import 'semantic-ui-css/semantic.min.css';
 
 import Root from './containers/Root';
-import rootReducer from './reducers';
+import rootReducer from './reducers/rootReducer';
+import setAuthToken from './utils/setAuthToken';
+import { setCurrentUser } from './actions/authActions';
 
 const configureStore = (initialState) => {
   const thunkApplied = applyMiddleware(thunk);
@@ -44,6 +47,11 @@ const store = configureStore(preloadedState);
 //   const { whyDidYouUpdate } = require('why-did-you-update');
 //   whyDidYouUpdate(React);
 // }
+
+if (localStorage.jwtToken) {
+  setAuthToken(localStorage.jwtToken);
+  store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)));
+}
 
 // eslint-disable-next-line no-undef
 const mountNode = document.getElementById('root');
