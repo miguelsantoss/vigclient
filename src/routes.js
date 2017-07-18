@@ -17,7 +17,7 @@ import requireAuth from './utils/requireAuth';
 
 import * as jsonData from './jsonData';
 
-export default (
+const RouterWrapper = () => (
   <BrowserRouter>
     <Switch>
       <Route path='/login'component={LoginPage} />
@@ -36,3 +36,5 @@ export default (
     </Switch>
   </BrowserRouter>
 );
+
+export default RouterWrapper;
