@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Grid, Container, Segment } from 'semantic-ui-react';
+import { Grid, Container, Segment, Header } from 'semantic-ui-react';
 
 import Piechart from '../components/Piechart/index';
 import Linechart from '../components/Linechart';
@@ -20,16 +20,16 @@ class Home extends Component {
           <Grid.Row columns={2}>
             <Grid.Column>
               <Segment>
+                <Header>All vulnerabilities</Header>
                 <Container textAlign='center'>
-                  <h1>All vulnerabilities:</h1>
                   <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
             <Grid.Column>
               <Segment>
+                <Header>Latest vulnerabilities</Header>
                 <Container textAlign='center'>
-                  <h1>Latest vulnerabilities:</h1>
                   <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' />
                 </Container>
               </Segment>
@@ -38,16 +38,16 @@ class Home extends Component {
           <Grid.Row columns={2}>
             <Grid.Column>
               <Segment>
+                <Header>All vulnerabilities</Header>
                 <Container textAlign='center'>
-                  <h1>All vulnerabilities:</h1>
                   <Linechart data={this.props.visData.allVulns} id='linechart-all-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
             <Grid.Column>
               <Segment>
+                <Header>Latest vulnerabilities</Header>
                 <Container textAlign='center'>
-                  <h1>Latest vulnerabilities:</h1>
                   <Linechart data={this.props.visData.latestVulns} id='linechart-recent-vulnerabilities' />
                 </Container>
               </Segment>
