@@ -93,6 +93,7 @@
     "build": "babel-node scripts/build.js",
     "test": "babel-node scripts/test.js --env=jsdom"
   },
+  "proxy": "http://localhost:8080",
   "babel": {
     "presets": [
       [

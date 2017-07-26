@@ -1,10 +1,10 @@
 import express from 'express';
 import authenticate from '../middlewares/authenticate';
 
-let router =  express.Router();
+const router = express.Router();
 
 router.post('/', authenticate, (req, res) => {
-  res.status(201).json({ sucess: true});
+  res.status(201).json({ sucess: true });
 });
 
 export default router;

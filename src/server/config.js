@@ -1,3 +1,5 @@
-export default {
-  jwtSecret: 'secretphraseverybigindeedmyfriend'
-}
+const secret = {
+  jwtSecret: 'secretphraseverybigindeedmyfriend',
+};
+
+export default secret;
