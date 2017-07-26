@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Header } from 'semantic-ui-react';
 
-class Audits extends Component {
+class Profile extends Component {
   render() {
     return (
       <div>
-        <Header>audits page</Header>
+        <Header>profile</Header>
       </div>
     );
   }
 }
 
-Audits.propTypes = {
+Profile.propTypes = {
 };
 
-export default Audits;
+export default Profile;
+

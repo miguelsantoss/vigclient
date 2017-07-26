@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Audits from '../../pages/Audits';
+import Audits from '../../pages/Audit';
 import * as jsonData from '../../jsonData';
 
 // In order to pass props into the Audits Component

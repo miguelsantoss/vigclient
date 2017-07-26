@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Grid, Breadcrumb } from 'semantic-ui-react';
+import { Grid, Breadcrumb, Segment } from 'semantic-ui-react';
 import Sidebar from './Sidebar';
 import Appbar from './Appbar';
 import MessageList from './messages/MessageList';
@@ -107,17 +107,19 @@ class Layout extends Component {
     // Improve this with new routes
     const { history } = this.state;
     return (
-      <Breadcrumb>
-        <Breadcrumb.Section><Link to='/'>Home</Link></Breadcrumb.Section>
-        { history.audit && <Breadcrumb.Divider icon='right angle' /> }
-        { history.audit && <Breadcrumb.Section><Link to={`/audit/${history.audit}`}>Audit {history.audit}</Link></Breadcrumb.Section> }
-        { history.scan && <Breadcrumb.Divider icon='right angle' /> }
-        { history.scan && <Breadcrumb.Section><Link to={`/scan/${history.scan}`}>Scan {history.scan}</Link></Breadcrumb.Section> }
-        { history.machine && <Breadcrumb.Divider icon='right angle' /> }
-        { history.machine && <Breadcrumb.Section><Link to={`/machine/${history.machine}`}>Machine {history.machine}</Link></Breadcrumb.Section> }
-        { history.vuln && <Breadcrumb.Divider icon='right angle' /> }
-        { history.vuln && <Breadcrumb.Section><Link to={`/vulnerability/${history.vuln}`}>Vulnerability {history.vuln}</Link></Breadcrumb.Section> }
-      </Breadcrumb>
+      <Segment>
+        <Breadcrumb>
+          <Breadcrumb.Section><Link to='/'>Home</Link></Breadcrumb.Section>
+          { history.audit && <Breadcrumb.Divider icon='right angle' /> }
+          { history.audit && <Breadcrumb.Section><Link to={`/audit/${history.audit}`}>Audit {history.audit}</Link></Breadcrumb.Section> }
+          { history.scan && <Breadcrumb.Divider icon='right angle' /> }
+          { history.scan && <Breadcrumb.Section><Link to={`/scan/${history.scan}`}>Scan {history.scan}</Link></Breadcrumb.Section> }
+          { history.machine && <Breadcrumb.Divider icon='right angle' /> }
+          { history.machine && <Breadcrumb.Section><Link to={`/machine/${history.machine}`}>Machine {history.machine}</Link></Breadcrumb.Section> }
+          { history.vuln && <Breadcrumb.Divider icon='right angle' /> }
+          { history.vuln && <Breadcrumb.Section><Link to={`/vulnerability/${history.vuln}`}>Vulnerability {history.vuln}</Link></Breadcrumb.Section> }
+        </Breadcrumb>
+      </Segment>
     );
   }
   render() {
