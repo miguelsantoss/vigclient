@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { Grid, Container, Segment, Header } from 'semantic-ui-react';
 
 import Piechart from '../components/Piechart/index';
@@ -16,7 +15,6 @@ class Home extends Component {
     return (
       <div>
         <Grid>
-          <Link to='/scan/10'>SCAN 10 LINK - only one with machines</Link>
           <Grid.Row columns={2}>
             <Grid.Column>
               <Segment>
