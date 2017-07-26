@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
 
   User.query({
     where: { username: identifier },
-    orWhere: { email: identifier },
+    //orWhere: { email: identifier },
   }).fetch().then((user) => {
     if (user) {
       if (bcrypt.compareSync(password, user.get('password_digest'))) {
