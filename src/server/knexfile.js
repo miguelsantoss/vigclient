@@ -4,10 +4,10 @@ module.exports = {
   development: {
     client: 'mysql',
     connection: {
-      host: '127.0.0.1',
+      host: '192.168.1.132',
       user: 'root',
-      password: 'root',
-      database: 'vigclient',
+      password: '',
+      database: 'drc_app_dev',
     },
   },
 

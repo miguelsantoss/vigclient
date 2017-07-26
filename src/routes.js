@@ -7,11 +7,13 @@ import NewEventPage from './components/events/NewEventPage';
 import Layout from './components/Layout';
 import PageNotFound from './pages/PageNotFound';
 
+import Audits from './pages/Audits';
 import AuditsWrapper from './components/containers/AuditsWrapper';
 import MachinesWrapper from './components/containers/MachinesWrapper';
 import ScanWrapper from './components/containers/ScanWrapper';
 import VulnerabilityWrapper from './components/containers/VulnerabilityWrapper';
 import HomeWrapper from './components/containers/HomeWrapper';
+import Profile from './pages/Profile';
 
 import requireAuth from './utils/requireAuth';
 
@@ -25,8 +27,10 @@ const RouterWrapper = () => (
       <Layout client={jsonData.props.client} audits={jsonData.props.client.audits}>
         <Switch>
           <Route exact path='/' component={HomeWrapper} />
+          <Route exact path='/profile' component={Profile} />
           <Route path='/new-event'component={requireAuth(NewEventPage)} />
           <Route path='/scan/:id' component={ScanWrapper} />
+          <Route path='/audits' component={Audits} />
           <Route path='/audit/:id' component={AuditsWrapper} />
           <Route path='/machine/:id' component={MachinesWrapper} />
           <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />

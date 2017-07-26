@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import _ from 'lodash';
 import moment from 'moment';
@@ -22,7 +22,7 @@ class Sidebar extends Component {
     const auditsByDate = audits.sort((a, b) => moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'));
     // Map each audit into a Menu item element
     const auditsRender = _.map(auditsByDate, audit => (
-      <Menu.Item key={audit.id} as={NavLink} to={`/audit/${audit.id}`} activeClassName='active'>
+      <Menu.Item key={audit.id} as={Link} to={`/audit/${audit.id}`} activeClassName='active'>
         {`Audit${audit.id}-${audit.serial_number}`}
       </Menu.Item>
     ));
@@ -33,11 +33,11 @@ class Sidebar extends Component {
     const { style } = this.props;
     return (
       <Menu vertical fixed='left' inverted style={style}>
-        <Menu.Item as={NavLink} to='/' activeClassName=''>
-          <strong>Client Profile</strong>
+        <Menu.Item>
+          <Menu.Header as={Link} to='/profile'>Client Profile</Menu.Header>
         </Menu.Item>
         <Menu.Item>
-          <Menu.Header>Audits</Menu.Header>
+          <Menu.Header as={Link} to='/audits'>Audits</Menu.Header>
           <Menu.Menu>
             {this.renderAudits()}
           </Menu.Menu>
