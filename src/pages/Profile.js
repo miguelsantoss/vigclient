@@ -76,7 +76,7 @@ class Profile extends Component {
                 <Image src='/placeholder.png' />
               </Grid.Column>
               <Grid.Column>
-                <table>
+                <table className='profileInfo'>
                   <tbody>
                     <tr>
                       <td>Name: </td>
@@ -97,7 +97,7 @@ class Profile extends Component {
           </Grid>
         </Segment>
         <Segment style={{ background: '#ecf0f5' }}>
-          <table>
+          <table className='profileInfo'>
             <tbody>
               <tr>
                 <td>Address: </td>

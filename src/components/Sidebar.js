@@ -22,7 +22,7 @@ class Sidebar extends Component {
     const auditsByDate = audits.sort((a, b) => moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'));
     // Map each audit into a Menu item element
     const auditsRender = _.map(auditsByDate, audit => (
-      <Menu.Item key={audit.id} as={Link} to={`/audit/${audit.id}`} activeClassName='active'>
+      <Menu.Item key={audit.id} as={Link} to={`/audit/${audit.id}`}>
         {`Audit${audit.id}-${audit.serial_number}`}
       </Menu.Item>
     ));

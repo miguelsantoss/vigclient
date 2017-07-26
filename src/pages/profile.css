@@ -1,9 +1,13 @@
-td {
+.profileInfo td {
     padding-left: 15px !important;
 }
 
-td:nth-child(3) {
+.profileInfo td:nth-child(3) {
     padding-left: 45px !important;
+}
+
+.contact td {
+    padding-left: 15px !important;
 }
 
 .contact td:nth-child(2) {
