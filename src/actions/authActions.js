@@ -3,11 +3,11 @@ import setAuthToken from '../utils/setAuthToken';
 import jwtDecode from 'jwt-decode';
 import { SET_CURRENT_USER } from './types';
 
-export function setCurrentUser(user){
+export function setCurrentUser(user) {
   return {
     type: SET_CURRENT_USER,
     user
-  }
+  };
 }
 
 export function logout(){
@@ -15,7 +15,7 @@ export function logout(){
     localStorage.removeItem('jwtToken');
     setAuthToken(false);
     dispatch(setCurrentUser({}));
-  }
+  };
 }
 export function login(data) {
   return dispatch => {
@@ -25,5 +25,5 @@ export function login(data) {
       setAuthToken(token);
       dispatch(setCurrentUser(jwtDecode(token)));
     });
-  }
+  };
 }

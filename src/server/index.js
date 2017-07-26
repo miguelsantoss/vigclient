@@ -5,6 +5,8 @@ import morgan from 'morgan';
 import users from './routes/users';
 import auth from './routes/auth';
 import events from './routes/events';
+import clientInfo from './routes/clientInfo';
+import scans from './routes/scans';
 
 // APP
 const app = express();
@@ -14,6 +16,8 @@ app.use(bodyParser.json());
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/events', events);
+app.use('/api/clientInfo', clientInfo);
+app.use('/api/scans', scans);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
