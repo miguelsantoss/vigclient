@@ -7,21 +7,18 @@ import { logout } from  '../actions/authActions';
 import PropTypes from 'prop-types';
 
 class AppBar extends Component {
-
-  logout(e){
+  logout(e) {
     e.preventDefault();
     this.props.logout();
   }
 
   render() {
     const { isAuth } = this.props.auth;
-    
     const userLink = (
       <Menu.Item position='right' name='user'>
-        <Link to='/login' onClick={this.logout.bind(this)}>Logout</Link>
+        <Link to='/login' onClick={() => this.logout}>Logout</Link>
       </Menu.Item>
     );
-  
     const guestLink = (
       <Menu.Item position='right' name='user'>
         <Link to='/signup'>Signup</Link>
@@ -42,7 +39,7 @@ class AppBar extends Component {
           </Menu.Header>
         </Menu.Item>
         <Menu.Item name='user' >
-        <Link to='/'>{this.props.client.name}</Link>
+          <Link to='/profile'>{this.props.client.name}</Link>
         </Menu.Item>
         { isAuth ? userLink : guestLink }
       </Menu>
@@ -51,15 +48,15 @@ class AppBar extends Component {
 }
 
 AppBar.propTypes = {
-  client: PropTypes.object.isRequired, 
+  client: PropTypes.object.isRequired,
   style: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   return {
-      auth: state.auth
+    auth: state.auth,
   };
 }
 

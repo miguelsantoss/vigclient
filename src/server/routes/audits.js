@@ -13,4 +13,8 @@ router.get('/:identifier', (req, res) => {
   });
 });
 
+router.get('/', (req, res) => {
+  res.json({ test: 'test' });
+});
+
 export default router;
