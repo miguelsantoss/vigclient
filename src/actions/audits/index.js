@@ -6,8 +6,8 @@ export const FETCH_AUDITS_FAIL = 'FETCH_AUDITS_FAIL';
 
 export const FETCH_AUDITS = () =>
   (dispatch) => {
-    dispatch({ type: 'FETCH_AUDITS_LOADING' });
+    dispatch({ type: FETCH_AUDITS_LOADING });
     fetchAudits()
-      .then(response => dispatch({ type: 'FETCH_AUDITS_SUCCESS', result: response }))
-      .catch(err => dispatch({ type: 'FETCH_AUDITS_FAIL', result: err }));
+      .then(response => dispatch({ type: FETCH_AUDITS_SUCCESS, result: response.data }))
+      .catch(err => dispatch({ type: FETCH_AUDITS_FAIL, result: err }));
   };

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, Breadcrumb, Segment } from 'semantic-ui-react';
 import Sidebar from './Sidebar';
@@ -156,4 +157,12 @@ Layout.propTypes = {
   client: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-export default Layout;
+const mapDispatchToProps = dispatch => ({
+  // sortAuditsBy: (sortKey, ascending) => dispatch(SORT_AUDITS(sortKey, ascending)),
+});
+
+const mapStateToProps = state => ({
+  audits: state.audits.list,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

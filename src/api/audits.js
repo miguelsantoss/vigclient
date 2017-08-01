@@ -1,5 +1,4 @@
 import axios from 'axios';
 
-export const fetchAudits = () => {
-  return axios.get('/api/audits');
-};
+export const fetchAudits = () => axios.get('/api/audits');
+

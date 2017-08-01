@@ -7,5 +7,5 @@ import clientInfo from './clientInfo';
 export default combineReducers({
   messages,
   auth,
-  clientInfo
-})
+  clientInfo,
+});

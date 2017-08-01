@@ -1,12 +1,12 @@
 import { APP_INIT } from '../../actions/common';
 import {
-  FETCH_AUDITS_SUCCESS,
-  FETCH_AUDITS_LOADING,
-  FETCH_AUDITS_FAIL,
-} from '../../actions/audits';
+  FETCH_PROFILE_INFO_SUCCESS,
+  FETCH_PROFILE_INFO_LOADING,
+  FETCH_PROFILE_INFO_FAIL,
+} from '../../actions/profile';
 
 const initialState = {
-  list: [],
+  info: {},
   fetchLoading: false,
   fetchError: false,
 };
@@ -17,19 +17,19 @@ export default function audits(state = initialState, action) {
       return {
         ...state,
       };
-    case FETCH_AUDITS_LOADING:
+    case FETCH_PROFILE_INFO_LOADING:
       return {
         ...state,
         fetchLoading: true,
       };
-    case FETCH_AUDITS_SUCCESS:
+    case FETCH_PROFILE_INFO_SUCCESS:
       return {
         ...state,
-        list: action.result,
+        info: action.result,
         fetchLoading: false,
         fetchError: false,
       };
-    case FETCH_AUDITS_FAIL:
+    case FETCH_PROFILE_INFO_FAIL:
       return {
         ...state,
         fetchLoading: false,
@@ -39,3 +39,4 @@ export default function audits(state = initialState, action) {
       return state;
   }
 }
+

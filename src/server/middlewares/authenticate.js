@@ -17,7 +17,7 @@ export default (req, res, next) => {
       } else {
         User.query({
           where: { id: decoded.id },
-          select: ['email', 'id', 'username'],
+          select: ['email', 'client_id as id', 'username', 'id as client_user_id'],
         }).fetch().then((user) => {
           if (!user) {
             res.status(404).json({ error: 'User does not Exist!' });

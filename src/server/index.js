@@ -6,6 +6,7 @@ import users from './routes/users';
 import auth from './routes/auth';
 import events from './routes/events';
 import audits from './routes/audits';
+import profile from './routes/profile';
 
 // APP
 const app = express();
@@ -16,6 +17,7 @@ app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/events', events);
 app.use('/api/audits', audits);
+app.use('/api/profile', profile);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
