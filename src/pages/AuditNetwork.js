@@ -5,8 +5,12 @@ import { Table } from 'semantic-ui-react';
 import _ from 'lodash';
 
 class Audit extends Component {
+  componentWillMount() {
+    this.props.auditInfo.scans.forEach(scan => this.props.fetchScanByID(scan.id));
+  }
+
   renderScanEntries = () => {
-    const scans = this.props.scan;
+    const { scans } = this.props.auditInfo;
     return _.map(scans, scan => (
       <Table.Row key={scan.id}>
         <Table.Cell><Link to={`/scan/${scan.id}`}>{scan.id}</Link></Table.Cell>
@@ -15,8 +19,8 @@ class Audit extends Component {
       </Table.Row>
     ));
   }
-  renderScans() {
-    if (this.props.auditInfo.scan) {
+  renderScans = () => {
+    if (this.props.auditInfo.scans.length !== 0) {
       return (
         <div>
           <h4>Network scans:</h4>
@@ -50,6 +54,7 @@ class Audit extends Component {
 }
 
 Audit.propTypes = {
+  fetchScanByID: PropTypes.func.isRequired,
   auditInfo: PropTypes.shape({
     scan: PropTypes.array,
     id: PropTypes.number.isRequired,
@@ -57,11 +62,12 @@ Audit.propTypes = {
     serial_number: PropTypes.string.isRequired,
     created_at: PropTypes.string.isRequired,
     closed_at: PropTypes.string.isRequired,
+    scans: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      category: PropTypes.string.isRequired,
+      network: PropTypes.string.isRequired,
+    })),
   }).isRequired,
-};
-
-Audit.defaultProps = {
-  page: undefined,
 };
 
 export default Audit;

@@ -6,6 +6,7 @@ import users from './routes/users';
 import auth from './routes/auth';
 import events from './routes/events';
 import audits from './routes/audits';
+import scans from './routes/scans';
 import profile from './routes/profile';
 
 // APP
@@ -18,6 +19,7 @@ app.use('/api/auth', auth);
 app.use('/api/events', events);
 app.use('/api/audits', audits);
 app.use('/api/profile', profile);
+app.use('/api/scan', scans);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));

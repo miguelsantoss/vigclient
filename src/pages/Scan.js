@@ -11,7 +11,7 @@ class Scan extends Component {
     return (
       <div>
         <h4>
-          <Icon inline size="small" name="laptop" />
+          <Icon size="small" name="laptop" />
           MACHINE LIST
         </h4>
         <Table celled>
@@ -46,6 +46,7 @@ class Scan extends Component {
   }
 
   render() {
+    const disabledViz = true;
     return (
       <Grid>
         <Grid.Row>
@@ -63,7 +64,7 @@ class Scan extends Component {
             <Segment>
               <Container>
                 <Header>Vulnerabilities</Header>
-                <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' />
+                { !disabledViz && <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' /> }
               </Container>
             </Segment>
           </Grid.Column>

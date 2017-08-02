@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 
 import AuditsNetwork from '../../pages/AuditNetwork';
 import AuditsWebPage from '../../pages/AuditWebPage';
+import { FETCH_SCAN_BY_ID } from '../../actions/scans';
 
 // In order to pass props into the Audits Component
-const AuditsWrapper = ({ match, audits }) => {
+const AuditsWrapper = (props) => {
   let audit = {};
+  const { match, audits, fetchScanByID } = props;
   for (let i = 0; i < audits.length; i += 1) {
     if (audits[i].serial_number === match.params.id) {
       audit = audits[i];
@@ -20,11 +22,18 @@ const AuditsWrapper = ({ match, audits }) => {
     return (<Redirect to={{ pathname: '/404', state: { from: match.url } }} />);
   }
   if (audit.category === 'web') return (<AuditsWebPage match={match} auditInfo={audit} />);
-  return (<AuditsNetwork match={match} auditInfo={audit} />);
+  return (
+    <AuditsNetwork
+      match={match}
+      auditInfo={audit}
+      fetchScanByID={fetchScanByID}
+    />
+  );
 };
 
 AuditsWrapper.propTypes = {
   match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  fetchScanByID: PropTypes.func.isRequired,
   audits: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -37,10 +46,11 @@ AuditsWrapper.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
+  fetchScanByID: id => dispatch(FETCH_SCAN_BY_ID(id)),
 });
 
 const mapStateToProps = state => ({
-  audits: state.audits.list,
+  audits: state.audits.auditList,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuditsWrapper);

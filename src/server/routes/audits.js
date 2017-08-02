@@ -21,6 +21,24 @@ router.get('/', (req, res) => {
     where: { client_id: userId },
   }).fetchAll({ withRelated: ['scans', 'webScans'] }).then((audits) => {
     const auditList = audits.toJSON();
+    auditList.forEach((audit) => {
+      if (audit.scans && audit.scans.length !== 0) {
+        audit.scans.forEach((scan) => {
+          delete scan.locked;
+          delete scan.state;
+          delete scan.audit_id;
+          delete scan.client_id;
+        });
+      }
+      if (audit.webScans && audit.webScans !== 0) {
+        audit.webScans.forEach((scan) => {
+          delete scan.locked;
+          delete scan.state;
+          delete scan.audit_id;
+          delete scan.client_id;
+        });
+      }
+    });
     auditList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     res.json(auditList);
   });

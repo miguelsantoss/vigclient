@@ -68,7 +68,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  audits: state.audits.list,
+  audits: state.audits.auditList,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Audits);
