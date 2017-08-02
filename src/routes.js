@@ -8,8 +8,8 @@ import Layout from './components/Layout';
 import PageNotFound from './pages/PageNotFound';
 
 import Audits from './pages/Audits';
-import AuditsWrapper from './components/containers/AuditsWrapper';
-import MachinesWrapper from './components/containers/MachinesWrapper';
+import AuditWrapper from './components/containers/AuditsWrapper';
+import MachineWrapper from './components/containers/MachinesWrapper';
 import ScanWrapper from './components/containers/ScanWrapper';
 import VulnerabilityWrapper from './components/containers/VulnerabilityWrapper';
 import HomeWrapper from './components/containers/HomeWrapper';
@@ -31,8 +31,8 @@ const RouterWrapper = () => (
           <Route path='/new-event'component={requireAuth(NewEventPage)} />
           <Route path='/scan/:id' component={ScanWrapper} />
           <Route path='/audits' component={Audits} />
-          <Route path='/audit/:id' component={AuditsWrapper} />
-          <Route path='/machine/:id' component={MachinesWrapper} />
+          <Route path='/audit/:id' component={AuditWrapper} />
+          <Route path='/machine/:id' component={MachineWrapper} />
           <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
           <Route component={PageNotFound} status={404} />
         </Switch>

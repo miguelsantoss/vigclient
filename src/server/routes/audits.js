@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
   Audits.query({
     select: ['id', 'category', 'created_at', 'closed_at', 'serial_number'],
     where: { client_id: userId },
-  }).fetchAll().then((audits) => {
+  }).fetchAll({ withRelated: ['scans', 'webScans'] }).then((audits) => {
     const auditList = audits.toJSON();
     auditList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     res.json(auditList);

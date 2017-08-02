@@ -21,9 +21,9 @@ class Sidebar extends Component {
     // FIXME: use closed_at date in the sort too - deal with NULL
     const auditsByDate = audits.sort((a, b) => moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'));
     // Map each audit into a Menu item element
-    const auditsRender = _.map(auditsByDate, audit => (
-      <Menu.Item key={audit.id} as={Link} to={`/audit/${audit.id}`}>
-        {`Audit${audit.id}-${audit.serial_number}`}
+    const auditsRender = _.map(audits, audit => (
+      <Menu.Item key={audit.serial_number} as={Link} to={`/audit/${audit.serial_number}`}>
+        {`${audit.serial_number}`}
       </Menu.Item>
     ));
     return auditsRender;
