@@ -1,34 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Segment, Grid, Image } from 'semantic-ui-react';
 
 import './profile.css';
 
-const contacts = [
-  {
-    name: 'contact1',
-    jobTitle: 'contact1_jobTitle',
-    mobilePhone: 'contact1_phone',
-    telephone: 'contact1_telephone',
-    function: '',
-    departament: '',
-    email: 'contact1_email',
-  },
-  {
-    name: 'contact2',
-    jobTitle: 'contact2_jobTitle',
-    mobilePhone: 'contact2_phone',
-    telephone: 'contact2_telephone',
-    function: '',
-    departament: '',
-    email: 'contact2_email',
-  },
-];
-
 class Profile extends Component {
-  renderContacts = () =>
-    _.map(contacts, c => (
+  renderContacts = () => {
+    const { contacts } = this.props.info;
+    if (contacts.length === 0) {
+      return (
+        <span><br />No contacts available.</span>
+      );
+    }
+    return _.map(contacts, c => (
       <Segment key={c.name} style={{ background: '#ecf0f5' }}>
         <table className='contact'>
           <tbody>
@@ -64,9 +50,11 @@ class Profile extends Component {
           </tbody>
         </table>
       </Segment>
-    ))
+    ));
+  }
 
   render() {
+    const { info } = this.props;
     return (
       <Segment raised>
         <Segment style={{ background: '#ecf0f5' }}>
@@ -80,15 +68,15 @@ class Profile extends Component {
                   <tbody>
                     <tr>
                       <td>Name: </td>
-                      <td>comp_name</td>
+                      <td>{info.name}</td>
                     </tr>
                     <tr>
                       <td>Website: </td>
-                      <td>comp_website</td>
+                      <td>{info.website}</td>
                     </tr>
                     <tr>
                       <td>Telephone: </td>
-                      <td>comp_phone</td>
+                      <td>{info.telephone}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -101,15 +89,15 @@ class Profile extends Component {
             <tbody>
               <tr>
                 <td>Address: </td>
-                <td>comp_address</td>
+                <td>{info.address}</td>
                 <td>District: </td>
-                <td>comp_district</td>
+                <td>{info.district}</td>
               </tr>
               <tr>
                 <td>Location: </td>
-                <td>comp_location</td>
+                <td>{info.location}</td>
                 <td>Country: </td>
-                <td>comp_coutry</td>
+                <td>{info.country}</td>
               </tr>
             </tbody>
           </table>
@@ -122,7 +110,30 @@ class Profile extends Component {
 }
 
 Profile.propTypes = {
+  info: PropTypes.shape({
+    acronym: PropTypes.string.isRequired,
+    address: PropTypes.string.isRequired,
+    country: PropTypes.string.isRequired,
+    district: PropTypes.string.isRequired,
+    fax: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    municipality: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    nif: PropTypes.string.isRequired,
+    postal_code: PropTypes.string.isRequired,
+    telephone: PropTypes.string.isRequired,
+    website: PropTypes.string.isRequired,
+    contacts: PropTypes.arrayOf(PropTypes.shape({
+
+    })).isRequired,
+  }).isRequired,
 };
 
-export default Profile;
+const mapDispatchToProps = dispatch => ({
+});
 
+const mapStateToProps = state => ({
+  info: state.profile.info,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

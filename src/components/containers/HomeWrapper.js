@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 
 import Home from '../../pages/Home';
 
-const HomeWrapper = (props) => {
-  return (<Home vizData={props.vizData} />);
-};
+const HomeWrapper = props => (<Home vizData={props.vizData} />);
 
 HomeWrapper.propTypes = {
   vizData: PropTypes.shape({

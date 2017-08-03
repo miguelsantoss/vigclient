@@ -6,12 +6,26 @@ import {
 } from '../../actions/profile';
 
 const initialState = {
-  info: {},
+  info: {
+    acronym: '',
+    address: '',
+    country: '',
+    district: '',
+    fax: '',
+    location: '',
+    municipality: '',
+    name: '',
+    nif: '',
+    postal_code: '',
+    telephone: '',
+    website: '',
+    contacts: [],
+  },
   fetchLoading: false,
   fetchError: false,
 };
 
-export default function audits(state = initialState, action) {
+export default function profile(state = initialState, action) {
   switch (action.type) {
     case APP_INIT:
       return {

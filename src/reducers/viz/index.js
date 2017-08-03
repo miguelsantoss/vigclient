@@ -12,9 +12,13 @@ const initialState = {
     fetchError: false,
     fetchLoading: false,
   },
+  lineCharts: {
+    all: [],
+    latest: [],
+  },
 };
 
-export default function audits(state = initialState, action) {
+export default function viz(state = initialState, action) {
   switch (action.type) {
     case APP_INIT:
       return {
@@ -29,14 +33,19 @@ export default function audits(state = initialState, action) {
         },
       };
     case FETCH_VIZ_DATA_SUCCESS:
+      console.info(action.result);
       return {
         ...state,
         pieCharts: {
           ...state.pieCharts,
-          all: action.result.all,
-          latest: action.result.latest,
+          all: action.result.pieData.all,
+          latest: action.result.pieData.latest,
           fetchLoading: false,
           fetchError: false,
+        },
+        lineCharts: {
+          ...state.lineCharts,
+          latest: action.result.lineGraphData.latest,
         },
       };
     case FETCH_VIZ_DATA_FAIL:
