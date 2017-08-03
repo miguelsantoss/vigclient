@@ -9,6 +9,7 @@ import './profile.css';
 class Profile extends Component {
   renderContacts = () => {
     const { contacts } = this.props.info;
+    console.log(contacts);
     if (contacts.length === 0) {
       return (
         <span><br />No contacts available.</span>
@@ -124,7 +125,13 @@ Profile.propTypes = {
     telephone: PropTypes.string.isRequired,
     website: PropTypes.string.isRequired,
     contacts: PropTypes.arrayOf(PropTypes.shape({
-
+      name: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      department: PropTypes.string.isRequired,
+      job_title: PropTypes.string.isRequired,
+      mobile_phone: PropTypes.string.isRequired,
+      telephone: PropTypes.string.isRequired,
+      function: PropTypes.string.isRequired,
     })).isRequired,
   }).isRequired,
 };
