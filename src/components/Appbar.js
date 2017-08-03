@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
-import { logout } from  '../actions/authActions';
+import { logout } from '../actions/authActions';
 import PropTypes from 'prop-types';
 
 class AppBar extends Component {

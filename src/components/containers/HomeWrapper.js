@@ -19,9 +19,6 @@ HomeWrapper.propTypes = {
   }).isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-});
-
 const mapStateToProps = state => ({
   vizData: {
     pieAllVulns: state.viz.pieCharts.all,
@@ -29,4 +26,4 @@ const mapStateToProps = state => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(HomeWrapper);
+export default connect(mapStateToProps)(HomeWrapper);

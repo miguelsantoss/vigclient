@@ -9,7 +9,6 @@ import './profile.css';
 class Profile extends Component {
   renderContacts = () => {
     const { contacts } = this.props.info;
-    console.log(contacts);
     if (contacts.length === 0) {
       return (
         <span><br />No contacts available.</span>
@@ -136,11 +135,8 @@ Profile.propTypes = {
   }).isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-});
-
 const mapStateToProps = state => ({
   info: state.profile.info,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps)(Profile);

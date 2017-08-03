@@ -35,12 +35,8 @@ ScanWrapper.propTypes = {
   })).isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  // fetchScanByID: id => dispatch(FETCH_SCAN_BY_ID(id)),
-});
-
 const mapStateToProps = state => ({
   scanList: state.audits.scanList,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScanWrapper);
+export default connect(mapStateToProps)(ScanWrapper);

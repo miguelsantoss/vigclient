@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Segment, Table, Icon } from 'semantic-ui-react';
 
-import SORT_AUDITS from '../actions/audits';
+import { SORT_AUDITS_BY } from '../actions/audits';
 
 class Audits extends Component {
+  handleSort = (key) => {
+    const { sort } = this.props;
+    if (!this.props.sort || this.props.sort.key !== key) this.props.sortAuditsBy(key, true);
+    else if (sort.key === key) this.props.sortAuditsBy(key, !sort.ascending);
+  }
+
+  iconName = (tableKey) => {
+    const { key, ascending } = this.props.sort;
+    if (key === tableKey) {
+      if (ascending) return 'triangle up';
+    }
+    return 'triangle down';
+  }
+
   renderAudits = () =>
     _.map(this.props.audits, audit => (
       <Table.Row key={audit.serial_number}>
-        <Table.Cell>{audit.serial_number}</Table.Cell>
+        <Table.Cell><Link to={`/audit/${audit.serial_number}`}>{audit.serial_number}</Link></Table.Cell>
         <Table.Cell>{audit.category}</Table.Cell>
         <Table.Cell>{audit.created_at}</Table.Cell>
         <Table.Cell>{audit.closed_at ? audit.closed_at : 'Audit open'}</Table.Cell>
@@ -24,20 +39,33 @@ class Audits extends Component {
           <Table.Header>
             <Table.Row style={{ background: 'red' }}>
               <Table.HeaderCell>
-                Serial Number
-                <Icon name='triangle down' size='mini' />
+                <span>Serial Number </span>
+                <Icon name='sort' />
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Type
-                <Icon name='triangle down' size='mini' />
+                <span>Type </span>
+                <Icon.Group>
+                  <Icon name='sort descending' link style={{ left: '50%' }} />
+                  <Icon name='sort ascending' link style={{ margin: 0, left: 4 }} />
+                </Icon.Group>
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Date Iniciated
-                <Icon name='triangle down' size='mini' />
+                <span>Date Iniciated</span>
+                <Icon
+                  name={this.iconName('created_at')}
+                  size='mini'
+                  link
+                  onClick={() => this.handleSort('created_at')}
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>
-                Date Closed
-                <Icon name='triangle down' size='mini' />
+                <span>Date Closed</span>
+                <Icon
+                  name={this.iconName('closed_at')}
+                  size='mini'
+                  link
+                  onClick={() => this.handleSort('closed_at')}
+                />
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -60,15 +88,20 @@ Audits.propTypes = {
       serial_number: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  sort: PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    ascending: PropTypes.bool.isRequired,
+  }).isRequired,
   sortAuditsBy: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
-  sortAuditsBy: (sortKey, ascending) => dispatch(SORT_AUDITS(sortKey, ascending)),
+  sortAuditsBy: (sortKey, ascending) => dispatch(SORT_AUDITS_BY(sortKey, ascending)),
 });
 
 const mapStateToProps = state => ({
   audits: state.audits.auditList,
+  sort: state.audits.auditSort,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Audits);

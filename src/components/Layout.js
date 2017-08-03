@@ -157,12 +157,8 @@ Layout.propTypes = {
   client: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-const mapDispatchToProps = dispatch => ({
-  // sortAuditsBy: (sortKey, ascending) => dispatch(SORT_AUDITS(sortKey, ascending)),
-});
-
 const mapStateToProps = state => ({
   audits: state.audits.auditList,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout);
+export default connect(mapStateToProps)(Layout);

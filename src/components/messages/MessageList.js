@@ -18,13 +18,13 @@ class MessageList extends React.Component {
 
 MessageList.propTypes = {
   messages: PropTypes.array.isRequired,
-  deleteMessage: PropTypes.func.isRequired
-}
+  deleteMessage: PropTypes.func.isRequired,
+};
 
 function mapStateToProps(state) {
-  return{
-    messages: state.messages
-  }
+  return {
+    messages: state.messages,
+  };
 }
 
 export default connect(mapStateToProps, { deleteMessage })(MessageList);

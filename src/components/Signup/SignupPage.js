@@ -24,7 +24,7 @@ SignupPage.propTypes = {
   userSignupRequest: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   addMessages: PropTypes.func.isRequired,
-  isUserExists:PropTypes.func.isRequired
+  isUserExists: PropTypes.func.isRequired,
 };
 
-export default connect(null, {userSignupRequest, addMessages, isUserExists})(SignupPage);
+export default connect(null, { userSignupRequest, addMessages, isUserExists })(SignupPage);

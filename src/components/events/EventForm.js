@@ -45,7 +45,7 @@ onSubmit(e){
 }
 
 EventForm.propTypes = {
-  createEvent: PropTypes.func.isRequired
-}
+  createEvent: PropTypes.func.isRequired,
+};
 
 export default connect(null, { createEvent })(EventForm);
