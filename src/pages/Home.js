@@ -8,6 +8,7 @@ import Linechart from '../components/Linechart';
 
 import { FETCH_AUDITS } from '../actions/audits';
 import { FETCH_PROFILE_INFO } from '../actions/profile';
+import { FETCH_VIZ_DATA } from '../actions/viz';
 
 class Home extends Component {
   constructor(props) {
@@ -19,9 +20,12 @@ class Home extends Component {
   componentWillMount() {
     this.props.fetchAudits();
     this.props.fetchProfileInfo();
+    this.props.fetchVizData();
   }
 
   render() {
+    const pieDataAvailable = this.props.vizData.pieAllVulns.length !== 0
+      && this.props.vizData.pieLatestVulns.length !== 0;
     return (
       <div>
         <Grid>
@@ -30,7 +34,7 @@ class Home extends Component {
               <Segment>
                 <Header>All vulnerabilities</Header>
                 <Container textAlign='center'>
-                  <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' />
+                  { pieDataAvailable && <Piechart data={this.props.vizData.pieAllVulns} id='piechart-all-vulnerabilities' /> }
                 </Container>
               </Segment>
             </Grid.Column>
@@ -38,7 +42,7 @@ class Home extends Component {
               <Segment>
                 <Header>Latest vulnerabilities</Header>
                 <Container textAlign='center'>
-                  <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' />
+                  { pieDataAvailable && <Piechart data={this.props.vizData.pieLatestVulns} id='piechart-all-vulnerabilities' /> }
                 </Container>
               </Segment>
             </Grid.Column>
@@ -48,7 +52,7 @@ class Home extends Component {
               <Segment>
                 <Header>All vulnerabilities</Header>
                 <Container textAlign='center'>
-                  <Linechart data={this.props.visData.allVulns} id='linechart-all-vulnerabilities' />
+                  <Linechart data={this.props.vizData.allVulns} id='linechart-all-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
@@ -56,7 +60,7 @@ class Home extends Component {
               <Segment>
                 <Header>Latest vulnerabilities</Header>
                 <Container textAlign='center'>
-                  <Linechart data={this.props.visData.latestVulns} id='linechart-recent-vulnerabilities' />
+                  <Linechart data={this.props.vizData.latestVulns} id='linechart-recent-vulnerabilities' />
                 </Container>
               </Segment>
             </Grid.Column>
@@ -68,14 +72,16 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  visData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  vizData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   fetchAudits: PropTypes.func.isRequired,
   fetchProfileInfo: PropTypes.func.isRequired,
+  fetchVizData: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   fetchAudits: () => dispatch(FETCH_AUDITS()),
   fetchProfileInfo: () => dispatch(FETCH_PROFILE_INFO()),
+  fetchVizData: () => dispatch(FETCH_VIZ_DATA()),
 });
 
 const mapStateToProps = state => ({

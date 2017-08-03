@@ -5,6 +5,7 @@ import audits from './audits';
 import messages from './messages';
 import auth from './auth';
 import profile from './profile';
+import viz from './viz';
 
 const rootReducer = combineReducers({
   audits,
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   messages,
   auth,
   profile,
+  viz,
 });
 
 export default rootReducer;

@@ -70,8 +70,8 @@ class Piechart extends Component {
 
     // Set up format options
     const floatFormat = d3Format.format('.4r');
-    const variable = 'numberVulnerabilities';
-    const category = 'riskFactor';
+    const variable = 'totalVulns';
+    const category = 'risk_factor';
 
     // creates a new pie generator
     const pie = d3Shape.pie()
@@ -123,10 +123,10 @@ class Piechart extends Component {
 
       // Risk Factor info
 
-      tip += `<tspan x="0" dy="0em">Risk: ${risk(dataArg.data.riskFactor)}</tspan>`;
+      tip += `<tspan x="0" dy="0em">Risk: ${risk(dataArg.data[category])}</tspan>`;
 
       // Number of Vulnerabilities info
-      tip += `<tspan x="0" dy="1em">Total: ${dataArg.data.numberVulnerabilities}</tspan>`;
+      tip += `<tspan x="0" dy="1em">Total: ${dataArg.data[variable]}</tspan>`;
 
       // Object.keys(dataArg.data).forEach((key, i) => {
       //   // if value is a number, format it as a percentage
@@ -187,15 +187,15 @@ class Piechart extends Component {
       .append('text')
       .attr('dy', '.35em')
       // add "key: value" for given category. Number inside tspan is bolded in stylesheet.
-      .html(d => `${risk(d.data.riskFactor)}: <tspan>${d.data.numberVulnerabilities}</tspan>`)
+      .html(d => `${risk(d.data[category])}: <tspan>${d.data[variable]}</tspan>`)
       .attr('transform', (d) => {
         // effectively computes the centre of the slice.
         // see https://github.com/d3/d3-shape/blob/master/README.md#arc_centroid
         const pos = outerArc.centroid(d);
         // changes the point to be on left or right depending on where label is.
         // eslint-disable-next-line max-len
-        pos[0] = radius * radiusDistMultiplier * (d.data.riskFactor === 4 ? -1 : 1) * (midAngle(d) < Math.PI ? 1 : -1);
-        if (d.data.riskFactor === 4) {
+        pos[0] = radius * radiusDistMultiplier * (d.data[category] === 5 ? -1 : 1) * (midAngle(d) < Math.PI ? 1 : -1);
+        if (d.data[category] === 5) {
           pos[0] += 50;
         }
         return `translate(${pos})`;
@@ -213,7 +213,7 @@ class Piechart extends Component {
           // see label transform function for explanations of these three lines.
           const pos = outerArc.centroid(d);
           // eslint-disable-next-line max-len
-          pos[0] = radius * radiusDistMultiplier * (d.data.riskFactor === 4 ? -1 : 1) * (midAngle(d) < Math.PI ? 1 : -1);
+          pos[0] = radius * radiusDistMultiplier * (d.data[category] === 5 ? -1 : 1) * (midAngle(d) < Math.PI ? 1 : -1);
           return [arc.centroid(d), outerArc.centroid(d), pos];
         });
 

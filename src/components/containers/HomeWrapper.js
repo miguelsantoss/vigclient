@@ -1,28 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import Home from '../../pages/Home';
 
-import vulnsJSON from '../../json/vulnerabilities.json';
-
-
-const HomeWrapper = () => {
-  const visData = {};
-  const vulns = [];
-  for (let i = 0; i < vulnsJSON.length; i += 1) {
-    const riskFactor = vulnsJSON[i].risk_factor;
-    // eslint-disable-next-line no-plusplus
-    vulns[riskFactor - 1] = vulns[riskFactor - 1] ? ++vulns[riskFactor - 1] : 1;
-  }
-  const vulnerabilityData = [];
-  for (let i = 0; i < vulns.length; i += 1) {
-    const vulnTypeData = {
-      riskFactor: i + 1,
-      numberVulnerabilities: vulns[i],
-    };
-    vulnerabilityData.push(vulnTypeData);
-  }
-  visData.allVulns = vulnerabilityData;
-  visData.latestVulns = vulnerabilityData;
-  return (<Home visData={visData} />);
+const HomeWrapper = (props) => {
+  return (<Home vizData={props.vizData} />);
 };
 
-export default HomeWrapper;
+HomeWrapper.propTypes = {
+  vizData: PropTypes.shape({
+    pieAllVulns: PropTypes.arrayOf(PropTypes.shape({
+      risk_factor: PropTypes.number.isRequired,
+      totalVulns: PropTypes.number.isRequired,
+    })).isRequired,
+    pieLatestVulns: PropTypes.arrayOf(PropTypes.shape({
+      risk_factor: PropTypes.number.isRequired,
+      totalVulns: PropTypes.number.isRequired,
+    })).isRequired,
+  }).isRequired,
+};
+
+const mapDispatchToProps = dispatch => ({
+});
+
+const mapStateToProps = state => ({
+  vizData: {
+    pieAllVulns: state.viz.pieCharts.all,
+    pieLatestVulns: state.viz.pieCharts.latest,
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeWrapper);
