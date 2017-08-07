@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import cx from 'classnames';
 import { Grid, Breadcrumb, Segment } from 'semantic-ui-react';
-import Sidebar from './Sidebar';
-import Appbar from './Appbar';
-import MessageList from './messages/MessageList';
-import browserHistory from '../history';
+
+import Sidebar from '../Sidebar';
+import Appbar from '../Appbar';
+import MessageList from '../messages/MessageList';
+import browserHistory from '../../history';
+import s from './index.scss';
+import { RESET_STATE_STORE } from '../../actions/common';
 
 const style = {};
 const sidebarWidth = 200;
 
 style.main = {
   marginLeft: sidebarWidth,
+  marginTop: 49,
 };
 
 style.appbar = {
@@ -23,7 +28,6 @@ style.appbar = {
 style.grid = {
   // marginleft: siddebarWidth + 'px',
   marginLeft: 0,
-  marginTop: 49,
   paddingRight: '15px',
   paddingLeft: '0px',
   background: '#ecf0f5',
@@ -126,13 +130,18 @@ class Layout extends Component {
   render() {
     return (
       <div>
-        <Appbar style={style.appbar} client={this.props.client} history={this.props.history} />
+        <Appbar
+          style={style.appbar}
+          client={this.props.client}
+          history={this.props.history}
+          reset={this.props.reset}
+        />
         <Sidebar audits={this.props.audits} style={style.menu} />
         <div style={style.main}>
+          {this.renderBreadcrumbHistory()}
           <Grid style={style.grid}>
             <Grid.Row>
               <Grid.Column>
-                {this.renderBreadcrumbHistory()}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row>
@@ -157,8 +166,12 @@ Layout.propTypes = {
   client: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
+const mapDispatchToProps = dispatch => ({
+  reset: () => dispatch(RESET_STATE_STORE()),
+});
+
 const mapStateToProps = state => ({
   audits: state.audits.auditList,
 });
 
-export default connect(mapStateToProps)(Layout);
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

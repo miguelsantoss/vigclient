@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Segment, Table, Icon } from 'semantic-ui-react';
 
-import { SORT_AUDITS_BY } from '../actions/audits';
+import { SORT_AUDITS_BY } from '../../actions/audits';
 
 class Audits extends Component {
   handleSort = (key) => {
@@ -44,16 +44,18 @@ class Audits extends Component {
               </Table.HeaderCell>
               <Table.HeaderCell>
                 <span>Type </span>
-                <Icon.Group>
-                  <Icon name='sort descending' link style={{ left: '50%' }} />
-                  <Icon name='sort ascending' link style={{ margin: 0, left: 4 }} />
-                </Icon.Group>
+                <Icon
+                  name={this.iconName('category')}
+                  size='small'
+                  link
+                  onClick={() => this.handleSort('category')}
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>
                 <span>Date Iniciated</span>
                 <Icon
                   name={this.iconName('created_at')}
-                  size='mini'
+                  size='small'
                   link
                   onClick={() => this.handleSort('created_at')}
                 />
@@ -62,7 +64,7 @@ class Audits extends Component {
                 <span>Date Closed</span>
                 <Icon
                   name={this.iconName('closed_at')}
-                  size='mini'
+                  size='small'
                   link
                   onClick={() => this.handleSort('closed_at')}
                 />

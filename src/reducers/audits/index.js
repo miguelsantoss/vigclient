@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { APP_INIT } from '../../actions/common';
+import { APP_INIT, RESET_STATE } from '../../actions/common';
 import {
   FETCH_AUDITS_SUCCESS,
   FETCH_AUDITS_LOADING,
@@ -141,6 +141,10 @@ export default function audits(state = initialState, action) {
           fetchError: true,
         },
       };
+    case RESET_STATE:
+      return {
+        ...initialState,
+      }
     default:
       return state;
   }

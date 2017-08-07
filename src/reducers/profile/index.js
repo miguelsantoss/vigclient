@@ -1,4 +1,4 @@
-import { APP_INIT } from '../../actions/common';
+import { APP_INIT, RESET_STATE } from '../../actions/common';
 import {
   FETCH_PROFILE_INFO_SUCCESS,
   FETCH_PROFILE_INFO_LOADING,
@@ -48,6 +48,10 @@ export default function profile(state = initialState, action) {
         ...state,
         fetchLoading: false,
         fetchError: true,
+      };
+    case RESET_STATE:
+      return {
+        ...initialState,
       };
     default:
       return state;

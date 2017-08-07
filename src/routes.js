@@ -7,7 +7,7 @@ import NewEventPage from './components/events/NewEventPage';
 import Layout from './components/Layout';
 import PageNotFound from './pages/PageNotFound';
 
-import Audits from './pages/Audits';
+import Audits from './pages/Audits/Audits';
 import AuditWrapper from './components/containers/AuditsWrapper';
 import MachineWrapper from './components/containers/MachinesWrapper';
 import ScanWrapper from './components/containers/ScanWrapper';

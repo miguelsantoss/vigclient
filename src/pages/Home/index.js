@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Container, Segment, Header } from 'semantic-ui-react';
 
-import Piechart from '../components/Piechart/index';
-import Linechart from '../components/Linechart';
+import Piechart from '../../components/Piechart/index';
+import Linechart from '../../components/Linechart';
 
-import { FETCH_AUDITS } from '../actions/audits';
-import { FETCH_PROFILE_INFO } from '../actions/profile';
-import { FETCH_VIZ_DATA } from '../actions/viz';
+import { FETCH_AUDITS } from '../../actions/audits';
+import { FETCH_PROFILE_INFO } from '../../actions/profile';
+import { FETCH_VIZ_DATA } from '../../actions/viz';
 
 class Home extends Component {
   constructor(props) {

@@ -176,6 +176,49 @@ module.exports = {
       // in the main CSS file.
       {
         test: /\.css$/,
+        exclude: [/node_modules/],
+        loader: ExtractTextPlugin.extract(
+          Object.assign(
+            {
+              fallback: require.resolve('style-loader'),
+              use: [
+                {
+                  loader: require.resolve('css-loader'),
+                  options: {
+                    importLoaders: 1,
+                    minimize: true,
+                    sourceMap: true,
+                    modules: true,
+                  },
+                },
+                {
+                  loader: require.resolve('postcss-loader'),
+                  options: {
+                    ident: 'postcss', // https://webpack.js.org/guides/migrating/#complex-options
+                    plugins: () => [
+                      require('postcss-flexbugs-fixes'), // eslint-disable-line global-require
+                      autoprefixer({
+                        browsers: [
+                          '>1%',
+                          'last 4 versions',
+                          'Firefox ESR',
+                          'not ie < 9', // React doesn't support IE8 anyway
+                        ],
+                        flexbox: 'no-2009',
+                      }),
+                    ],
+                  },
+                },
+              ],
+            },
+            extractTextPluginOptions,
+          ),
+        ),
+        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+      },
+      {
+        test: /\.css$/,
+        exclude: [paths.appSrc],
         loader: ExtractTextPlugin.extract(
           Object.assign(
             {

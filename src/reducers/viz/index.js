@@ -1,4 +1,4 @@
-import { APP_INIT } from '../../actions/common';
+import { APP_INIT, RESET_STATE } from '../../actions/common';
 import {
   FETCH_VIZ_DATA_SUCCESS,
   FETCH_VIZ_DATA_LOADING,
@@ -33,7 +33,6 @@ export default function viz(state = initialState, action) {
         },
       };
     case FETCH_VIZ_DATA_SUCCESS:
-      console.info(action.result);
       return {
         ...state,
         pieCharts: {
@@ -56,6 +55,10 @@ export default function viz(state = initialState, action) {
           fetchLoading: false,
           fetchError: true,
         },
+      };
+    case RESET_STATE:
+      return {
+        ...initialState,
       };
     default:
       return state;

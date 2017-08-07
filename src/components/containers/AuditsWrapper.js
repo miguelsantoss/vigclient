@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import AuditsNetwork from '../../pages/AuditNetwork';
-import AuditsWebPage from '../../pages/AuditWebPage';
+import AuditsNetwork from '../../pages/Audits/AuditNetwork';
+import AuditsWebPage from '../../pages/Audits/AuditWebPage';
 import { FETCH_SCAN_BY_ID } from '../../actions/scans';
 
 // In order to pass props into the Audits Component

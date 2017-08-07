@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
-import { Menu } from 'semantic-ui-react';
-import { logout } from '../actions/authActions';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { NavLink, Link } from 'react-router-dom';
+import { Menu } from 'semantic-ui-react';
+import { logout } from '../../actions/authActions';
 
 class AppBar extends Component {
   logout(e) {
@@ -40,6 +39,9 @@ class AppBar extends Component {
         </Menu.Item>
         <Menu.Item name='user' >
           <Link to='/profile'>{this.props.client.name}</Link>
+        </Menu.Item>
+        <Menu.Item name='user' onClick={() => this.props.reset()}>
+          <span>RESET_STATE_STORE</span>
         </Menu.Item>
         { isAuth ? userLink : guestLink }
       </Menu>
