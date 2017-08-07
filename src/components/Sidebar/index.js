@@ -5,25 +5,20 @@ import { withRouter } from 'react-router';
 import _ from 'lodash';
 import moment from 'moment';
 
-// import { Icon, Divider } from 'semantic-ui-react';
 import { Menu } from 'semantic-ui-react';
-
-export const auditType = [
-  'EXTERNAL',
-  'INTERNAL',
-  'WEB',
-];
 
 class Sidebar extends Component {
   renderAudits() {
     const { audits } = this.props;
     // Sort audits by data iniciated
     // FIXME: use closed_at date in the sort too - deal with NULL
-    const auditsByDate = audits.sort((a, b) => moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'));
+    // const auditsByDate = audits.sort((a, b) =>
+    //   moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'),
+    // );
     // Map each audit into a Menu item element
     const auditsRender = _.map(audits, audit => (
       <Menu.Item key={audit.serial_number} as={Link} to={`/audit/${audit.serial_number}`}>
-        {`${audit.serial_number}`}
+        {`${moment(audit.created_at).format('DD MMM YYYY')}${audit.closed_at === '' ? ' (Open)' : ''}`}
       </Menu.Item>
     ));
     return auditsRender;

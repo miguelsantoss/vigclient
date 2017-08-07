@@ -9,15 +9,27 @@ import Piechart from '../../components/Piechart/index';
 class Scan extends Component {
   constructor(props) {
     super(props);
+
+    props.scan.vulnerabilities.sort((a, b) => {
+      if (a.risk_factor < b.risk_factor) return 1;
+      if (a.risk_factor > b.risk_factor) return -1;
+      if (a.count < b.count) return 1;
+      if (a.count > b.count) return -1;
+      return 0;
+    });
+
     this.state = {
+      scan: props.scan,
+      vulnerabilities: props.scan.vulnerabilities,
+      machines: props.scan.machines,
       selectedRow: null,
     };
   }
 
-  getMachineIndex = id => this.props.machines.map(m => m.id).indexOf(id)
+  getMachineIndex = id => this.state.machines.map(m => m.id).indexOf(id)
 
-  handleRowClick = (id, index) => {
-    this.setState({ ...this.state, selectedRow: { id, index } });
+  handleRowClick = (id) => {
+    this.setState({ ...this.state, selectedRow: id });
   }
 
   labelColor = (risk) => {
@@ -40,9 +52,17 @@ class Scan extends Component {
   )
 
   renderRelatedMachineEntries = () => {
-    const { vulnerabilities, machines } = this.props.scan;
-    if (!this.state.selectedRow) return null;
-    const { index } = this.state.selectedRow;
+    const { vulnerabilities, machines } = this.state.scan;
+    const { selectedRow } = this.state;
+    const getVulnIndex = (id) => {
+      for (let i = 0; i < vulnerabilities.length; i += 1) {
+        if (vulnerabilities[i].id === id) return i;
+      }
+      return -1;
+    };
+    if (!selectedRow) return null;
+    const index = getVulnIndex(selectedRow);
+    if (index === -1) return null;
     return _.map(vulnerabilities[index].relatedMachines, (machine) => {
       const machineIndex = this.getMachineIndex(machine);
       return (
@@ -90,13 +110,14 @@ class Scan extends Component {
       width: '18px',
       lineHeight: '1.2',
     };
-    const { vulnerabilities } = this.props.scan;
+    const { vulnerabilities } = this.state.scan;
     const { selectedRow } = this.state;
-    return _.map(vulnerabilities, (vuln, index) => (
+
+    return _.map(vulnerabilities, vuln => (
       <Table.Row
         key={vuln.id}
-        active={selectedRow && selectedRow.id === vuln.id}
-        onClick={() => this.handleRowClick(vuln.id, index)}
+        active={selectedRow === vuln.id}
+        onClick={() => this.handleRowClick(vuln.id)}
       >
         <Table.Cell>
           <Label color={this.labelColor(vuln.risk_factor)} size='mini' style={style}>
@@ -127,7 +148,7 @@ class Scan extends Component {
             <Segment>
               <Container>
                 <Header as='h4' icon='heartbeat' content='VULNERABILITIES' />
-                { !disabledViz && <Piechart data={this.props.visData.allVulns} id='piechart-all-vulnerabilities' /> }
+                { !disabledViz && <Piechart data={this.state.visData.allVulns} id='piechart-all-vulnerabilities' /> }
               </Container>
             </Segment>
           </Grid.Column>

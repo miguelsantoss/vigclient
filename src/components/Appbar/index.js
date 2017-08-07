@@ -50,10 +50,13 @@ class AppBar extends Component {
 }
 
 AppBar.propTypes = {
-  client: PropTypes.object.isRequired,
   style: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
+  client: PropTypes.shape({
+    acronym: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 function mapStateToProps(state) {

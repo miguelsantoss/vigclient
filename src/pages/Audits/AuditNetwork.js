@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Table } from 'semantic-ui-react';
+import { Table, Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
 class Audit extends Component {
@@ -13,30 +13,27 @@ class Audit extends Component {
     const { scans } = this.props.auditInfo;
     return _.map(scans, scan => (
       <Table.Row key={scan.id}>
-        <Table.Cell><Link to={`/scan/${scan.id}`}>{scan.id}</Link></Table.Cell>
+        <Table.Cell><Link to={`/scan/${scan.id}`}>{scan.network}</Link></Table.Cell>
         <Table.Cell>{scan.category}</Table.Cell>
-        <Table.Cell>{scan.network}</Table.Cell>
       </Table.Row>
     ));
   }
   renderScans = () => {
     if (this.props.auditInfo.scans.length !== 0) {
       return (
-        <div>
-          <h4>Network scans:</h4>
-          <Table celled>
+        <Segment>
+          <Table selectable compact basic='very' size='small'>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>id</Table.HeaderCell>
-                <Table.HeaderCell>category</Table.HeaderCell>
-                <Table.HeaderCell>network</Table.HeaderCell>
+                <Table.HeaderCell>Network</Table.HeaderCell>
+                <Table.HeaderCell>Category</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
               {this.renderScanEntries()}
             </Table.Body>
           </Table>
-        </div>
+        </Segment>
       );
     }
     return null;

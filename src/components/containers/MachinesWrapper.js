@@ -10,7 +10,6 @@ import vulnsJSON from '../../json/vulnerabilities.json';
 
 const MachinesWrapper = (props) => {
   const { match } = props;
-  console.log(props);
   let machine = {};
   const ports = [];
   const vulnerabilities = [];

@@ -141,8 +141,7 @@ class Layout extends Component {
           {this.renderBreadcrumbHistory()}
           <Grid style={style.grid}>
             <Grid.Row>
-              <Grid.Column>
-              </Grid.Column>
+              <Grid.Column />
             </Grid.Row>
             <Grid.Row>
               <Grid.Column>
@@ -163,7 +162,10 @@ Layout.propTypes = {
     PropTypes.arrayOf(PropTypes.element),
     PropTypes.element,
   ]).isRequired,
-  client: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  client: PropTypes.shape({
+    acronym: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -172,6 +174,7 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   audits: state.audits.auditList,
+  client: state.profile.info,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Layout);

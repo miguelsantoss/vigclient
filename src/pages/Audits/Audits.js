@@ -5,17 +5,66 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Segment, Table, Icon } from 'semantic-ui-react';
 
-import { SORT_AUDITS_BY } from '../../actions/audits';
-
 class Audits extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      audits: props.audits,
+      sort: {
+        key: 'created_at',
+        ascending: false,
+      },
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ ...this.state, audits: nextProps.audits });
+  }
+
+  sortAudits = (key, ascending) => {
+    const auditList = _.cloneDeep(this.state.audits);
+
+    if (auditList !== 0) {
+      switch (key) {
+        case 'category':
+          auditList.sort((a, b) => {
+            if (a.category < b.category) return ascending ? -1 : 1;
+            if (a.category > b.category) return ascending ? 1 : -1;
+            return 0;
+          });
+          break;
+        case 'created_at':
+          auditList.sort((a, b) => {
+            const aDate = new Date(a.created_at);
+            const bDate = new Date(b.created_at);
+            if (aDate < bDate) return ascending ? -1 : 1;
+            if (aDate > bDate) return ascending ? 1 : -1;
+            return 0;
+          });
+          break;
+        case 'closed_at':
+          auditList.sort((a, b) => {
+            const aDate = a.closed_at ? new Date(a.closed_at) : Date.now();
+            const bDate = b.closed_at ? new Date(b.closed_at) : Date.now();
+            if (aDate < bDate) return ascending ? -1 : 1;
+            if (aDate > bDate) return ascending ? 1 : -1;
+            return 0;
+          });
+          break;
+        default:
+          break;
+      }
+      this.setState({ ...this.state, audits: auditList, sort: { key, ascending } });
+    }
+  }
   handleSort = (key) => {
-    const { sort } = this.props;
-    if (!this.props.sort || this.props.sort.key !== key) this.props.sortAuditsBy(key, true);
-    else if (sort.key === key) this.props.sortAuditsBy(key, !sort.ascending);
+    const { sort } = this.state;
+    if (!sort || sort.key !== key) this.sortAudits(key, true);
+    else if (sort.key === key) this.sortAudits(key, !sort.ascending);
   }
 
   iconName = (tableKey) => {
-    const { key, ascending } = this.props.sort;
+    const { key, ascending } = this.state.sort;
     if (key === tableKey) {
       if (ascending) return 'triangle up';
     }
@@ -23,11 +72,10 @@ class Audits extends Component {
   }
 
   renderAudits = () =>
-    _.map(this.props.audits, audit => (
+    _.map(this.state.audits, audit => (
       <Table.Row key={audit.serial_number}>
-        <Table.Cell><Link to={`/audit/${audit.serial_number}`}>{audit.serial_number}</Link></Table.Cell>
         <Table.Cell>{audit.category}</Table.Cell>
-        <Table.Cell>{audit.created_at}</Table.Cell>
+        <Table.Cell><Link to={`/audit/${audit.serial_number}`}>{audit.created_at}</Link></Table.Cell>
         <Table.Cell>{audit.closed_at ? audit.closed_at : 'Audit open'}</Table.Cell>
       </Table.Row>
     ))
@@ -35,13 +83,9 @@ class Audits extends Component {
   render() {
     return (
       <Segment>
-        <Table compact='very' singleLine celled striped selectable>
+        <Table selectable compact basic='very' size='small'>
           <Table.Header>
-            <Table.Row style={{ background: 'red' }}>
-              <Table.HeaderCell>
-                <span>Serial Number </span>
-                <Icon name='sort' />
-              </Table.HeaderCell>
+            <Table.Row>
               <Table.HeaderCell>
                 <span>Type </span>
                 <Icon
@@ -90,20 +134,10 @@ Audits.propTypes = {
       serial_number: PropTypes.string.isRequired,
     }),
   ).isRequired,
-  sort: PropTypes.shape({
-    key: PropTypes.string.isRequired,
-    ascending: PropTypes.bool.isRequired,
-  }).isRequired,
-  sortAuditsBy: PropTypes.func.isRequired,
 };
-
-const mapDispatchToProps = dispatch => ({
-  sortAuditsBy: (sortKey, ascending) => dispatch(SORT_AUDITS_BY(sortKey, ascending)),
-});
 
 const mapStateToProps = state => ({
   audits: state.audits.auditList,
-  sort: state.audits.auditSort,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Audits);
+export default connect(mapStateToProps)(Audits);

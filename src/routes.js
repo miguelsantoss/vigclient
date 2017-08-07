@@ -17,14 +17,12 @@ import Profile from './pages/Profile';
 
 import requireAuth from './utils/requireAuth';
 
-import * as jsonData from './jsonData';
-
 const RouterWrapper = () => (
   <BrowserRouter>
     <Switch>
       <Route path='/login'component={LoginPage} />
       <Route path='/signup'component={SignupPage} />
-      <Layout client={jsonData.props.client} audits={jsonData.props.client.audits}>
+      <Layout>
         <Switch>
           <Route exact path='/' component={HomeWrapper} />
           <Route exact path='/profile' component={Profile} />
