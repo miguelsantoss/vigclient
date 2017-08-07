@@ -15,7 +15,7 @@ class Scan extends Component {
       if (a.risk_factor > b.risk_factor) return -1;
       if (a.count < b.count) return 1;
       if (a.count > b.count) return -1;
-      return 0;
+      return a.title.localeCompare(b.title);
     });
 
     this.state = {

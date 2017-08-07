@@ -42,10 +42,6 @@ export default function viz(state = initialState, action) {
           fetchLoading: false,
           fetchError: false,
         },
-        lineCharts: {
-          ...state.lineCharts,
-          latest: action.result.lineGraphData.latest,
-        },
       };
     case FETCH_VIZ_DATA_FAIL:
       return {

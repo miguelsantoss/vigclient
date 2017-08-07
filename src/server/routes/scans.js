@@ -42,6 +42,7 @@ router.get('/:id', (req, res) => {
           delete machineItem.source_id;
           delete machineItem.client_id;
           machineItem.vulnerabilities.forEach((vuln) => {
+            if (vuln.risk_factor === 4) vuln.risk_factor = 3;
             vuln.count = 1;
             vuln.relatedMachines = [machineItem.id];
             const t = vulnExists(scanItem.vulnerabilities, vuln.vid);

@@ -27,9 +27,10 @@ const RouterWrapper = () => (
           <Route exact path='/' component={HomeWrapper} />
           <Route exact path='/profile' component={Profile} />
           <Route path='/new-event'component={requireAuth(NewEventPage)} />
-          <Route path='/scan/:id' component={ScanWrapper} />
           <Route path='/audits' component={Audits} />
           <Route path='/audit/:id' component={AuditWrapper} />
+          <Route path='/scan/:id/vulnerabilities' component={ScanWrapper} />
+          <Route path='/scan/:id' component={ScanWrapper} />
           <Route path='/machine/:id' component={MachineWrapper} />
           <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
           <Route component={PageNotFound} status={404} />

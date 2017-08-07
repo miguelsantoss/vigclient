@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
     const pieAllVulns = [];
     const pieLatestAuditVulns = [];
     const graphLatestVulns = [];
-    for (let i = 0; i <= 4; i += 1) {
+    for (let i = 0; i < 4; i += 1) {
       const vulnType = {
         risk_factor: i,
         totalVulns: 0,
@@ -40,7 +40,8 @@ router.get('/', (req, res) => {
         audit.scans.forEach((scan) => {
           scan.machines.forEach((machine) => {
             machine.vulnerabilities.forEach((vuln) => {
-              pieAllVulns[vuln.risk_factor].totalVulns += 1;
+              const risk = vuln.risk_factor === 4 ? 3 : vuln.risk_factor;
+              pieAllVulns[risk].totalVulns += 1;
             });
           });
         });
@@ -52,12 +53,8 @@ router.get('/', (req, res) => {
       auditList[0].scans.forEach((scan) => {
         scan.machines.forEach((machine) => {
           machine.vulnerabilities.forEach((vuln) => {
-            pieLatestAuditVulns[vuln.risk_factor].totalVulns += 1;
-            const vizObj = {
-              date: vuln.updated_at,
-              total: pieLatestAuditVulns[vuln.risk_factor].totalVulns,
-            };
-            graphLatestVulns[vuln.risk_factor].data.push(vizObj);
+            const risk = vuln.risk_factor === 4 ? 3 : vuln.risk_factor;
+            pieLatestAuditVulns[risk].totalVulns += 1;
           });
         });
       });
@@ -72,7 +69,6 @@ router.get('/', (req, res) => {
     };
     const vizData = {
       pieData,
-      lineGraphData,
     };
     res.json(vizData);
   });
