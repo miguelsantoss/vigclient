@@ -12,6 +12,7 @@
         "jsx-quotes": "off",
         "no-console": ["error", { "allow": ["warn", "error", "info"]}],
         "linebreak-style": "off",
-        "no-case-declarations": "off"
+        "no-case-declarations": "off",
+        "no-underscore-dangle": "off"
     }
 }

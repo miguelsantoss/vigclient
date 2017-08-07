@@ -50,7 +50,7 @@ class Scan extends Component {
           key={machine}
         >
           <Table.Cell>{machines[machineIndex].ip_address}</Table.Cell>
-          <Table.Cell>Source</Table.Cell>
+          <Table.Cell><Link to={`/machine/${machine}`}>Vulnerabilities</Link></Table.Cell>
         </Table.Row>
       );
     });
@@ -91,10 +91,11 @@ class Scan extends Component {
       lineHeight: '1.2',
     };
     const { vulnerabilities } = this.props.scan;
+    const { selectedRow } = this.state;
     return _.map(vulnerabilities, (vuln, index) => (
       <Table.Row
         key={vuln.id}
-        active={this.state.selectedRow === vuln.id}
+        active={selectedRow && selectedRow.id === vuln.id}
         onClick={() => this.handleRowClick(vuln.id, index)}
       >
         <Table.Cell>
