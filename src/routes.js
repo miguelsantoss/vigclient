@@ -25,7 +25,7 @@ const RouterWrapper = () => (
       <Layout>
         <Switch>
           <Route exact path='/' component={HomeWrapper} />
-          <Route exact path='/profile' component={Profile} />
+          <Route path='/profile' component={Profile} />
           <Route path='/new-event'component={requireAuth(NewEventPage)} />
           <Route path='/audits' component={Audits} />
           <Route path='/audit/:id' component={AuditWrapper} />

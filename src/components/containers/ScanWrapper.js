@@ -8,6 +8,7 @@ import Scan from '../../pages/Scan';
 const ScanWrapper = (props) => {
   const { match } = props;
   let scan = {};
+
   props.scanList.forEach((scanItem) => {
     if (scanItem.id === parseInt(match.params.id, 10)) scan = scanItem;
   });
@@ -17,7 +18,6 @@ const ScanWrapper = (props) => {
   }
 
   const { machines } = scan;
-
   const visData = {};
   return (<Scan match={match} scan={scan} machines={machines} visData={visData} />);
 };

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Table, Segment } from 'semantic-ui-react';
+import { Table, Segment, Header } from 'semantic-ui-react';
+import moment from 'moment';
 import _ from 'lodash';
 
 class Audit extends Component {
@@ -18,34 +19,31 @@ class Audit extends Component {
       </Table.Row>
     ));
   }
-  renderScans = () => {
-    if (this.props.auditInfo.scans.length !== 0) {
-      return (
-        <Segment>
-          <Table selectable compact basic='very' size='small'>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Network</Table.HeaderCell>
-                <Table.HeaderCell>Category</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {this.renderScanEntries()}
-            </Table.Body>
-          </Table>
-        </Segment>
-      );
-    }
-    return null;
-  }
+  renderScans = () => (
+    <Table selectable compact basic='very' size='small'>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Network</Table.HeaderCell>
+          <Table.HeaderCell>Category</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {this.renderScanEntries()}
+      </Table.Body>
+    </Table>
+  )
+
   render() {
+    const { auditInfo } = this.props;
     return (
-      <div>
-        <h1>Audit {this.props.auditInfo.id} Serial Number: {this.props.auditInfo.serial_number}</h1>
-        <h2>category: {this.props.auditInfo.category}</h2>
-        <h3>{this.props.auditInfo.created_at} - {this.props.auditInfo.closed_at === '' ? 'present' : this.props.auditInfo.closed_at}</h3>
+      <Segment>
+        <Header>
+          {`${moment(auditInfo.created_at).format('DD MMM YYYY')} - ${auditInfo.closed_at === '' ?
+            ' (Open)' : moment(auditInfo.created_at).format('DD MMM YYYY')}`}
+        </Header>
         {this.renderScans()}
-      </div>
+        { auditInfo.scans.length === 0 ? <Header>There are no scans here yet</Header> : null}
+      </Segment>
     );
   }
 }
