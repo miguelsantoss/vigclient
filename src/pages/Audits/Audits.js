@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Segment, Table, Icon } from 'semantic-ui-react';
@@ -63,6 +63,8 @@ class Audits extends Component {
     else if (sort.key === key) this.sortAudits(key, !sort.ascending);
   }
 
+  handleRowClick = id => this.props.history.push(`/audit/${id}`);
+
   iconName = (tableKey) => {
     const { key, ascending } = this.state.sort;
     if (key === tableKey) {
@@ -73,7 +75,7 @@ class Audits extends Component {
 
   renderAudits = () =>
     _.map(this.state.audits, audit => (
-      <Table.Row key={audit.serial_number}>
+      <Table.Row key={audit.serial_number} onClick={() => this.handleRowClick(audit.serial_number)}>
         <Table.Cell>{audit.category}</Table.Cell>
         <Table.Cell><Link to={`/audit/${audit.serial_number}`}>{audit.created_at}</Link></Table.Cell>
         <Table.Cell>{audit.closed_at ? audit.closed_at : 'Audit open'}</Table.Cell>
@@ -134,10 +136,13 @@ Audits.propTypes = {
       serial_number: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const mapStateToProps = state => ({
   audits: state.audits.auditList,
 });
 
-export default connect(mapStateToProps)(Audits);
+export default connect(mapStateToProps)(withRouter(Audits));

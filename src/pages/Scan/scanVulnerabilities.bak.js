@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { Redirect, Route, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Table, Grid, Segment, Container, Header, Label } from 'semantic-ui-react';
 import Piechart from '../../components/Piechart/index';
 
@@ -11,30 +10,20 @@ class Scan extends Component {
   constructor(props) {
     super(props);
 
-    const { match } = props;
-    let scan = null;
-    props.scanList.forEach((scanItem) => {
-      if (scanItem.id === parseInt(match.params.id, 10)) {
-        scan = _.cloneDeep(scanItem);
-      }
+    props.scan.vulnerabilities.sort((a, b) => {
+      if (a.risk_factor < b.risk_factor) return 1;
+      if (a.risk_factor > b.risk_factor) return -1;
+      if (a.count < b.count) return 1;
+      if (a.count > b.count) return -1;
+      return a.title.localeCompare(b.title);
     });
 
-    if (scan && scan !== null) {
-      scan.vulnerabilities.sort((a, b) => {
-        if (a.risk_factor < b.risk_factor) return 1;
-        if (a.risk_factor > b.risk_factor) return -1;
-        if (a.count < b.count) return 1;
-        if (a.count > b.count) return -1;
-        return a.title.localeCompare(b.title);
-      });
-
-      this.state = {
-        scan,
-        vulnerabilities: scan.vulnerabilities,
-        machines: scan.machines,
-        selectedRow: null,
-      };
-    }
+    this.state = {
+      scan: props.scan,
+      vulnerabilities: props.scan.vulnerabilities,
+      machines: props.scan.machines,
+      selectedRow: null,
+    };
   }
 
   getMachineIndex = id => this.state.machines.map(m => m.id).indexOf(id)
@@ -48,7 +37,7 @@ class Scan extends Component {
     return colors[risk];
   }
 
-  renderRelatedMachines = () => (
+  renderMachineList = () => (
     <Table selectable compact basic='very' size='small' textAlign='center'>
       <Table.Header>
         <Table.Row>
@@ -57,13 +46,12 @@ class Scan extends Component {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {this.renderRelatedMachineEntries()}
+        {this.renderMachineEntries()}
       </Table.Body>
     </Table>
   )
 
-  renderRelatedMachineEntries = () => {
-    if (!this.state.scan) return null;
+  renderMachineEntries = () => {
     const { vulnerabilities, machines } = this.state.scan;
     const { selectedRow } = this.state;
     const getVulnIndex = (id) => {
@@ -122,7 +110,6 @@ class Scan extends Component {
       width: '18px',
       lineHeight: '1.2',
     };
-    if (!this.state.scan) return null;
     const { vulnerabilities } = this.state.scan;
     const { selectedRow } = this.state;
 
@@ -150,13 +137,12 @@ class Scan extends Component {
         <Grid.Row>
           <Grid.Column width={10}>
             <Segment>
-              {this.renderVulnerabilityList()}
+              {this.renderMachineList()}
             </Segment>
           </Grid.Column>
           <Grid.Column width={6}>
             <Segment>
               <Header as='h4' icon="laptop" content='RELATED MACHINES' />
-              {this.renderRelatedMachines()}
             </Segment>
             <Segment>
               <Container>
@@ -173,19 +159,8 @@ class Scan extends Component {
 
 Scan.propTypes = {
   match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  scanList: PropTypes.arrayOf(PropTypes.shape({
-    category: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
-    created_at: PropTypes.string.isRequired,
-    updated_at: PropTypes.string.isRequired,
-    machines: PropTypes.arrayOf(PropTypes.shape({
-
-    })).isRequired,
-  })).isRequired,
+  scan: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  machines: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-const mapStateToProps = state => ({
-  scanList: state.audits.scanList,
-});
-
-export default connect(mapStateToProps)(Scan);
+export default Scan;

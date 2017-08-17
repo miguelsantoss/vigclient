@@ -10,7 +10,7 @@ import PageNotFound from './pages/PageNotFound';
 import Audits from './pages/Audits/Audits';
 import AuditWrapper from './components/containers/AuditsWrapper';
 import MachineWrapper from './components/containers/MachinesWrapper';
-import ScanWrapper from './components/containers/ScanWrapper';
+import Scan from './pages/Scan';
 import VulnerabilityWrapper from './components/containers/VulnerabilityWrapper';
 import HomeWrapper from './components/containers/HomeWrapper';
 import Profile from './pages/Profile';
@@ -29,8 +29,7 @@ const RouterWrapper = () => (
           <Route path='/new-event'component={requireAuth(NewEventPage)} />
           <Route path='/audits' component={Audits} />
           <Route path='/audit/:id' component={AuditWrapper} />
-          <Route path='/scan/:id/vulnerabilities' component={ScanWrapper} />
-          <Route path='/scan/:id' component={ScanWrapper} />
+          <Route path='/scan/:id' component={Scan} />
           <Route path='/machine/:id' component={MachineWrapper} />
           <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
           <Route component={PageNotFound} status={404} />

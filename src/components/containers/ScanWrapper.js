@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Scan from '../../pages/Scan';
@@ -19,7 +19,12 @@ const ScanWrapper = (props) => {
 
   const { machines } = scan;
   const visData = {};
-  return (<Scan match={match} scan={scan} machines={machines} visData={visData} />);
+  return (
+    <div>
+      <Scan match={match} scan={scan} machines={machines} visData={visData} />
+      <Route path={`${match.url}/vulnerabilities`} component={Scan} />
+    </div>
+  );
 };
 
 ScanWrapper.propTypes = {

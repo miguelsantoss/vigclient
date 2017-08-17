@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Table, Segment, Header } from 'semantic-ui-react';
 import moment from 'moment';
 import _ from 'lodash';
@@ -10,10 +10,12 @@ class Audit extends Component {
     this.props.auditInfo.scans.forEach(scan => this.props.fetchScanByID(scan.id));
   }
 
+  handleRowClick = id => this.props.history.push(`/scan/${id}`);
+
   renderScanEntries = () => {
     const { scans } = this.props.auditInfo;
     return _.map(scans, scan => (
-      <Table.Row key={scan.id}>
+      <Table.Row key={scan.id} onClick={() => this.handleRowClick(scan.id)}>
         <Table.Cell><Link to={`/scan/${scan.id}`}>{scan.network}</Link></Table.Cell>
         <Table.Cell>{scan.category}</Table.Cell>
       </Table.Row>
@@ -63,6 +65,9 @@ Audit.propTypes = {
       network: PropTypes.string.isRequired,
     })),
   }).isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
-export default Audit;
+export default withRouter(Audit);

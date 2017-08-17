@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, withRouter } from 'react-router-dom';
 import { Menu } from 'semantic-ui-react';
 import { logout } from '../../actions/authActions';
 
@@ -65,4 +65,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { logout })(AppBar);
+export default connect(mapStateToProps, { logout })(withRouter(AppBar));

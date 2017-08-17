@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { persistStore, autoRehydrate } from 'redux-persist';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import jwtDecode from 'jwt-decode';
@@ -9,7 +8,7 @@ import { setCurrentUser } from './actions/authActions';
 import rootReducer from './reducers';
 import setAuthToken from './utils/setAuthToken';
 
-const configureStore = () => {
+const configureStore = (initialState) => {
   const thunkApplied = applyMiddleware(thunk);
   const loggerRedux = applyMiddleware(logger);
   let middlewares = null;
@@ -20,11 +19,36 @@ const configureStore = () => {
     middlewares = composeWithDevTools(thunkApplied, loggerRedux);
   }
 
-  return createStore(rootReducer, middlewares, autoRehydrate());
+  return createStore(rootReducer, initialState, middlewares);
 };
 
-const store = configureStore();
-persistStore(store, { blacklist: ['routing'] });
+const loadState = () => {
+  try {
+    const serializableState = localStorage.getItem('vigilanteState'); // eslint-disable-line no-undef
+    if (serializableState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializableState);
+  } catch (err) {
+    return undefined;
+  }
+};
+
+const saveState = (state) => {
+  try {
+    const serializableState = JSON.stringify(state);
+    localStorage.setItem('vigilanteState', serializableState); // eslint-disable-line no-undef
+  } catch (err) {
+    // err
+  }
+};
+
+const preloadedState = loadState() || {};
+const store = configureStore(preloadedState);
+
+store.subscribe(() => {
+  saveState(store.getState());
+});
 
 /* eslint-disable no-undef */
 if (localStorage.jwtToken) {

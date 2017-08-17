@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import { Grid, Breadcrumb, Segment } from 'semantic-ui-react';
@@ -177,4 +177,4 @@ const mapStateToProps = state => ({
   client: state.profile.info,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Layout));
