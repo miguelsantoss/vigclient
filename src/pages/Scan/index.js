@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { Redirect, Route, Link } from 'react-router-dom';
+import { Redirect, Route, Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Table, Grid, Segment, Container, Header, Label } from 'semantic-ui-react';
 import Piechart from '../../components/Piechart/index';
@@ -145,6 +145,7 @@ class Scan extends Component {
 
   render() {
     const disabledViz = true;
+    return (<Link to={`${this.props.match.url}/vulnerabilities`}>vulnerabilities</Link>);
     return (
       <Grid>
         <Grid.Row>

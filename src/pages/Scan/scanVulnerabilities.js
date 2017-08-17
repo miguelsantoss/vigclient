@@ -72,7 +72,13 @@ class Scan extends Component {
       }
       return -1;
     };
-    if (!selectedRow) return null;
+    if (!selectedRow) {
+      return (
+        <Table.Row>
+          <Table.Cell colSpan='4'>Select a vulnerability first.</Table.Cell>
+        </Table.Row>
+      );
+    }
     const index = getVulnIndex(selectedRow);
     if (index === -1) return null;
     return _.map(vulnerabilities[index].relatedMachines, (machine) => {
