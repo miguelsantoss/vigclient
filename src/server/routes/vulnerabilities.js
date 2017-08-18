@@ -22,6 +22,7 @@ router.get('/:id', (req, res) => {
     delete vulnItem.updated_at;
     if (vulnItem.clients.id === userId) {
       delete vulnItem.clients;
+      if (vulnItem.risk_factor > 3) vulnItem.risk_factor = 3;
       res.send(vulnItem);
     } else {
       res.status(404);

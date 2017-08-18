@@ -9,6 +9,11 @@ import {
   FETCH_SCAN_BY_ID_LOADING,
   FETCH_SCAN_BY_ID_FAIL,
 } from '../../actions/scans';
+import {
+  FETCH_VULNERABILITY_BY_ID_SUCCESS,
+  FETCH_VULNERABILITY_BY_ID_LOADING,
+  FETCH_VULNERABILITY_BY_ID_FAIL,
+} from '../../actions/vulnerability';
 
 const initialState = {
   auditList: [],
@@ -18,6 +23,11 @@ const initialState = {
   },
   scanList: [],
   scanStatus: {
+    fetchLoading: false,
+    fetchError: false,
+  },
+  vulnerabilityList: [],
+  vulnStatus: {
     fetchLoading: false,
     fetchError: false,
   },
@@ -33,7 +43,7 @@ export default function audits(state = initialState, action) {
       return {
         ...state,
         auditStatus: {
-          ...state.auditStatus,
+          fetchError: false,
           fetchLoading: true,
         },
       };
@@ -58,7 +68,7 @@ export default function audits(state = initialState, action) {
       return {
         ...state,
         scanStatus: {
-          ...state.scanStatus,
+          fetchError: false,
           fetchLoading: true,
         },
       };
@@ -83,6 +93,39 @@ export default function audits(state = initialState, action) {
       return {
         ...state,
         scanStatus: {
+          fetchLoading: false,
+          fetchError: true,
+        },
+      };
+    case FETCH_VULNERABILITY_BY_ID_LOADING:
+      return {
+        ...state,
+        vulnStatus: {
+          fetchError: false,
+          fetchLoading: true,
+        },
+      };
+    case FETCH_VULNERABILITY_BY_ID_SUCCESS:
+      const vulnerability = action.result;
+      const vulnerabilityList = [...state.vulnerabilityList];
+
+      for (let i = 0; i < vulnerabilityList.length; i += 1) {
+        if (vulnerability.id === vulnerabilityList[i].id) return { ...state };
+      }
+
+      vulnerabilityList.push(vulnerability);
+      return {
+        ...state,
+        vulnerabilityList,
+        vulnStatus: {
+          fetchLoading: false,
+          fetchError: false,
+        },
+      };
+    case FETCH_VULNERABILITY_BY_ID_FAIL:
+      return {
+        ...state,
+        vulnStatus: {
           fetchLoading: false,
           fetchError: true,
         },

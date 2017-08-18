@@ -61,6 +61,7 @@ router.get('/:id', (req, res) => {
             if (t !== 0 && !t) {
               scanItem.vulnerabilities.push(vuln);
             } else {
+              if (scanItem.vulnerabilities[t].risk_factor > 3) scanItem.vulnerabilities[t].risk_factor = 3;
               scanItem.vulnerabilities[t].count += 1;
               scanItem.vulnerabilities[t].relatedMachines.push(
                 {
