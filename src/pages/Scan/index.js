@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { Redirect, Route, Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Grid, Segment, Container, Header, Label } from 'semantic-ui-react';
+import { Table, Grid, Segment, Container, Header, Label, Button } from 'semantic-ui-react';
 import Piechart from '../../components/Piechart/index';
 
 class Scan extends Component {
@@ -39,8 +39,8 @@ class Scan extends Component {
 
   getMachineIndex = id => this.state.machines.map(m => m.id).indexOf(id)
 
-  handleRowClick = (id) => {
-    this.setState({ ...this.state, selectedRow: id });
+  handleRowClick = (machine) => {
+    this.setState({ ...this.state, selectedRow: machine });
   }
 
   labelColor = (risk) => {
@@ -48,56 +48,57 @@ class Scan extends Component {
     return colors[risk];
   }
 
-  renderRelatedMachines = () => (
-    <Table selectable compact basic='very' size='small' textAlign='center'>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>IP Address</Table.HeaderCell>
-          <Table.HeaderCell>Source</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {this.renderRelatedMachineEntries()}
-      </Table.Body>
-    </Table>
-  )
-
-  renderRelatedMachineEntries = () => {
-    if (!this.state.scan) return null;
-    const { vulnerabilities, machines } = this.state.scan;
-    const { selectedRow } = this.state;
-    const getVulnIndex = (id) => {
-      for (let i = 0; i < vulnerabilities.length; i += 1) {
-        if (vulnerabilities[i].id === id) return i;
-      }
-      return -1;
-    };
-    if (!selectedRow) return null;
-    const index = getVulnIndex(selectedRow);
-    if (index === -1) return null;
-    return _.map(vulnerabilities[index].relatedMachines, (machine) => {
-      const machineIndex = this.getMachineIndex(machine);
-      return (
-        <Table.Row
-          key={machine}
-        >
-          <Table.Cell>{machines[machineIndex].ip_address}</Table.Cell>
-          <Table.Cell><Link to={`/machine/${machine}`}>Vulnerabilities</Link></Table.Cell>
-        </Table.Row>
-      );
-    });
-  }
-
-  renderVulnerabilityList = () => {
-    const tableStyle = {
-      display: 'block',
-      overflowY: 'scroll',
-      height: '600px',
-    };
+  renderPortList = () => {
     const tbStyle = {
     };
     return (
-      <Table selectable compact basic='very' style={tableStyle} size='small'>
+      <Table selectable compact basic='very' size='small' textAlign='center'>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Port Number</Table.HeaderCell>
+            <Table.HeaderCell>Protocol</Table.HeaderCell>
+            <Table.HeaderCell>Service</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body style={tbStyle}>
+          {this.renderPortEntries()}
+        </Table.Body>
+      </Table>
+    );
+  }
+
+  renderPortEntries = () => {
+    if (!this.state.selectedRow) {
+      return (
+        <Table.Row>
+          <Table.Cell colSpan='3'>Select a machine first.</Table.Cell>
+        </Table.Row>
+      );
+    }
+    const { servicePorts } = this.state.selectedRow;
+    if (servicePorts.length === 0) {
+      return (
+        <Table.Row>
+          <Table.Cell colSpan='3'>Selected Machine has no open ports.</Table.Cell>
+        </Table.Row>
+      );
+    }
+    return _.map(servicePorts, port => (
+      <Table.Row
+        key={port.id}
+      >
+        <Table.Cell>{port.port_number}</Table.Cell>
+        <Table.Cell>{port.protocol}</Table.Cell>
+        <Table.Cell>{port.service}</Table.Cell>
+      </Table.Row>
+    ));
+  }
+
+  renderVulnerabilityList = () => {
+    const tbStyle = {
+    };
+    return (
+      <Table selectable compact basic='very' size='small'>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell />
@@ -113,6 +114,25 @@ class Scan extends Component {
   }
 
   renderVulnerabilityEntries = () => {
+    if (!this.state.selectedRow) {
+      return (
+        <Table.Row textAlign='center'>
+          <Table.Cell colSpan='3'>Select a machine first.</Table.Cell>
+        </Table.Row>
+      );
+    }
+    const { vulnerabilities } = this.state.selectedRow;
+    if (vulnerabilities.length === 0) {
+      return (
+        <Table.Row textAlign='center'>
+          <Table.Cell colSpan='3'>Selected Machine has no detected vulnerabilities.</Table.Cell>
+        </Table.Row>
+      );
+    }
+    const labelColor = (risk) => {
+      const colors = ['blue', 'green', 'yellow', 'red', 'purple'];
+      return colors[risk];
+    };
     const style = {
       padding: ' .2em .4em',
       textAlign: 'center',
@@ -122,18 +142,12 @@ class Scan extends Component {
       width: '18px',
       lineHeight: '1.2',
     };
-    if (!this.state.scan) return null;
-    const { vulnerabilities } = this.state.scan;
-    const { selectedRow } = this.state;
-
     return _.map(vulnerabilities, vuln => (
       <Table.Row
         key={vuln.id}
-        active={selectedRow === vuln.id}
-        onClick={() => this.handleRowClick(vuln.id)}
       >
         <Table.Cell>
-          <Label color={this.labelColor(vuln.risk_factor)} size='mini' style={style}>
+          <Label color={labelColor(vuln.risk_factor)} size='mini' style={style}>
             {vuln.risk_factor}
           </Label>
         </Table.Cell>
@@ -143,26 +157,71 @@ class Scan extends Component {
     ));
   }
 
+  renderMachineList = () => {
+    const tableStyle = {
+      display: 'block',
+      overflowY: 'scroll',
+      height: '600px',
+    };
+    const tbStyle = {
+    };
+    return (
+      <Table selectable compact basic='very' size='small'>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Hostname</Table.HeaderCell>
+            <Table.HeaderCell>IP Address</Table.HeaderCell>
+            <Table.HeaderCell>Operating System</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body style={tbStyle}>
+          {this.renderMachineEntries()}
+        </Table.Body>
+      </Table>
+    );
+  }
+
+  renderMachineEntries = () => {
+    if (!this.state.scan) return null;
+    const { machines } = this.state.scan;
+    const { selectedRow } = this.state;
+
+    return _.map(machines, machine => (
+      <Table.Row
+        key={machine.id}
+        active={selectedRow && selectedRow.id === machine.id}
+        onClick={() => this.handleRowClick(machine)}
+      >
+        <Table.Cell>{machine.hostname}</Table.Cell>
+        <Table.Cell>{machine.ip_address}</Table.Cell>
+        <Table.Cell>{machine.operating_system}</Table.Cell>
+      </Table.Row>
+    ));
+  }
+
   render() {
-    const disabledViz = true;
-    return (<Link to={`${this.props.match.url}/vulnerabilities`}>vulnerabilities</Link>);
     return (
       <Grid>
         <Grid.Row>
-          <Grid.Column width={10}>
+          <Grid.Column width={8}>
             <Segment>
-              {this.renderVulnerabilityList()}
+              {this.renderMachineList()}
             </Segment>
           </Grid.Column>
-          <Grid.Column width={6}>
+          <Grid.Column width={8}>
             <Segment>
-              <Header as='h4' icon="laptop" content='RELATED MACHINES' />
-              {this.renderRelatedMachines()}
+              <Container>
+                <Header as='h4' icon='setting' content='OPEN PORTS' />
+                {this.renderPortList()}
+              </Container>
             </Segment>
             <Segment>
               <Container>
                 <Header as='h4' icon='heartbeat' content='VULNERABILITIES' />
-                { !disabledViz && <Piechart data={this.state.visData.allVulns} id='piechart-all-vulnerabilities' /> }
+                {this.renderVulnerabilityList()}
+                <Link to={`${this.props.match.url}/vulnerabilities`}>
+                  <Button compact size='tiny' fluid>Show All Vulnerabilities</Button>
+                </Link>
               </Container>
             </Segment>
           </Grid.Column>
@@ -180,7 +239,21 @@ Scan.propTypes = {
     created_at: PropTypes.string.isRequired,
     updated_at: PropTypes.string.isRequired,
     machines: PropTypes.arrayOf(PropTypes.shape({
-
+      dns_name: PropTypes.string.isRequired,
+      hostname: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      ip_address: PropTypes.string.isRequired,
+      mac_address: PropTypes.string.isRequired,
+      operating_system: PropTypes.string.isRequired,
+      scan_id: PropTypes.number.isRequired,
+      servicePorts: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        machine_id: PropTypes.number.isRequired,
+        port_number: PropTypes.number.isRequired,
+        protocol: PropTypes.string.isRequired,
+        service: PropTypes.string.isRequired,
+        version: PropTypes.string.isRequired,
+      })).isRequired,
     })).isRequired,
   })).isRequired,
 };

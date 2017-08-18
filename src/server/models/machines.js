@@ -1,6 +1,6 @@
 import moment from 'moment';
 import bookshelf from '../bookshelf';
-import ServicePorts from './scans';
+import ServicePorts from './servicePorts';
 import Vulnerabilities from './vulnerabilities';
 
 export default bookshelf.Model.extend({

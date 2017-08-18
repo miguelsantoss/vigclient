@@ -112,8 +112,8 @@ class Layout extends Component {
     // Improve this with new routes
     const { history } = this.state;
     return (
-      <Segment>
-        <Breadcrumb>
+      <Segment size='tiny' style={{ marginBottom: 0 }}>
+        <Breadcrumb size='tiny'>
           <Breadcrumb.Section><Link to='/'>Home</Link></Breadcrumb.Section>
           { history.audit && <Breadcrumb.Divider icon='right angle' /> }
           { history.audit && <Breadcrumb.Section><Link to={`/audit/${history.audit}`}>Audit {history.audit}</Link></Breadcrumb.Section> }

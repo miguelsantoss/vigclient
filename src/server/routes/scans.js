@@ -20,7 +20,7 @@ router.get('/:id', (req, res) => {
   Scans.query({
     select: ['id', 'category', 'audit_id', 'created_at'],
     where: { id },
-  }).fetch({ withRelated: ['machines.vulnerabilities'] }).then((scan) => {
+  }).fetch({ withRelated: ['machines.vulnerabilities', 'machines.servicePorts'] }).then((scan) => {
     const scanItem = scan.toJSON();
     Audits.query({
       select: ['id', 'client_id'],
@@ -41,6 +41,10 @@ router.get('/:id', (req, res) => {
           delete machineItem.source;
           delete machineItem.source_id;
           delete machineItem.client_id;
+          delete machineItem.created_at;
+          delete machineItem.updated_at;
+          delete machineItem.group_id;
+          delete machineItem.os_family;
           machineItem.vulnerabilities.forEach((vuln) => {
             if (vuln.risk_factor === 4) vuln.risk_factor = 3;
             vuln.count = 1;
@@ -52,6 +56,15 @@ router.get('/:id', (req, res) => {
               scanItem.vulnerabilities[t].count += 1;
               scanItem.vulnerabilities[t].relatedMachines.push(machineItem.id);
             }
+          });
+          machineItem.servicePorts.forEach((port) => {
+            delete port.locked;
+            delete port.source;
+            delete port.source_id;
+            delete port.state;
+            delete port.output_excel;
+            delete port.created_at;
+            delete port.updated_at;
           });
         });
         res.json(scanItem);

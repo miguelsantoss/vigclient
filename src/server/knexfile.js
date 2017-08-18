@@ -4,7 +4,7 @@ module.exports = {
   development: {
     client: 'mysql',
     connection: {
-      host: '192.168.123.16',
+      host: '192.168.1.68',
       user: 'root',
       password: '',
       database: 'drc_app_dev',
