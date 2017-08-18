@@ -1,14 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import SignupPage from './components/Signup/SignupPage';
 import LoginPage from './components/Login/LoginPage';
 import Layout from './components/Layout';
 import PageNotFound from './pages/PageNotFound';
 
 import Audits from './pages/Audits/Audits';
 import AuditWrapper from './components/containers/AuditsWrapper';
-import MachineWrapper from './components/containers/MachinesWrapper';
 import Scan from './pages/Scan';
 import ScanVulnerabilities from './pages/Scan/scanVulnerabilities';
 import Vulnerability from './pages/Vulnerability';
@@ -29,7 +27,6 @@ const RouterWrapper = () => (
           <Route path='/audit/:id' component={requireAuth(AuditWrapper)} />
           <Route path='/scan/:id/vulnerabilities' component={requireAuth(ScanVulnerabilities)} />
           <Route path='/scan/:id' component={requireAuth(Scan)} />
-          <Route path='/machine/:id' component={requireAuth(MachineWrapper)} />
           <Route path='/vulnerability/:id' component={requireAuth(Vulnerability)} />
           <Route component={PageNotFound} status={404} />
         </Switch>
@@ -38,4 +35,5 @@ const RouterWrapper = () => (
   </BrowserRouter>
 );
 
+          // <Route path='/machine/:id' component={requireAuth(MachineWrapper)} />
 export default RouterWrapper;
