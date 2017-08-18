@@ -84,11 +84,9 @@ class Scan extends Component {
     return _.map(vulnerabilities[index].relatedMachines, (machine) => {
       const machineIndex = this.getMachineIndex(machine);
       return (
-        <Table.Row
-          key={machine}
-        >
+        <Table.Row key={machine}>
           <Table.Cell>{machines[machineIndex].ip_address}</Table.Cell>
-          <Table.Cell><Link to={`/machine/${machine}`}>Vulnerabilities</Link></Table.Cell>
+          <Table.Cell><Link to={`/vulnerability/${machine}`}>Vulnerabilities</Link></Table.Cell>
         </Table.Row>
       );
     });

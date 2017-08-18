@@ -1,15 +1,20 @@
 import moment from 'moment';
 import bookshelf from '../bookshelf';
+
+import Clients from './clients';
 import Scans from './scans';
-import WebScans from './webscans';
+import Pages from './pages';
 
 export default bookshelf.Model.extend({
   tableName: 'audits',
+  clients: function () { // eslint-disable-line func-names, object-shorthand
+    return this.belongsTo(Clients, 'client_id');
+  },
   scans: function () { // eslint-disable-line func-names, object-shorthand
     return this.hasMany(Scans, 'audit_id');
   },
-  webScans: function () { // eslint-disable-line func-names, object-shorthand
-    return this.hasMany(WebScans, 'audit_id');
+  pages: function () { // eslint-disable-line func-names, object-shorthand
+    return this.hasMany(Pages, 'audit_id');
   },
   toJSON: function () { // eslint-disable-line func-names, object-shorthand
     const attrs = bookshelf.Model.prototype.toJSON.apply(this, arguments);

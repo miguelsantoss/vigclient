@@ -1,14 +1,14 @@
 import bookshelf from '../bookshelf';
 
 import Clients from './clients';
-import Machines from './machines';
+import Pages from './pages';
 
 export default bookshelf.Model.extend({
-  tableName: 'vulnerabilities',
+  tableName: 'web_vulnerabilities',
   clients: function () { // eslint-disable-line func-names, object-shorthand
     return this.belongsTo(Clients, 'client_id');
   },
-  machines: function () { // eslint-disable-line func-names, object-shorthand
-    return this.belongsTo(Machines, 'machine_id');
+  pages: function () { // eslint-disable-line func-names, object-shorthand
+    return this.belongsTo(Pages, 'page_id');
   },
 });

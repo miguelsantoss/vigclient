@@ -16,7 +16,7 @@ router.use('/events', events);
 router.use('/audits', audits);
 router.use('/profile', profile);
 router.use('/scan', scans);
-router.use('/vulnerabilities', vulnerabilities);
+router.use('/vulnerability', vulnerabilities);
 router.use('/viz', viz);
 
 export default router;

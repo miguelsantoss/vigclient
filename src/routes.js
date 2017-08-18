@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import SignupPage from './components/Signup/SignupPage';
 import LoginPage from './components/Login/LoginPage';
-import NewEventPage from './components/events/NewEventPage';
 import Layout from './components/Layout';
 import PageNotFound from './pages/PageNotFound';
 
@@ -12,7 +11,7 @@ import AuditWrapper from './components/containers/AuditsWrapper';
 import MachineWrapper from './components/containers/MachinesWrapper';
 import Scan from './pages/Scan';
 import ScanVulnerabilities from './pages/Scan/scanVulnerabilities';
-import VulnerabilityWrapper from './components/containers/VulnerabilityWrapper';
+import Vulnerability from './pages/Vulnerability';
 import HomeWrapper from './components/containers/HomeWrapper';
 import Profile from './pages/Profile';
 
@@ -25,15 +24,14 @@ const RouterWrapper = () => (
       <Route path='/signup'component={SignupPage} />
       <Layout>
         <Switch>
-          <Route exact path='/' component={HomeWrapper} />
-          <Route path='/profile' component={Profile} />
-          <Route path='/new-event'component={requireAuth(NewEventPage)} />
-          <Route path='/audits' component={Audits} />
-          <Route path='/audit/:id' component={AuditWrapper} />
-          <Route path='/scan/:id/vulnerabilities' component={ScanVulnerabilities} />
-          <Route path='/scan/:id' component={Scan} />
-          <Route path='/machine/:id' component={MachineWrapper} />
-          <Route path='/vulnerability/:id' component={VulnerabilityWrapper} />
+          <Route exact path='/' component={requireAuth(HomeWrapper)} />
+          <Route path='/profile' component={requireAuth(Profile)} />
+          <Route path='/audits' component={requireAuth(Audits)} />
+          <Route path='/audit/:id' component={requireAuth(AuditWrapper)} />
+          <Route path='/scan/:id/vulnerabilities' component={requireAuth(ScanVulnerabilities)} />
+          <Route path='/scan/:id' component={requireAuth(Scan)} />
+          <Route path='/machine/:id' component={requireAuth(MachineWrapper)} />
+          <Route path='/vulnerability/:id' component={requireAuth(Vulnerability)} />
           <Route component={PageNotFound} status={404} />
         </Switch>
       </Layout>
