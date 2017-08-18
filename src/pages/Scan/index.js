@@ -236,8 +236,6 @@ Scan.propTypes = {
   scanList: PropTypes.arrayOf(PropTypes.shape({
     category: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
-    created_at: PropTypes.string.isRequired,
-    updated_at: PropTypes.string.isRequired,
     machines: PropTypes.arrayOf(PropTypes.shape({
       dns_name: PropTypes.string.isRequired,
       hostname: PropTypes.string.isRequired,
@@ -252,7 +250,6 @@ Scan.propTypes = {
         port_number: PropTypes.number.isRequired,
         protocol: PropTypes.string.isRequired,
         service: PropTypes.string.isRequired,
-        version: PropTypes.string.isRequired,
       })).isRequired,
     })).isRequired,
   })).isRequired,

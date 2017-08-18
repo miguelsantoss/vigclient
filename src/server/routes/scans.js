@@ -45,16 +45,29 @@ router.get('/:id', (req, res) => {
           delete machineItem.updated_at;
           delete machineItem.group_id;
           delete machineItem.os_family;
+          if (!machineItem.operating_system) {
+            machineItem.operating_system = '';
+          }
           machineItem.vulnerabilities.forEach((vuln) => {
             if (vuln.risk_factor === 4) vuln.risk_factor = 3;
             vuln.count = 1;
-            vuln.relatedMachines = [machineItem.id];
+            vuln.relatedMachines = [
+              {
+                machine_id: machineItem.id,
+                vuln_id: vuln.id,
+              },
+            ];
             const t = vulnExists(scanItem.vulnerabilities, vuln.vid);
             if (t !== 0 && !t) {
               scanItem.vulnerabilities.push(vuln);
             } else {
               scanItem.vulnerabilities[t].count += 1;
-              scanItem.vulnerabilities[t].relatedMachines.push(machineItem.id);
+              scanItem.vulnerabilities[t].relatedMachines.push(
+                {
+                  machine_id: machineItem.id,
+                  vuln_id: vuln.id,
+                },
+              );
             }
           });
           machineItem.servicePorts.forEach((port) => {

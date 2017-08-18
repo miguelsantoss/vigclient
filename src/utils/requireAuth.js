@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { addMessages } from '../actions/messages';
 
-export default function(Component) {
+export default function (Component) {
   class Authenticate extends React.Component {
     componentWillMount() {
       if (!this.props.isAuth) {
@@ -34,15 +35,11 @@ export default function(Component) {
     history: PropTypes.object.isRequired,
   };
 
-  Authenticate.contextTypes = {
-    history: PropTypes.object.isRequired,
-  };
-
   function mapStateToProps(state) {
     return {
       isAuth: state.auth.isAuth,
     };
   }
 
-  return connect(mapStateToProps, { addMessages })(Authenticate);
+  return connect(mapStateToProps, { addMessages })(withRouter(Authenticate));
 }

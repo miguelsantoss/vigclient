@@ -82,11 +82,11 @@ class Scan extends Component {
     const index = getVulnIndex(selectedRow);
     if (index === -1) return null;
     return _.map(vulnerabilities[index].relatedMachines, (machine) => {
-      const machineIndex = this.getMachineIndex(machine);
+      const machineIndex = this.getMachineIndex(machine.machine_id);
       return (
-        <Table.Row key={machine}>
+        <Table.Row key={machine.machine_id}>
           <Table.Cell>{machines[machineIndex].ip_address}</Table.Cell>
-          <Table.Cell><Link to={`/vulnerability/${machine}`}>Vulnerabilities</Link></Table.Cell>
+          <Table.Cell><Link to={`/vulnerability/${machine.vuln_id}`}>Vulnerabilities</Link></Table.Cell>
         </Table.Row>
       );
     });
@@ -180,8 +180,6 @@ Scan.propTypes = {
   scanList: PropTypes.arrayOf(PropTypes.shape({
     category: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
-    created_at: PropTypes.string.isRequired,
-    updated_at: PropTypes.string.isRequired,
     machines: PropTypes.arrayOf(PropTypes.shape({
 
     })).isRequired,

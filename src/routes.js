@@ -21,7 +21,6 @@ const RouterWrapper = () => (
   <BrowserRouter>
     <Switch>
       <Route path='/login'component={LoginPage} />
-      <Route path='/signup'component={SignupPage} />
       <Layout>
         <Switch>
           <Route exact path='/' component={requireAuth(HomeWrapper)} />
