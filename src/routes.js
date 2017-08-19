@@ -10,18 +10,18 @@ import AuditWrapper from './components/containers/AuditsWrapper';
 import Scan from './pages/Scan';
 import ScanVulnerabilities from './pages/Scan/scanVulnerabilities';
 import Vulnerability from './pages/Vulnerability';
-import HomeWrapper from './components/containers/HomeWrapper';
+import Home from './pages/Home';
 import Profile from './pages/Profile';
 
 import requireAuth from './utils/requireAuth';
 
-const RouterWrapper = () => (
+const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <Route path='/login'component={LoginPage} />
+      <Route path='/login' component={LoginPage} />
       <Layout>
         <Switch>
-          <Route exact path='/' component={requireAuth(HomeWrapper)} />
+          <Route exact path='/' component={requireAuth(Home)} />
           <Route path='/profile' component={requireAuth(Profile)} />
           <Route path='/audits' component={requireAuth(Audits)} />
           <Route path='/audit/:id' component={requireAuth(AuditWrapper)} />
@@ -35,5 +35,5 @@ const RouterWrapper = () => (
   </BrowserRouter>
 );
 
-          // <Route path='/machine/:id' component={requireAuth(MachineWrapper)} />
-export default RouterWrapper;
+// <Route path='/machine/:id' component={requireAuth(MachineWrapper)} />
+export default Routes;

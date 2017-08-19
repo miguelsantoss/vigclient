@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { Table, Segment, Header } from 'semantic-ui-react';
 import moment from 'moment';
@@ -39,10 +40,12 @@ class Audit extends Component {
     const { auditInfo } = this.props;
     return (
       <Segment>
-        <Header>
-          {`${moment(auditInfo.created_at).format('DD MMM YYYY')} - ${auditInfo.closed_at === '' ?
+        <Header
+          as='h4'
+          icon='calendar check'
+          content={`${moment(auditInfo.created_at).format('DD MMM YYYY')} - ${auditInfo.closed_at === '' ?
             ' (Open)' : moment(auditInfo.created_at).format('DD MMM YYYY')}`}
-        </Header>
+        />
         {this.renderScans()}
         { auditInfo.scans.length === 0 ? <Header>There are no scans here yet</Header> : null}
       </Segment>
@@ -70,4 +73,8 @@ Audit.propTypes = {
   }).isRequired,
 };
 
-export default withRouter(Audit);
+const mapStateToProps = state => ({
+  audits: state.audits.auditList,
+});
+
+export default connect(mapStateToProps)(withRouter(Audit));

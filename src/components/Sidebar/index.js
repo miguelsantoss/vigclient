@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import _ from 'lodash';
 import moment from 'moment';
 
-import { Menu } from 'semantic-ui-react';
+import { Menu, Loader } from 'semantic-ui-react';
 
 class Sidebar extends Component {
   renderAudits() {
@@ -16,6 +16,11 @@ class Sidebar extends Component {
     //   moment(b.initiated_at, 'YYYY-MM-DD') - moment(a.initiated_at, 'YYYY-MM-DD'),
     // );
     // Map each audit into a Menu item element
+    if (this.props.status.fetchLoading) {
+      return (
+        <Loader size='tiny' inverted active inline='centered' />
+      );
+    }
     const auditsRender = _.map(audits, audit => (
       <Menu.Item key={audit.serial_number} as={Link} to={`/audit/${audit.serial_number}`}>
         {`${moment(audit.created_at).format('DD MMM YYYY')}${audit.closed_at === '' ? ' (Open)' : ''}`}
@@ -44,6 +49,10 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
   audits: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  status: PropTypes.shape({
+    fetchLoading: PropTypes.bool.isRequired,
+    fetchError: PropTypes.bool.isRequired,
+  }).isRequired,
   style: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 

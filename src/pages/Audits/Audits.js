@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Segment, Table, Icon } from 'semantic-ui-react';
+import { Segment, Table, Icon, Header } from 'semantic-ui-react';
 
 class Audits extends Component {
   constructor(props) {
@@ -85,6 +85,7 @@ class Audits extends Component {
   render() {
     return (
       <Segment>
+        <Header as='h4' icon='unordered list' content='AUDIT LIST' />
         <Table selectable compact basic='very' size='small'>
           <Table.Header>
             <Table.Row>

@@ -128,6 +128,7 @@ class Layout extends Component {
     );
   }
   render() {
+    const { fetchLoading, fetchError } = this.props;
     return (
       <div>
         <Appbar
@@ -136,7 +137,7 @@ class Layout extends Component {
           history={this.props.history}
           reset={this.props.reset}
         />
-        <Sidebar audits={this.props.audits} style={style.menu} />
+        <Sidebar audits={this.props.audits} style={style.menu} status={{ fetchLoading, fetchError }} />
         <div style={style.main}>
           {this.renderBreadcrumbHistory()}
           <Grid style={style.grid}>
@@ -158,6 +159,8 @@ class Layout extends Component {
 
 Layout.propTypes = {
   audits: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  fetchLoading: PropTypes.bool.isRequired,
+  fetchError: PropTypes.bool.isRequired,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.element),
     PropTypes.element,
@@ -174,6 +177,8 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   audits: state.audits.auditList,
+  fetchLoading: state.audits.auditStatus.fetchLoading,
+  fetchError: state.audits.auditStatus.fetchError,
   client: state.profile.info,
 });
 

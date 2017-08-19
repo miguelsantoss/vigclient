@@ -27,6 +27,15 @@ class Scan extends Component {
         if (a.count > b.count) return -1;
         return a.title.localeCompare(b.title);
       });
+      scan.machines.forEach((machine) => {
+        machine.vulnerabilities.sort((a, b) => {
+          if (a.risk_factor < b.risk_factor) return 1;
+          if (a.risk_factor > b.risk_factor) return -1;
+          if (a.count < b.count) return 1;
+          if (a.count > b.count) return -1;
+          return a.title.localeCompare(b.title);
+        });
+      });
 
       this.state = {
         scan,
@@ -205,6 +214,7 @@ class Scan extends Component {
         <Grid.Row>
           <Grid.Column width={8}>
             <Segment>
+                <Header as='h4' icon='unordered list' content='MACHINE LIST' />
               {this.renderMachineList()}
             </Segment>
           </Grid.Column>

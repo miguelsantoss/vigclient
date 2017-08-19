@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Grid, Container, Segment, Header } from 'semantic-ui-react';
+import { Grid, Container, Segment, Header, Dimmer, Loader } from 'semantic-ui-react';
 
 import Piechart from '../../components/Piechart/index';
 import Linechart from '../../components/Linechart';
@@ -34,6 +34,11 @@ class Home extends Component {
               <Segment>
                 <Header>All vulnerabilities</Header>
                 <Container textAlign='center'>
+                  {
+                    this.props.vizData.status.fetchLoading && (
+                      <Loader size='tiny' inverted active inline='centered' />
+                    )
+                  }
                   { pieDataAvailable && <Piechart data={this.props.vizData.pieAllVulns} id='piechart-all-vulnerabilities' /> }
                 </Container>
               </Segment>
@@ -72,7 +77,20 @@ class Home extends Component {
 }
 
 Home.propTypes = {
-  vizData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  vizData: PropTypes.shape({
+    pieAllVulns: PropTypes.arrayOf(PropTypes.shape({
+      risk_factor: PropTypes.number.isRequired,
+      totalVulns: PropTypes.number.isRequired,
+    })).isRequired,
+    pieLatestVulns: PropTypes.arrayOf(PropTypes.shape({
+      risk_factor: PropTypes.number.isRequired,
+      totalVulns: PropTypes.number.isRequired,
+    })).isRequired,
+    status: PropTypes.shape({
+      fetchLoading: PropTypes.bool.isRequired,
+      fetchError: PropTypes.bool.isRequired,
+    }).isRequired,
+  }).isRequired,
   fetchAudits: PropTypes.func.isRequired,
   fetchProfileInfo: PropTypes.func.isRequired,
   fetchVizData: PropTypes.func.isRequired,
@@ -86,7 +104,14 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   audits: state.audits.list,
-  profile: state.profile,
+  vizData: {
+    pieAllVulns: state.viz.pieCharts.all,
+    pieLatestVulns: state.viz.pieCharts.latest,
+    status: {
+      fetchLoading: state.viz.pieCharts.fetchLoading,
+      fetchError: state.viz.pieCharts.fetchError,
+    },
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
