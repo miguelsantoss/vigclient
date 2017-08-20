@@ -5,20 +5,15 @@ import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Table, Grid, Segment, Container, Header, Label, Button } from 'semantic-ui-react';
-import Piechart from '../../components/Piechart/index';
+
+import { FETCH_SCAN_BY_ID } from '../../actions/scans';
 
 class Scan extends Component {
   constructor(props) {
     super(props);
 
-    const { match } = props;
-    let scan = null;
-    props.scanList.forEach((scanItem) => {
-      if (scanItem.id === parseInt(match.params.id, 10)) {
-        scan = _.cloneDeep(scanItem);
-      }
-    });
-
+    let scan = this.props.scan;
+    console.log(scan);
     if (scan && scan !== null) {
       scan.vulnerabilities.sort((a, b) => {
         if (a.risk_factor < b.risk_factor) return 1;
@@ -43,7 +38,13 @@ class Scan extends Component {
         machines: scan.machines,
         selectedRow: null,
       };
+    } else {
+      this.state = {};
     }
+  }
+
+  componentWillMount = () => {
+    this.props.fetchScanByID(this.props.match.params.id);
   }
 
   getMachineIndex = id => this.state.machines.map(m => m.id).indexOf(id)
@@ -191,6 +192,8 @@ class Scan extends Component {
   }
 
   renderMachineEntries = () => {
+    console.log(this);
+    console.log(this.state);
     if (!this.state.scan) return null;
     const { machines } = this.state.scan;
     const { selectedRow } = this.state;
@@ -214,7 +217,7 @@ class Scan extends Component {
         <Grid.Row>
           <Grid.Column width={8}>
             <Segment>
-                <Header as='h4' icon='unordered list' content='MACHINE LIST' />
+              <Header as='h4' icon='unordered list' content='MACHINE LIST' />
               {this.renderMachineList()}
             </Segment>
           </Grid.Column>
@@ -243,7 +246,7 @@ class Scan extends Component {
 
 Scan.propTypes = {
   match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  scanList: PropTypes.arrayOf(PropTypes.shape({
+  scan: PropTypes.shape({
     category: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     machines: PropTypes.arrayOf(PropTypes.shape({
@@ -262,11 +265,16 @@ Scan.propTypes = {
         service: PropTypes.string.isRequired,
       })).isRequired,
     })).isRequired,
-  })).isRequired,
+  }).isRequired,
 };
 
-const mapStateToProps = state => ({
-  scanList: state.audits.scanList,
+const mapDispatchToProps = dispatch => ({
+  fetchScanByID: id => dispatch(FETCH_SCAN_BY_ID(id)),
 });
 
-export default connect(mapStateToProps)(Scan);
+const mapStateToProps = (state, ownProps) => ({
+  scan: _.find(state.scans.list, { id: parseInt(ownProps.match.params.id, 10) }),
+  list: state.scans.list,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Scan);

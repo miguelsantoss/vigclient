@@ -53,7 +53,7 @@ export default function audits(state = initialState, action) {
       };
     case FETCH_AUDIT_BY_ID_LOADING:
       auditList = _.cloneDeep(state.list);
-      index = _.findIndex(auditList, 'serial_number', action.result.id);
+      index = _.findIndex(auditList, 'id', action.result.id);
 
       if (index !== -1) {
         auditList[index].fetchError = false;

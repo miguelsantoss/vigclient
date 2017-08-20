@@ -63,8 +63,6 @@ class Audits extends Component {
     else if (sort.key === key) this.sortAudits(key, !sort.ascending);
   }
 
-  handleRowClick = id => this.props.history.push(`/audit/${id}`);
-
   iconName = (tableKey) => {
     const { key, ascending } = this.state.sort;
     if (key === tableKey) {
@@ -75,9 +73,9 @@ class Audits extends Component {
 
   renderAudits = () =>
     _.map(this.state.audits, audit => (
-      <Table.Row key={audit.serial_number} onClick={() => this.handleRowClick(audit.serial_number)}>
+      <Table.Row key={audit.serial_number}>
         <Table.Cell>{audit.category}</Table.Cell>
-        <Table.Cell><Link to={`/audit/${audit.serial_number}`}>{audit.created_at}</Link></Table.Cell>
+        <Table.Cell><Link to={`/audit/${audit.id}`}>{audit.created_at}</Link></Table.Cell>
         <Table.Cell>{audit.closed_at ? audit.closed_at : 'Audit open'}</Table.Cell>
       </Table.Row>
     ))

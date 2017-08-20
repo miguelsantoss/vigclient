@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export default function audits(state = initialState, action) {
-  let scanList;
+  let list;
   let scan;
   let index;
   switch (action.type) {
@@ -21,14 +21,14 @@ export default function audits(state = initialState, action) {
         ...state,
       };
     case FETCH_SCAN_BY_ID_LOADING:
-      scanList = _.cloneDeep(state.list);
-      index = _.findIndex(scanList, 'id', action.result.id);
+      list = _.cloneDeep(state.list);
+      index = _.findIndex(list, { id: action.result.id });
 
       if (index !== -1) {
-        scanList[index].fetchError = false;
-        scanList[index].fetchLoading = true;
+        list[index].fetchError = false;
+        list[index].fetchLoading = true;
       } else {
-        scanList.push({
+        list.push({
           id: action.result.id,
           fetchError: false,
           fetchLoading: true,
@@ -37,34 +37,34 @@ export default function audits(state = initialState, action) {
 
       return {
         ...state,
-        scanList,
+        list,
       };
     case FETCH_SCAN_BY_ID_SUCCESS:
       scan = action.result;
-      scanList.fetchError = false;
-      scanList.fetchLoading = false;
+      scan.fetchError = false;
+      scan.fetchLoading = false;
 
-      scanList = _.cloneDeep(state.list);
-      index = _.findIndex(scanList, 'id', scan.id);
+      list = _.cloneDeep(state.list);
+      index = _.findIndex(list, { id: scan.id });
       if (index !== -1) {
-        scanList[index] = scan;
+        list[index] = scan;
       } else {
-        scanList.push(scan);
+        list.push(scan);
       }
 
       return {
         ...state,
-        scanList,
+        list,
       };
     case FETCH_SCAN_BY_ID_FAIL:
-      scanList = _.cloneDeep(state.list);
-      index = _.findIndex(scanList, 'id', action.result.id);
+      list = _.cloneDeep(state.list);
+      index = _.findIndex(list, { id: action.result.id });
 
       if (index !== -1) {
-        scanList[index].fetchError = action.result.err;
-        scanList[index].fetchLoading = false;
+        list[index].fetchError = action.result.err;
+        list[index].fetchLoading = false;
       } else {
-        scanList.push({
+        list.push({
           fetchError: action.result.err,
           fetchLoading: false,
         });
@@ -72,7 +72,7 @@ export default function audits(state = initialState, action) {
 
       return {
         ...state,
-        scanList,
+        list,
       };
     case RESET_STATE:
       return {

@@ -22,7 +22,7 @@ class Sidebar extends Component {
       );
     }
     const auditsRender = _.map(audits, audit => (
-      <Menu.Item key={audit.serial_number} as={Link} to={`/audit/${audit.serial_number}`}>
+      <Menu.Item key={audit.serial_number} as={Link} to={`/audit/${audit.id}`}>
         {`${moment(audit.created_at).format('DD MMM YYYY')}${audit.closed_at === '' ? ' (Open)' : ''}`}
       </Menu.Item>
     ));

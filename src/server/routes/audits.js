@@ -9,28 +9,34 @@ router.get('/:id', (req, res) => {
   const userId = req.currentUser.id;
   Audits.query({
     select: ['id', 'category', 'created_at', 'closed_at', 'serial_number', 'client_id'],
-    where: { serial_number: req.params.id },
-  }).fetchAll({ withRelated: ['scans', 'pages'] }).then((audits) => {
+    where: { id: req.params.id },
+  }).fetch({ withRelated: ['scans', 'pages'] }).then((audits) => {
     const auditItem = audits.toJSON();
-    auditItem.forEach((audit) => {
-      if (audit.scans && audit.scans.length !== 0) {
-        audit.scans.forEach((scan) => {
+    if (auditItem.client_id !== userId) {
+      res.status(404);
+    } else {
+      if (auditItem.scans) {
+        auditItem.scans.forEach((scan) => {
           delete scan.locked;
           delete scan.state;
           delete scan.audit_id;
           delete scan.client_id;
+          delete scan.created_at;
+          delete scan.updated_at;
         });
       }
-      if (audit.pages && audit.pages !== 0) {
-        audit.pages.forEach((page) => {
+      if (auditItem.pages) {
+        auditItem.pages.forEach((page) => {
           delete page.locked;
           delete page.state;
           delete page.audit_id;
           delete page.client_id;
+          delete page.created_at;
+          delete page.updated_at;
         });
       }
-    });
-    res.json(auditItem);
+      res.json(auditItem);
+    }
   });
 });
 
@@ -48,6 +54,8 @@ router.get('/', (req, res) => {
           delete scan.state;
           delete scan.audit_id;
           delete scan.client_id;
+          delete scan.created_at;
+          delete scan.updated_at;
         });
       }
       if (audit.pages && audit.pages !== 0) {
@@ -56,6 +64,8 @@ router.get('/', (req, res) => {
           delete page.state;
           delete page.audit_id;
           delete page.client_id;
+          delete page.created_at;
+          delete page.updated_at;
         });
       }
     });

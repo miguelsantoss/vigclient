@@ -13,7 +13,7 @@ const initialState = {
 
 export default function audits(state = initialState, action) {
   let vulnerability;
-  let vulnerabilityList;
+  let list;
   let index;
   switch (action.type) {
     case APP_INIT:
@@ -21,14 +21,14 @@ export default function audits(state = initialState, action) {
         ...state,
       };
     case FETCH_VULNERABILITY_BY_ID_LOADING:
-      vulnerabilityList = _.cloneDeep(state.list);
-      index = _.findIndex(vulnerabilityList, 'id', action.result.id);
+      list = _.cloneDeep(state.list);
+      index = _.findIndex(list, 'id', action.result.id);
 
       if (index !== -1) {
-        vulnerabilityList[index].fetchError = false;
-        vulnerabilityList[index].fetchLoading = true;
+        list[index].fetchError = false;
+        list[index].fetchLoading = true;
       } else {
-        vulnerabilityList.push({
+        list.push({
           id: action.result.id,
           fetchError: false,
           fetchLoading: true,
@@ -37,34 +37,34 @@ export default function audits(state = initialState, action) {
 
       return {
         ...state,
-        vulnerabilityList,
+        list,
       };
     case FETCH_VULNERABILITY_BY_ID_SUCCESS:
       vulnerability = action.result;
       vulnerability.fetchError = false;
       vulnerability.fetchLoading = false;
 
-      vulnerabilityList = _.cloneDeep(state.list);
-      index = _.findIndex(vulnerabilityList, 'id', vulnerability.id);
+      list = _.cloneDeep(state.list);
+      index = _.findIndex(list, 'id', vulnerability.id);
       if (index !== -1) {
-        vulnerabilityList[index] = vulnerability;
+        list[index] = vulnerability;
       } else {
-        vulnerabilityList.push(vulnerability);
+        list.push(vulnerability);
       }
 
       return {
         ...state,
-        vulnerabilityList,
+        list,
       };
     case FETCH_VULNERABILITY_BY_ID_FAIL:
-      vulnerabilityList = _.cloneDeep(state.list);
-      index = _.findIndex(vulnerabilityList, 'id', action.result.id);
+      list = _.cloneDeep(state.list);
+      index = _.findIndex(list, 'id', action.result.id);
 
       if (index !== -1) {
-        vulnerabilityList[index].fetchError = action.result.err;
-        vulnerabilityList[index].fetchLoading = false;
+        list[index].fetchError = action.result.err;
+        list[index].fetchLoading = false;
       } else {
-        vulnerabilityList.push({
+        list.push({
           id: action.result.id,
           fetchError: action.result.err,
           fetchLoading: false,
@@ -73,7 +73,7 @@ export default function audits(state = initialState, action) {
 
       return {
         ...state,
-        vulnerabilityList,
+        list,
       };
     case RESET_STATE:
       return {
