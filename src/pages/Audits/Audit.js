@@ -5,19 +5,21 @@ import { Link, withRouter } from 'react-router-dom';
 import { Table, Segment, Header } from 'semantic-ui-react';
 import moment from 'moment';
 import _ from 'lodash';
+import { FETCH_AUDIT_BY_ID } from '../../actions/audits';
 
 class Audit extends Component {
   componentWillMount() {
-    console.log(this.props);
-    this.props.auditInfo.scans.forEach(scan => this.props.fetchScanByID(scan.id));
+    const { id } = this.props.match.params;
+    this.props.fetchAuditByID(id);
   }
 
-  handleRowClick = id => this.props.history.push(`/scan/${id}`);
-
   renderScanEntries = () => {
-    const { scans } = this.props.auditInfo;
+    if (!this.props.audit) {
+      return null;
+    }
+    const { scans } = this.props.audit;
     return _.map(scans, scan => (
-      <Table.Row key={scan.id} onClick={() => this.handleRowClick(scan.id)}>
+      <Table.Row key={scan.id}>
         <Table.Cell><Link to={`/scan/${scan.id}`}>{scan.network}</Link></Table.Cell>
         <Table.Cell>{scan.category}</Table.Cell>
       </Table.Row>
@@ -38,25 +40,25 @@ class Audit extends Component {
   )
 
   render() {
-    const { auditInfo } = this.props;
+    const { audit } = this.props;
     return (
       <Segment>
         <Header
           as='h4'
           icon='calendar check'
-          content={`${moment(auditInfo.created_at).format('DD MMM YYYY')} - ${auditInfo.closed_at === '' ?
-            ' (Open)' : moment(auditInfo.created_at).format('DD MMM YYYY')}`}
+          content={`${moment(audit.created_at).format('DD MMM YYYY')} - ${audit.closed_at === '' ?
+            ' (Open)' : moment(audit.created_at).format('DD MMM YYYY')}`}
         />
         {this.renderScans()}
-        { auditInfo.scans.length === 0 ? <Header>There are no scans here yet</Header> : null}
+        { audit.scans.length === 0 ? <Header>There are no scans here yet</Header> : null}
       </Segment>
     );
   }
 }
 
 Audit.propTypes = {
-  fetchScanByID: PropTypes.func.isRequired,
-  auditInfo: PropTypes.shape({
+  fetchAuditByID: PropTypes.func.isRequired,
+  audit: PropTypes.shape({
     scan: PropTypes.array,
     id: PropTypes.number.isRequired,
     category: PropTypes.string.isRequired,
@@ -69,14 +71,19 @@ Audit.propTypes = {
       network: PropTypes.string.isRequired,
     })),
   }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
   }).isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  audits: state.audits.auditList,
-  audit: _.find(state.audits.auditList, 'serial_number', ownProps.match.params.id),
+const mapDispatchToProps = dispatch => ({
+  fetchAuditByID: id => dispatch(FETCH_AUDIT_BY_ID(id)),
 });
 
-export default connect(mapStateToProps)(withRouter(Audit));
+const mapStateToProps = (state, ownProps) => ({
+  audit: _.find(state.audits.list, 'serial_number', ownProps.match.params.id),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Audit));

@@ -5,12 +5,32 @@ import Audits from '../models/audits';
 const router = express.Router();
 router.use(authenticate);
 
-router.get('/:identifier', (req, res) => {
+router.get('/:id', (req, res) => {
+  const userId = req.currentUser.id;
   Audits.query({
-    select: ['id', 'category', 'created_at', 'closed_at'],
-    where: { client_id: req.params.identifier },
-  }).fetch().then((audits) => {
-    res.json({ audits });
+    select: ['id', 'category', 'created_at', 'closed_at', 'serial_number', 'client_id'],
+    where: { serial_number: req.params.id },
+  }).fetchAll({ withRelated: ['scans', 'pages'] }).then((audits) => {
+    const auditItem = audits.toJSON();
+    auditItem.forEach((audit) => {
+      if (audit.scans && audit.scans.length !== 0) {
+        audit.scans.forEach((scan) => {
+          delete scan.locked;
+          delete scan.state;
+          delete scan.audit_id;
+          delete scan.client_id;
+        });
+      }
+      if (audit.pages && audit.pages !== 0) {
+        audit.pages.forEach((page) => {
+          delete page.locked;
+          delete page.state;
+          delete page.audit_id;
+          delete page.client_id;
+        });
+      }
+    });
+    res.json(auditItem);
   });
 });
 

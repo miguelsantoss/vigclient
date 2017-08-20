@@ -176,7 +176,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  audits: state.audits.auditList,
+  audits: state.audits.list,
   fetchLoading: state.audits.auditStatus.fetchLoading,
   fetchError: state.audits.auditStatus.fetchError,
   client: state.profile.info,

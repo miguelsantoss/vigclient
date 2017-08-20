@@ -6,7 +6,7 @@ import Layout from './components/Layout';
 import PageNotFound from './pages/PageNotFound';
 
 import Audits from './pages/Audits/Audits';
-import AuditWrapper from './components/containers/AuditsWrapper';
+import Audit from './pages/Audits/Audit';
 import Scan from './pages/Scan';
 import ScanVulnerabilities from './pages/Scan/scanVulnerabilities';
 import Vulnerability from './pages/Vulnerability';
@@ -24,7 +24,7 @@ const Routes = () => (
           <Route exact path='/' component={requireAuth(Home)} />
           <Route path='/profile' component={requireAuth(Profile)} />
           <Route path='/audits' component={requireAuth(Audits)} />
-          <Route path='/audit/:id' component={requireAuth(AuditWrapper)} />
+          <Route path='/audit/:id' component={requireAuth(Audit)} />
           <Route path='/scan/:id/vulnerabilities' component={requireAuth(ScanVulnerabilities)} />
           <Route path='/scan/:id' component={requireAuth(Scan)} />
           <Route path='/vulnerability/:id' component={requireAuth(Vulnerability)} />
