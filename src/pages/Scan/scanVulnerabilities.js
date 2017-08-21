@@ -237,7 +237,11 @@ Scan.propTypes = {
         service: PropTypes.string.isRequired,
       })).isRequired,
     })).isRequired,
-  }).isRequired,
+  }),
+};
+
+Scan.defaultProps = {
+  scan: null,
 };
 
 const mapDispatchToProps = dispatch => ({

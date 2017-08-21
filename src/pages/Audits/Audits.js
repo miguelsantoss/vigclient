@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Segment, Table, Icon, Header } from 'semantic-ui-react';
+import { Segment, Table, Icon, Header, Loader } from 'semantic-ui-react';
+
+import { FETCH_AUDITS } from '../../actions/audits';
 
 class Audits extends Component {
   constructor(props) {
@@ -15,6 +17,10 @@ class Audits extends Component {
         ascending: false,
       },
     };
+  }
+
+  componentWillMount = () => {
+    this.props.fetchAudits();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -71,14 +77,22 @@ class Audits extends Component {
     return 'triangle down';
   }
 
-  renderAudits = () =>
-    _.map(this.state.audits, audit => (
+  renderAudits = () => {
+    if (this.props.fetchLoading) {
+      return (
+        <Table.Row textAlign='center'>
+          <Table.Cell colSpan='3'><Loader size='tiny' active inline='centered' /></Table.Cell>
+        </Table.Row>
+      );
+    }
+    return _.map(this.state.audits, audit => (
       <Table.Row key={audit.serial_number}>
         <Table.Cell>{audit.category}</Table.Cell>
         <Table.Cell><Link to={`/audit/${audit.id}`}>{audit.created_at}</Link></Table.Cell>
         <Table.Cell>{audit.closed_at ? audit.closed_at : 'Audit open'}</Table.Cell>
       </Table.Row>
-    ))
+    ));
+  }
 
   render() {
     return (
@@ -126,6 +140,9 @@ class Audits extends Component {
 }
 
 Audits.propTypes = {
+  fetchAudits: PropTypes.func.isRequired,
+  fetchLoading: PropTypes.bool.isRequired,
+  fetchError: PropTypes.bool.isRequired,
   audits: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -140,8 +157,14 @@ Audits.propTypes = {
   }).isRequired,
 };
 
-const mapStateToProps = state => ({
-  audits: state.audits.auditList,
+const mapDispatchToProps = dispatch => ({
+  fetchAudits: () => dispatch(FETCH_AUDITS()),
 });
 
-export default connect(mapStateToProps)(withRouter(Audits));
+const mapStateToProps = state => ({
+  audits: state.audits.list,
+  fetchLoading: state.audits.fetchLoading,
+  fetchError: state.audits.fetchError,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Audits);

@@ -32,6 +32,8 @@ export default function audits(state = initialState, action) {
           id: parseInt(action.result.id, 10),
           fetchError: false,
           fetchLoading: true,
+          category: '',
+          machines: [],
         });
       }
 
@@ -68,6 +70,8 @@ export default function audits(state = initialState, action) {
           id: parseInt(action.result.id, 10),
           fetchError: action.result.err,
           fetchLoading: false,
+          category: '',
+          machines: [],
         });
       }
 

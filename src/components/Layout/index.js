@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import { Grid, Breadcrumb, Segment } from 'semantic-ui-react';
@@ -10,6 +10,7 @@ import Appbar from '../Appbar';
 import MessageList from '../messages/MessageList';
 import browserHistory from '../../history';
 import s from './index.scss';
+
 import { RESET_STATE_STORE } from '../../actions/common';
 
 const style = {};
@@ -177,9 +178,9 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = state => ({
   audits: state.audits.list,
-  fetchLoading: state.audits.auditStatus.fetchLoading,
-  fetchError: state.audits.auditStatus.fetchError,
+  fetchLoading: state.audits.fetchLoading,
+  fetchError: state.audits.fetchError,
   client: state.profile.info,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Layout));
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);

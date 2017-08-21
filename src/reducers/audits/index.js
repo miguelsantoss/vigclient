@@ -12,14 +12,12 @@ import {
 
 const initialState = {
   list: [],
-  auditStatus: {
-    fetchLoading: false,
-    fetchError: false,
-  },
+  fetchLoading: false,
+  fetchError: false,
 };
 
 export default function audits(state = initialState, action) {
-  let auditList;
+  let list;
   let index;
   switch (action.type) {
     case APP_INIT:
@@ -52,15 +50,15 @@ export default function audits(state = initialState, action) {
         },
       };
     case FETCH_AUDIT_BY_ID_LOADING:
-      auditList = _.cloneDeep(state.list);
-      index = _.findIndex(auditList, 'id', action.result.id);
+      list = _.cloneDeep(state.list);
+      index = _.findIndex(list, { id: parseInt(action.result.id, 10) });
 
       if (index !== -1) {
-        auditList[index].fetchError = false;
-        auditList[index].fetchLoading = true;
+        list[index].fetchError = false;
+        list[index].fetchLoading = true;
       } else {
-        auditList.push({
-          id: action.result.id,
+        list.push({
+          id: parseInt(action.result.id, 10),
           fetchError: false,
           fetchLoading: true,
         });
@@ -68,7 +66,7 @@ export default function audits(state = initialState, action) {
 
       return {
         ...state,
-        auditList,
+        list,
       };
     case FETCH_AUDIT_BY_ID_SUCCESS:
       return {

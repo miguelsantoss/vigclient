@@ -285,6 +285,7 @@ Scan.propTypes = {
     params: PropTypes.shape({
       id: PropTypes.string.isRequired,
     }).isRequired,
+    url: PropTypes.string.isRequired,
   }).isRequired,
   scan: PropTypes.shape({
     category: PropTypes.string.isRequired,
@@ -302,10 +303,14 @@ Scan.propTypes = {
         machine_id: PropTypes.number.isRequired,
         port_number: PropTypes.number.isRequired,
         protocol: PropTypes.string.isRequired,
-        service: PropTypes.string.isRequired,
+        service: PropTypes.string,
       })).isRequired,
     })).isRequired,
-  }).isRequired,
+  }),
+};
+
+Scan.defaultProps = {
+  scan: null,
 };
 
 const mapDispatchToProps = dispatch => ({

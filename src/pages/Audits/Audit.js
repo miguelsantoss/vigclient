@@ -37,7 +37,7 @@ class Audit extends Component {
   renderScanEntries = () => {
     const { scans } = this.props.audit;
     if (scans.length === 0) {
-      return (<Header>There are no scans here yet</Header>);
+      return null;
     }
     return _.map(scans, scan => (
       <Table.Row key={scan.id}>
@@ -46,24 +46,30 @@ class Audit extends Component {
       </Table.Row>
     ));
   }
-  renderScans = () => (
-    <Table selectable compact basic='very' size='small'>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Network</Table.HeaderCell>
-          <Table.HeaderCell>Category</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {this.renderScanEntries()}
-      </Table.Body>
-    </Table>
-  )
+  renderScans = () => {
+    const { scans } = this.props.audit;
+    return (
+      <div>
+        <Table selectable compact basic='very' size='small'>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Network</Table.HeaderCell>
+              <Table.HeaderCell>Category</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {this.renderScanEntries()}
+          </Table.Body>
+        </Table>
+        { scans.length === 0 ? <Header as='h4'>There are no scans here yet</Header> : null }
+      </div>
+    );
+  }
 
   renderPageEntries = () => {
     const { pages } = this.props.audit;
     if (pages.length === 0) {
-      return (<Header>There are no pages here yet</Header>);
+      return null;
     }
     return _.map(pages, page => (
       <Table.Row key={page.id}>
@@ -72,18 +78,24 @@ class Audit extends Component {
     ));
   }
 
-  renderPages = () => (
-    <Table selectable compact basic='very' size='small'>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>URL</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {this.renderPageEntries()}
-      </Table.Body>
-    </Table>
-  )
+  renderPages = () => {
+    const { pages } = this.props.audit;
+    return (
+      <div>
+        <Table selectable compact basic='very' size='small'>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>URL</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {this.renderPageEntries()}
+          </Table.Body>
+        </Table>
+        { pages.length === 0 ? <Header as='h4'>There are no pages here yet</Header> : null }
+      </div>
+    );
+  }
 
   render() {
     const { audit } = this.props;
