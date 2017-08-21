@@ -1,31 +1,10 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import jwtDecode from 'jwt-decode';
-import { setCurrentUser } from './actions/authActions';
-
-import Routes from './routes';
-import rootReducer from './reducers/rootReducer';
-import setAuthToken from './utils/setAuthToken';
+import ReactDOM from 'react-dom';
 import 'semantic-ui-css/semantic.min.css';
+import Root from './components/containers/Root';
+import store from './store';
 
-const store = createStore(
-  rootReducer,
-  compose(
-    applyMiddleware(thunk),
-    window.devToolsExtension ? window.devToolsExtension() : f => f
-  )
-);
-
-if(localStorage.jwtToken) {
-  setAuthToken(localStorage.jwtToken);
-  store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)));
-}
-
-render((
-  <Provider store={store}>
-    <Routes />
-  </Provider>
-), document.getElementById('app'));
+const mountNode = document.getElementById('root'); // eslint-disable-line no-undef
+// eslint-disable-next-line react/no-render-return-value
+const render = NewApp => ReactDOM.render(<NewApp store={store} />, mountNode);
+render(Root);

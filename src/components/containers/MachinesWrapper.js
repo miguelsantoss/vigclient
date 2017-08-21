@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Machines from '../../pages/Machines';
 
@@ -7,7 +8,8 @@ import machinesJSON from '../../json/machines.json';
 import portsJSON from '../../json/ports.json';
 import vulnsJSON from '../../json/vulnerabilities.json';
 
-const MachinesWrapper = ({ match }) => {
+const MachinesWrapper = (props) => {
+  const { match } = props;
   let machine = {};
   const ports = [];
   const vulnerabilities = [];
@@ -41,4 +43,8 @@ MachinesWrapper.propTypes = {
   match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-export default MachinesWrapper;
+const mapStateToProps = state => ({
+  state,
+});
+
+export default connect(mapStateToProps)(MachinesWrapper);

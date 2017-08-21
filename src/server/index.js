@@ -1,27 +1,20 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import compression from 'compression';
 import morgan from 'morgan';
 
-import users from './routes/users';
-import auth from './routes/auth';
-import events from './routes/events';
-import audits from './routes/audits';
+import routes from './routes';
 
-// APP
 const app = express();
 
+if (process.env.NODE_ENV === 'production') app.use(morgan('combined'));
+else app.use(morgan('dev'));
+
 app.use(bodyParser.json());
+app.use(compression());
+app.use('/api', routes);
 
-app.use('/api/users', users);
-app.use('/api/auth', auth);
-app.use('/api/events', events);
-app.use('/api/audits', audits);
-
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-} else if (process.env.NODE_ENV === 'production') {
-  app.use(morgan('combined'));
-}
-
-// eslint-disable-next-line no-console
-app.listen(8080, () => console.log('running on localhost:8080'));
+const server = app.listen(8080, () => {
+  const port = server.address().port;
+  console.info(`App now running on port ${port}`);
+});
