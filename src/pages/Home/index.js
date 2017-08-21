@@ -1,25 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Grid, Container, Segment, Header, Dimmer, Loader } from 'semantic-ui-react';
+import { Grid, Container, Segment, Header, Loader } from 'semantic-ui-react';
 
 import Piechart from '../../components/Piechart/index';
 import Linechart from '../../components/Linechart';
 
 import { FETCH_AUDITS } from '../../actions/audits';
-import { FETCH_PROFILE_INFO } from '../../actions/profile';
 import { FETCH_VIZ_DATA } from '../../actions/viz';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
   componentWillMount() {
     this.props.fetchAudits();
-    this.props.fetchProfileInfo();
     this.props.fetchVizData();
   }
 
@@ -92,13 +84,11 @@ Home.propTypes = {
     }).isRequired,
   }).isRequired,
   fetchAudits: PropTypes.func.isRequired,
-  fetchProfileInfo: PropTypes.func.isRequired,
   fetchVizData: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   fetchAudits: () => dispatch(FETCH_AUDITS()),
-  fetchProfileInfo: () => dispatch(FETCH_PROFILE_INFO()),
   fetchVizData: () => dispatch(FETCH_VIZ_DATA()),
 });
 

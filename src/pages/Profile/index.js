@@ -3,10 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Segment, Grid, Image } from 'semantic-ui-react';
+import { FETCH_PROFILE_INFO } from '../../actions/profile';
 
 import './index.scss';
 
 class Profile extends Component {
+  componentWillMount = () => {
+    this.props.fetchProfileInfo();
+  }
   renderContacts = () => {
     const { contacts } = this.props.info;
     if (contacts.length === 0) {
@@ -110,6 +114,7 @@ class Profile extends Component {
 }
 
 Profile.propTypes = {
+  fetchProfileInfo: PropTypes.func.isRequired,
   info: PropTypes.shape({
     acronym: PropTypes.string.isRequired,
     address: PropTypes.string.isRequired,
@@ -135,8 +140,12 @@ Profile.propTypes = {
   }).isRequired,
 };
 
+const mapDispatchToProps = dispatch => ({
+  fetchProfileInfo: () => dispatch(FETCH_PROFILE_INFO()),
+});
+
 const mapStateToProps = state => ({
   info: state.profile.info,
 });
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

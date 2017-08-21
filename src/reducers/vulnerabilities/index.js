@@ -22,7 +22,7 @@ export default function audits(state = initialState, action) {
       };
     case FETCH_VULNERABILITY_BY_ID_LOADING:
       list = _.cloneDeep(state.list);
-      index = _.findIndex(list, 'id', action.result.id);
+      index = _.findIndex(list, { id: parseInt(action.result.id, 10) });
 
       if (index !== -1) {
         list[index].fetchError = false;
@@ -45,7 +45,7 @@ export default function audits(state = initialState, action) {
       vulnerability.fetchLoading = false;
 
       list = _.cloneDeep(state.list);
-      index = _.findIndex(list, 'id', vulnerability.id);
+      index = _.findIndex(list, { id: vulnerability.id });
       if (index !== -1) {
         list[index] = vulnerability;
       } else {
@@ -58,7 +58,7 @@ export default function audits(state = initialState, action) {
       };
     case FETCH_VULNERABILITY_BY_ID_FAIL:
       list = _.cloneDeep(state.list);
-      index = _.findIndex(list, 'id', action.result.id);
+      index = _.findIndex(list, { id: parseInt(action.result.id, 10) });
 
       if (index !== -1) {
         list[index].fetchError = action.result.err;
