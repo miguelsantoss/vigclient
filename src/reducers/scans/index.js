@@ -22,14 +22,14 @@ export default function audits(state = initialState, action) {
       };
     case FETCH_SCAN_BY_ID_LOADING:
       list = _.cloneDeep(state.list);
-      index = _.findIndex(list, { id: action.result.id });
+      index = _.findIndex(list, { id: parseInt(action.result.id, 10) });
 
       if (index !== -1) {
         list[index].fetchError = false;
         list[index].fetchLoading = true;
       } else {
         list.push({
-          id: action.result.id,
+          id: parseInt(action.result.id, 10),
           fetchError: false,
           fetchLoading: true,
         });
@@ -58,13 +58,14 @@ export default function audits(state = initialState, action) {
       };
     case FETCH_SCAN_BY_ID_FAIL:
       list = _.cloneDeep(state.list);
-      index = _.findIndex(list, { id: action.result.id });
+      index = _.findIndex(list, { id: parseInt(action.result.id, 10) });
 
       if (index !== -1) {
         list[index].fetchError = action.result.err;
         list[index].fetchLoading = false;
       } else {
         list.push({
+          id: parseInt(action.result.id, 10),
           fetchError: action.result.err,
           fetchLoading: false,
         });

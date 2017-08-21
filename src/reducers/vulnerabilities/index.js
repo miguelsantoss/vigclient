@@ -29,7 +29,7 @@ export default function audits(state = initialState, action) {
         list[index].fetchLoading = true;
       } else {
         list.push({
-          id: action.result.id,
+          id: parseInt(action.result.id, 10),
           fetchError: false,
           fetchLoading: true,
         });
@@ -65,7 +65,7 @@ export default function audits(state = initialState, action) {
         list[index].fetchLoading = false;
       } else {
         list.push({
-          id: action.result.id,
+          id: parseInt(action.result.id, 10),
           fetchError: action.result.err,
           fetchLoading: false,
         });

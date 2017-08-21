@@ -2,24 +2,24 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { Redirect, Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Grid, Segment, Container, Header, Label } from 'semantic-ui-react';
+import { Table, Grid, Segment, Container, Header, Label, Loader } from 'semantic-ui-react';
 import Piechart from '../../components/Piechart/index';
 
+import { FETCH_SCAN_BY_ID } from '../../actions/scans';
+
 class Scan extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    selectedRow: null,
+  }
+  componentWillMount = () => {
+    this.props.fetchScanByID(this.props.match.params.id);
+  }
 
-    const { match } = props;
-    let scan = null;
-    props.scanList.forEach((scanItem) => {
-      if (scanItem.id === parseInt(match.params.id, 10)) {
-        scan = _.cloneDeep(scanItem);
-      }
-    });
-
-    if (scan && scan !== null) {
+  componentWillReceiveProps = (nextProps) => {
+    const { scan } = nextProps;
+    if (scan && !scan.fetchLoading && (this.state && this.state.scan.fetchLoading)) {
       scan.vulnerabilities.sort((a, b) => {
         if (a.risk_factor < b.risk_factor) return 1;
         if (a.risk_factor > b.risk_factor) return -1;
@@ -27,17 +27,22 @@ class Scan extends Component {
         if (a.count > b.count) return -1;
         return a.title.localeCompare(b.title);
       });
-
-      this.state = {
-        scan,
-        vulnerabilities: scan.vulnerabilities,
-        machines: scan.machines,
-        selectedRow: null,
-      };
+      scan.machines.forEach((machine) => {
+        machine.vulnerabilities.sort((a, b) => {
+          if (a.risk_factor < b.risk_factor) return 1;
+          if (a.risk_factor > b.risk_factor) return -1;
+          if (a.count < b.count) return 1;
+          if (a.count > b.count) return -1;
+          return a.title.localeCompare(b.title);
+        });
+      });
+      this.setState({ scan, selectedRow: null });
+    } else if (scan && (scan.fetchLoading || scan.fetchError)) {
+      this.setState({ scan });
     }
   }
 
-  getMachineIndex = id => this.state.machines.map(m => m.id).indexOf(id)
+  getMachineIndex = id => this.state.scan.machines.map(m => m.id).indexOf(id)
 
   handleRowClick = (id) => {
     this.setState({ ...this.state, selectedRow: id });
@@ -49,7 +54,14 @@ class Scan extends Component {
   }
 
   renderRelatedMachines = () => (
-    <Table selectable compact basic='very' size='small' textAlign='center'>
+    <Table
+      // toggle selectable only when scan is not loading or when machine is selected
+      selectable={!(!this.state.scan || this.state.scan.fetchLoading)}
+      compact
+      basic='very'
+      size='small'
+      textAlign='center'
+    >
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>IP Address</Table.HeaderCell>
@@ -63,15 +75,24 @@ class Scan extends Component {
   )
 
   renderRelatedMachineEntries = () => {
-    if (!this.state.scan) return null;
+    if (!this.state.scan || this.state.scan.fetchLoading) {
+      return (
+        <Table.Row textAlign='center'>
+          <Table.Cell colSpan='3'><Loader size='tiny' active inline='centered' /></Table.Cell>
+        </Table.Row>
+      );
+    }
+
     const { vulnerabilities, machines } = this.state.scan;
     const { selectedRow } = this.state;
+
     const getVulnIndex = (id) => {
       for (let i = 0; i < vulnerabilities.length; i += 1) {
         if (vulnerabilities[i].id === id) return i;
       }
       return -1;
     };
+
     if (!selectedRow) {
       return (
         <Table.Row>
@@ -79,6 +100,7 @@ class Scan extends Component {
         </Table.Row>
       );
     }
+
     const index = getVulnIndex(selectedRow);
     if (index === -1) return null;
     return _.map(vulnerabilities[index].relatedMachines, (machine) => {
@@ -101,7 +123,14 @@ class Scan extends Component {
     const tbStyle = {
     };
     return (
-      <Table selectable compact basic='very' style={tableStyle} size='small'>
+      <Table
+        // toggle selectable only when scan is not loading or when machine is selected
+        selectable={!(!this.state.scan || this.state.scan.fetchLoading)}
+        style={tableStyle}
+        compact
+        basic='very'
+        size='small'
+      >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell />
@@ -117,6 +146,13 @@ class Scan extends Component {
   }
 
   renderVulnerabilityEntries = () => {
+    if (!this.state.scan || this.state.scan.fetchLoading) {
+      return (
+        <Table.Row textAlign='center'>
+          <Table.Cell colSpan='3'><Loader size='tiny' active inline='centered' /></Table.Cell>
+        </Table.Row>
+      );
+    }
     const style = {
       padding: ' .2em .4em',
       textAlign: 'center',
@@ -126,7 +162,7 @@ class Scan extends Component {
       width: '18px',
       lineHeight: '1.2',
     };
-    if (!this.state.scan) return null;
+
     const { vulnerabilities } = this.state.scan;
     const { selectedRow } = this.state;
 
@@ -176,18 +212,41 @@ class Scan extends Component {
 }
 
 Scan.propTypes = {
-  match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  scanList: PropTypes.arrayOf(PropTypes.shape({
+  fetchScanByID: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  scan: PropTypes.shape({
     category: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     machines: PropTypes.arrayOf(PropTypes.shape({
-
+      dns_name: PropTypes.string.isRequired,
+      hostname: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired,
+      ip_address: PropTypes.string.isRequired,
+      mac_address: PropTypes.string.isRequired,
+      operating_system: PropTypes.string.isRequired,
+      scan_id: PropTypes.number.isRequired,
+      servicePorts: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        machine_id: PropTypes.number.isRequired,
+        port_number: PropTypes.number.isRequired,
+        protocol: PropTypes.string.isRequired,
+        service: PropTypes.string.isRequired,
+      })).isRequired,
     })).isRequired,
-  })).isRequired,
+  }).isRequired,
 };
 
-const mapStateToProps = state => ({
-  scanList: state.audits.scanList,
+const mapDispatchToProps = dispatch => ({
+  fetchScanByID: id => dispatch(FETCH_SCAN_BY_ID(id)),
 });
 
-export default connect(mapStateToProps)(Scan);
+const mapStateToProps = (state, ownProps) => ({
+  scan: _.find(state.scans.list, { id: parseInt(ownProps.match.params.id, 10) }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Scan);
+

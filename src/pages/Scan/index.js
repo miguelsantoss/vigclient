@@ -4,17 +4,21 @@ import _ from 'lodash';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Grid, Segment, Container, Header, Label, Button } from 'semantic-ui-react';
+import { Table, Grid, Segment, Container, Header, Label, Button, Loader } from 'semantic-ui-react';
 
 import { FETCH_SCAN_BY_ID } from '../../actions/scans';
 
 class Scan extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    selectedRow: null,
+  }
+  componentWillMount = () => {
+    this.props.fetchScanByID(this.props.match.params.id);
+  }
 
-    let scan = this.props.scan;
-    console.log(scan);
-    if (scan && scan !== null) {
+  componentWillReceiveProps = (nextProps) => {
+    const { scan } = nextProps;
+    if (scan && !scan.fetchLoading && (this.state && this.state.scan.fetchLoading)) {
       scan.vulnerabilities.sort((a, b) => {
         if (a.risk_factor < b.risk_factor) return 1;
         if (a.risk_factor > b.risk_factor) return -1;
@@ -31,20 +35,10 @@ class Scan extends Component {
           return a.title.localeCompare(b.title);
         });
       });
-
-      this.state = {
-        scan,
-        vulnerabilities: scan.vulnerabilities,
-        machines: scan.machines,
-        selectedRow: null,
-      };
-    } else {
-      this.state = {};
+      this.setState({ scan, selectedRow: null });
+    } else if (scan && (scan.fetchLoading || scan.fetchError)) {
+      this.setState({ scan });
     }
-  }
-
-  componentWillMount = () => {
-    this.props.fetchScanByID(this.props.match.params.id);
   }
 
   getMachineIndex = id => this.state.machines.map(m => m.id).indexOf(id)
@@ -62,7 +56,14 @@ class Scan extends Component {
     const tbStyle = {
     };
     return (
-      <Table selectable compact basic='very' size='small' textAlign='center'>
+      <Table
+        // toggle selectable only when scan is not loading or when machine is selected
+        selectable={!(!this.state.scan || this.state.scan.fetchLoading) || !!this.state.selectedRow}
+        compact
+        basic='very'
+        size='small'
+        textAlign='center'
+      >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Port Number</Table.HeaderCell>
@@ -78,6 +79,13 @@ class Scan extends Component {
   }
 
   renderPortEntries = () => {
+    if (!this.state.scan || this.state.scan.fetchLoading) {
+      return (
+        <Table.Row textAlign='center'>
+          <Table.Cell colSpan='3'><Loader size='tiny' active inline='centered' /></Table.Cell>
+        </Table.Row>
+      );
+    }
     if (!this.state.selectedRow) {
       return (
         <Table.Row>
@@ -108,7 +116,13 @@ class Scan extends Component {
     const tbStyle = {
     };
     return (
-      <Table selectable compact basic='very' size='small'>
+      <Table
+        // toggle selectable only when scan is not loading or when machine is selected
+        selectable={!(!this.state.scan || this.state.scan.fetchLoading) || !!this.state.selectedRow}
+        compact
+        basic='very'
+        size='small'
+      >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell />
@@ -124,6 +138,13 @@ class Scan extends Component {
   }
 
   renderVulnerabilityEntries = () => {
+    if (!this.state.scan || this.state.scan.fetchLoading) {
+      return (
+        <Table.Row textAlign='center'>
+          <Table.Cell colSpan='3'><Loader size='tiny' active inline='centered' /></Table.Cell>
+        </Table.Row>
+      );
+    }
     if (!this.state.selectedRow) {
       return (
         <Table.Row textAlign='center'>
@@ -175,8 +196,15 @@ class Scan extends Component {
     };
     const tbStyle = {
     };
+
     return (
-      <Table selectable compact basic='very' size='small'>
+      <Table
+        // toggle selectable only when scan is not loading or when machine is selected
+        selectable={!(!this.state.scan || this.state.scan.fetchLoading)}
+        compact
+        basic='very'
+        size='small'
+      >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Hostname</Table.HeaderCell>
@@ -192,9 +220,13 @@ class Scan extends Component {
   }
 
   renderMachineEntries = () => {
-    console.log(this);
-    console.log(this.state);
-    if (!this.state.scan) return null;
+    if (!this.state.scan || this.state.scan.fetchLoading) {
+      return (
+        <Table.Row textAlign='center'>
+          <Table.Cell colSpan='3'><Loader size='tiny' active inline='centered' /></Table.Cell>
+        </Table.Row>
+      );
+    }
     const { machines } = this.state.scan;
     const { selectedRow } = this.state;
 
@@ -233,7 +265,10 @@ class Scan extends Component {
                 <Header as='h4' icon='heartbeat' content='VULNERABILITIES' />
                 {this.renderVulnerabilityList()}
                 <Link to={`${this.props.match.url}/vulnerabilities`}>
-                  <Button compact size='tiny' fluid>Show All Vulnerabilities</Button>
+                  <Button compact size='tiny' fluid>
+                    {(!this.state.scan || this.state.scan.fetchLoading) ? <Loader size='tiny' active inline='centered' /> :
+                    <span>Show All Vulnerabilities</span> }
+                  </Button>
                 </Link>
               </Container>
             </Segment>
@@ -245,7 +280,12 @@ class Scan extends Component {
 }
 
 Scan.propTypes = {
-  match: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  fetchScanByID: PropTypes.func.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   scan: PropTypes.shape({
     category: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
@@ -274,7 +314,6 @@ const mapDispatchToProps = dispatch => ({
 
 const mapStateToProps = (state, ownProps) => ({
   scan: _.find(state.scans.list, { id: parseInt(ownProps.match.params.id, 10) }),
-  list: state.scans.list,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Scan);

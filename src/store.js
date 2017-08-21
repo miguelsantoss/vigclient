@@ -16,7 +16,7 @@ const configureStore = (initialState) => {
   if (process.env.NODE_ENV === 'production') {
     middlewares = compose(thunkApplied);
   } else {
-    middlewares = composeWithDevTools(thunkApplied, loggerRedux);
+    middlewares = composeWithDevTools(thunkApplied);
   }
 
   return createStore(rootReducer, initialState, middlewares);
