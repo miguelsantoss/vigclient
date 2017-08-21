@@ -11,6 +11,7 @@ import MessageList from '../messages/MessageList';
 import browserHistory from '../../history';
 import s from './index.scss';
 
+import { FETCH_AUDITS } from '../../actions/audits';
 import { RESET_STATE_STORE } from '../../actions/common';
 
 const style = {};
@@ -53,7 +54,11 @@ class Layout extends Component {
     },
   };
 
-  componentWillReceiveProps() {
+  componentWillMount = () => {
+    this.props.fetchAudits();
+  }
+
+  componentWillReceiveProps = () => {
     // This is a hack -- pass history prop just to force update
     // this is not good
     const route = browserHistory.location.pathname.split('/');
@@ -159,6 +164,7 @@ class Layout extends Component {
 }
 
 Layout.propTypes = {
+  fetchAudits: PropTypes.func.isRequired,
   audits: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   fetchLoading: PropTypes.bool.isRequired,
   fetchError: PropTypes.bool.isRequired,
@@ -173,6 +179,7 @@ Layout.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
+  fetchAudits: () => dispatch(FETCH_AUDITS()),
   reset: () => dispatch(RESET_STATE_STORE()),
 });
 

@@ -9,7 +9,7 @@ import Piechart from '../../components/Piechart/index';
 
 import { FETCH_SCAN_BY_ID } from '../../actions/scans';
 
-class Scan extends Component {
+class ScanVulns extends Component {
   state = {
     selectedRow: null,
   }
@@ -20,22 +20,6 @@ class Scan extends Component {
   componentWillReceiveProps = (nextProps) => {
     const { scan } = nextProps;
     if (scan && !scan.fetchLoading && (this.state && this.state.scan.fetchLoading)) {
-      scan.vulnerabilities.sort((a, b) => {
-        if (a.risk_factor < b.risk_factor) return 1;
-        if (a.risk_factor > b.risk_factor) return -1;
-        if (a.count < b.count) return 1;
-        if (a.count > b.count) return -1;
-        return a.title.localeCompare(b.title);
-      });
-      scan.machines.forEach((machine) => {
-        machine.vulnerabilities.sort((a, b) => {
-          if (a.risk_factor < b.risk_factor) return 1;
-          if (a.risk_factor > b.risk_factor) return -1;
-          if (a.count < b.count) return 1;
-          if (a.count > b.count) return -1;
-          return a.title.localeCompare(b.title);
-        });
-      });
       this.setState({ scan, selectedRow: null });
     } else if (scan && (scan.fetchLoading || scan.fetchError)) {
       this.setState({ scan });
@@ -44,8 +28,8 @@ class Scan extends Component {
 
   getMachineIndex = id => this.state.scan.machines.map(m => m.id).indexOf(id)
 
-  handleRowClick = (id) => {
-    this.setState({ ...this.state, selectedRow: id });
+  handleRowClick = (vuln) => {
+    this.setState({ ...this.state, selectedRow: vuln });
   }
 
   labelColor = (risk) => {
@@ -83,15 +67,8 @@ class Scan extends Component {
       );
     }
 
-    const { vulnerabilities, machines } = this.state.scan;
+    const { machines } = this.state.scan;
     const { selectedRow } = this.state;
-
-    const getVulnIndex = (id) => {
-      for (let i = 0; i < vulnerabilities.length; i += 1) {
-        if (vulnerabilities[i].id === id) return i;
-      }
-      return -1;
-    };
 
     if (!selectedRow) {
       return (
@@ -101,9 +78,7 @@ class Scan extends Component {
       );
     }
 
-    const index = getVulnIndex(selectedRow);
-    if (index === -1) return null;
-    return _.map(vulnerabilities[index].relatedMachines, (machine) => {
+    return _.map(selectedRow.relatedMachines, (machine) => {
       const machineIndex = this.getMachineIndex(machine.machine_id);
       return (
         <Table.Row key={machine.machine_id}>
@@ -169,8 +144,8 @@ class Scan extends Component {
     return _.map(vulnerabilities, vuln => (
       <Table.Row
         key={vuln.id}
-        active={selectedRow === vuln.id}
-        onClick={() => this.handleRowClick(vuln.id)}
+        active={selectedRow && selectedRow.id === vuln.id}
+        onClick={() => this.handleRowClick(vuln)}
       >
         <Table.Cell>
           <Label color={this.labelColor(vuln.risk_factor)} size='mini' style={style}>
@@ -190,17 +165,30 @@ class Scan extends Component {
         <Grid.Row>
           <Grid.Column width={10}>
             <Segment>
+              <Header
+                as='h4'
+                icon='unordered list'
+                content={`LIST OF VULNERABILITIES (${this.state.scan ? this.state.scan.vulnerabilities.length : ''})`}
+              />
               {this.renderVulnerabilityList()}
             </Segment>
           </Grid.Column>
           <Grid.Column width={6}>
             <Segment>
-              <Header as='h4' icon="laptop" content='RELATED MACHINES' />
+              <Header
+                as='h4'
+                icon='laptop'
+                content={`RELATED MACHINES (${this.state.selectedRow ? this.state.selectedRow.relatedMachines.length : ''})`}
+              />
               {this.renderRelatedMachines()}
             </Segment>
             <Segment>
               <Container>
-                <Header as='h4' icon='heartbeat' content='VULNERABILITIES' />
+                <Header
+                  as='h4'
+                  icon='heartbeat'
+                  content='VULNERABILITIES'
+                />
                 { !disabledViz && <Piechart data={this.state.visData.allVulns} id='piechart-all-vulnerabilities' /> }
               </Container>
             </Segment>
@@ -211,7 +199,7 @@ class Scan extends Component {
   }
 }
 
-Scan.propTypes = {
+ScanVulns.propTypes = {
   fetchScanByID: PropTypes.func.isRequired,
   match: PropTypes.shape({
     params: PropTypes.shape({
@@ -240,7 +228,7 @@ Scan.propTypes = {
   }),
 };
 
-Scan.defaultProps = {
+ScanVulns.defaultProps = {
   scan: null,
 };
 
@@ -252,5 +240,5 @@ const mapStateToProps = (state, ownProps) => ({
   scan: _.find(state.scans.list, { id: parseInt(ownProps.match.params.id, 10) }),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Scan);
+export default connect(mapStateToProps, mapDispatchToProps)(ScanVulns);
 

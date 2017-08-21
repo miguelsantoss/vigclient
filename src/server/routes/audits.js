@@ -13,7 +13,7 @@ router.get('/:id', (req, res) => {
   }).fetch({ withRelated: ['scans', 'pages'] }).then((audits) => {
     const auditItem = audits.toJSON();
     if (auditItem.client_id !== userId) {
-      res.status(404);
+      res.status(404).json({});
     } else {
       if (auditItem.scans) {
         auditItem.scans.forEach((scan) => {

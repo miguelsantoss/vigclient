@@ -5,7 +5,9 @@ import events from './events';
 import audits from './audits';
 import profile from './profile';
 import scans from './scans';
+import pages from './pages';
 import vulnerabilities from './vulnerabilities';
+import webvulnerabilities from './webvulnerabilities';
 import viz from './viz';
 
 const router = express.Router();
@@ -16,7 +18,9 @@ router.use('/events', events);
 router.use('/audits', audits);
 router.use('/profile', profile);
 router.use('/scan', scans);
+router.use('/page', pages);
 router.use('/vulnerability', vulnerabilities);
+router.use('/webvulnerability', webvulnerabilities);
 router.use('/viz', viz);
 
 export default router;

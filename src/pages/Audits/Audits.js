@@ -97,7 +97,11 @@ class Audits extends Component {
   render() {
     return (
       <Segment>
-        <Header as='h4' icon='unordered list' content='AUDIT LIST' />
+        <Header
+          as='h4'
+          icon='unordered list'
+          content={`AUDIT LIST (${this.state.audits ? this.state.audits.length : ''})`}
+        />
         <Table selectable compact basic='very' size='small'>
           <Table.Header>
             <Table.Row>

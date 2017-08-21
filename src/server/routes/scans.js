@@ -81,8 +81,24 @@ router.get('/:id', (req, res) => {
             delete port.updated_at;
           });
         });
+        scanItem.vulnerabilities.sort((a, b) => {
+          if (a.risk_factor < b.risk_factor) return 1;
+          if (a.risk_factor > b.risk_factor) return -1;
+          if (a.count < b.count) return 1;
+          if (a.count > b.count) return -1;
+          return a.title.localeCompare(b.title);
+        });
+        scanItem.machines.forEach((machine) => {
+          machine.vulnerabilities.sort((a, b) => {
+            if (a.risk_factor < b.risk_factor) return 1;
+            if (a.risk_factor > b.risk_factor) return -1;
+            if (a.count < b.count) return 1;
+            if (a.count > b.count) return -1;
+            return a.title.localeCompare(b.title);
+          });
+        });
         res.json(scanItem);
-      } else res.status(404);
+      } else res.status(404).json({});
     });
   });
 });

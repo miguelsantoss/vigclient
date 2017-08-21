@@ -19,22 +19,6 @@ class Scan extends Component {
   componentWillReceiveProps = (nextProps) => {
     const { scan } = nextProps;
     if (scan && !scan.fetchLoading && (this.state && this.state.scan.fetchLoading)) {
-      scan.vulnerabilities.sort((a, b) => {
-        if (a.risk_factor < b.risk_factor) return 1;
-        if (a.risk_factor > b.risk_factor) return -1;
-        if (a.count < b.count) return 1;
-        if (a.count > b.count) return -1;
-        return a.title.localeCompare(b.title);
-      });
-      scan.machines.forEach((machine) => {
-        machine.vulnerabilities.sort((a, b) => {
-          if (a.risk_factor < b.risk_factor) return 1;
-          if (a.risk_factor > b.risk_factor) return -1;
-          if (a.count < b.count) return 1;
-          if (a.count > b.count) return -1;
-          return a.title.localeCompare(b.title);
-        });
-      });
       this.setState({ scan, selectedRow: null });
     } else if (scan && (scan.fetchLoading || scan.fetchError)) {
       this.setState({ scan });
@@ -249,20 +233,32 @@ class Scan extends Component {
         <Grid.Row>
           <Grid.Column width={8}>
             <Segment>
-              <Header as='h4' icon='unordered list' content='MACHINE LIST' />
+              <Header
+                as='h4'
+                icon='unordered list'
+                content={`MACHINE LIST (${this.state.scan ? this.state.scan.machines.length : ''})`}
+              />
               {this.renderMachineList()}
             </Segment>
           </Grid.Column>
           <Grid.Column width={8}>
             <Segment>
               <Container>
-                <Header as='h4' icon='setting' content='OPEN PORTS' />
+                <Header
+                  as='h4'
+                  icon='setting'
+                  content={`OPEN PORTS (${this.state.selectedRow ? this.state.selectedRow.servicePorts.length : ''})`}
+                />
                 {this.renderPortList()}
               </Container>
             </Segment>
             <Segment>
               <Container>
-                <Header as='h4' icon='heartbeat' content='VULNERABILITIES' />
+                <Header
+                  as='h4'
+                  icon='heartbeat'
+                  content={`VULNERABILITIES (${this.state.selectedRow ? this.state.selectedRow.vulnerabilities.length : ''})`}
+                />
                 {this.renderVulnerabilityList()}
                 <Link to={`${this.props.match.url}/vulnerabilities`}>
                   <Button compact size='tiny' fluid>

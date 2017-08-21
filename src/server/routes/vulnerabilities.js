@@ -41,7 +41,7 @@ router.get('/:id', (req, res) => {
       });
       res.send(vulnItem);
     } else {
-      res.status(404);
+      res.status(404).json({});
     }
   });
 });

@@ -73,7 +73,7 @@ class Audit extends Component {
     }
     return _.map(pages, page => (
       <Table.Row key={page.id}>
-        <Table.Cell><Link to={`/scan/${page.id}`}>{page.url}</Link></Table.Cell>
+        <Table.Cell><Link to={`/page/${page.id}`}>{page.url}</Link></Table.Cell>
       </Table.Row>
     ));
   }
