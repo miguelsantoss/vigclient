@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Table, Grid, Segment, Container, Header, Label, Button, Loader } from 'semantic-ui-react';
+import { Table, Grid, Segment, Header, Label, Loader } from 'semantic-ui-react';
 
 import { FETCH_PAGE_BY_ID } from '../../actions/pages';
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import _ from 'lodash';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import cx from 'classnames';
 import { Grid, Breadcrumb, Segment } from 'semantic-ui-react';
@@ -8,10 +9,10 @@ import { Grid, Breadcrumb, Segment } from 'semantic-ui-react';
 import Sidebar from '../Sidebar';
 import Appbar from '../Appbar';
 import MessageList from '../messages/MessageList';
-import browserHistory from '../../history';
 import s from './index.scss';
 
 import { FETCH_AUDITS } from '../../actions/audits';
+import { FETCH_PROFILE_INFO } from '../../actions/profile';
 import { RESET_STATE_STORE } from '../../actions/common';
 
 const style = {};
@@ -45,95 +46,305 @@ style.menu = {
 };
 
 class Layout extends Component {
-  state = {
-    history: {
-      audit: '',
-      scan: '',
-      machine: '',
-      vuln: '',
-    },
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      history: null,
+      lastRoute: props.location.pathname,
+    };
+  }
 
   componentWillMount = () => {
     this.props.fetchAudits();
+    this.props.fetchProfileInfo();
   }
 
-  componentWillReceiveProps = () => {
-    // This is a hack -- pass history prop just to force update
-    // this is not good
-    const route = browserHistory.location.pathname.split('/');
-    if (route[1] !== undefined) {
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      ...this.state,
+      history: this.handleNewRoute(nextProps.location.pathname, nextProps),
+    });
+  }
+
+  handleNewRoute = (pathname, props) => {
+    const route = pathname.split('/');
+    if (props && route[1] && route[1] !== '') {
+      const { audits } = props;
+      const { scans } = props;
+      const { pages } = props;
+      const { machines } = props;
+      const { vulnerabilities } = props;
+      const { webvulnerabilities } = props;
+      let audit;
+      let scan;
+      let page;
+      let machine;
+      let vulnerability;
+      let webvulnerability;
       switch (route[1]) {
+        case 'profile':
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <span>Profile</span>
+              </Breadcrumb.Section>
+            </div>
+          );
+        case 'audits':
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+                <span> | {props.client.name}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to='/audits/'>Audits</Link>
+              </Breadcrumb.Section>
+            </div>
+          );
         case 'audit':
-          this.setState({
-            history: {
-              audit: route[2],
-              scan: '',
-              machine: '',
-              vuln: '',
-            },
-          });
-          break;
+          for (let i = 0; i < audits.length; i += 1) {
+            if (audits[i].id === parseInt(route[2], 10)) {
+              audit = audits[i];
+            }
+          }
+          if (!audit) return null;
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+                <span> | {props.client.name}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to='/audits/'>Audits</Link>
+                <span> | {audit.created_at}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/audit/${route[2]}`}>{ audit.category === 'web' ? 'Pages' : 'Scans'}</Link>
+              </Breadcrumb.Section>
+            </div>
+          );
         case 'scan':
-          this.setState({
-            history: {
-              ...this.state.history,
-              scan: route[2],
-              machine: '',
-              vuln: '',
-            },
-          });
-          break;
+          for (let i = 0; i < scans.length; i += 1) {
+            if (scans[i].id === parseInt(route[2], 10)) {
+              scan = scans[i];
+            }
+          }
+
+          if (!scan) {
+            return null;
+          }
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+                <span> | {props.client.name}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to='/audits/'>Audits</Link>
+                <span> | {scan.audit_date}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/audit/${scan.audit_id}`}>Scans</Link>
+                <span> | {scan.network}</span>
+              </Breadcrumb.Section>
+              {
+                route[3] && route[3] === 'vulnerabilities' && <Breadcrumb.Divider icon='right angle' />
+              }
+              {
+                route[3] && route[3] === 'vulnerabilities' && (
+                  <Breadcrumb.Section>
+                    <strong>All Vulnerabilities</strong>
+                  </Breadcrumb.Section>
+                )
+              }
+            </div>
+          );
+        case 'page':
+          for (let i = 0; i < pages.length; i += 1) {
+            if (pages[i].id === parseInt(route[2], 10)) {
+              page = pages[i];
+            }
+          }
+
+          if (!page) {
+            return null;
+          }
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+                <span> | {props.client.name}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to='/audits/'>Audits</Link>
+                <span> | {page.audit_date}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/audit/${page.audit_id}`}>Scans</Link>
+                <span> | {page.url}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <strong>All Vulnerabilities</strong>
+              </Breadcrumb.Section>
+            </div>
+          );
+
         case 'machine':
-          this.setState({
-            history: {
-              ...this.state.history,
-              machine: route[2],
-              vuln: '',
-            },
-          });
-          break;
+          for (let i = 0; i < machines.length; i += 1) {
+            if (machines[i].id === parseInt(route[2], 10)) {
+              machine = machines[i];
+            }
+          }
+          if (!machine) {
+            return null;
+          }
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+                <span> | {props.client.name}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to='/audits/'>Audits</Link>
+                <span> | {machine.audit_date}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/audit/${machine.audit_id}`}>Scans</Link>
+                <span> | {machine.scan_network}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/scan/${machine.scan_id}`}>Machines</Link>
+                <span> | {machine.ip_address}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <strong>Vulnerabilities</strong>
+              </Breadcrumb.Section>
+            </div>
+          );
+        case 'webvulnerability':
+          for (let i = 0; i < webvulnerabilities.length; i += 1) {
+            if (webvulnerabilities[i].id === parseInt(route[2], 10)) {
+              webvulnerability = webvulnerabilities[i];
+            }
+          }
+          if (!webvulnerability) {
+            return null;
+          }
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+                <span> | {props.client.name}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to='/audits/'>Audits</Link>
+                <span> | {webvulnerability.audit_date}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/audit/${webvulnerability.audit_id}`}>Pages</Link>
+                <span> | {webvulnerability.page_url}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/page/${webvulnerability.page_id}`}>Web Vulnerabilities</Link>
+                <span> | id:{webvulnerability.id}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <strong>Details</strong>
+              </Breadcrumb.Section>
+            </div>
+          );
         case 'vulnerability':
-          this.setState({
-            history: {
-              ...this.state.history,
-              vuln: route[2],
-            },
-          });
-          break;
+          for (let i = 0; i < vulnerabilities.length; i += 1) {
+            if (vulnerabilities[i].id === parseInt(route[2], 10)) {
+              vulnerability = vulnerabilities[i];
+            }
+          }
+          if (!vulnerability) {
+            return null;
+          }
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+                <span> | {props.client.name}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to='/audits/'>Audits</Link>
+                <span> | {vulnerability.audit_date}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/audit/${vulnerability.audit_id}`}>Scans</Link>
+                <span> | {vulnerability.scan_network}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/scan/${vulnerability.scan_id}`}>Machines</Link>
+                <span> | {vulnerability.machine_ip}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <Link to={`/machine/${vulnerability.machine_id}`}>Vulnerabilities</Link>
+                <span> | vid:{vulnerability.vid}</span>
+              </Breadcrumb.Section>
+              <Breadcrumb.Divider icon='right angle' />
+              <Breadcrumb.Section>
+                <strong>Details</strong>
+              </Breadcrumb.Section>
+            </div>
+          );
         default:
-          this.setState({
-            history: {
-              audit: '',
-              scan: '',
-              machine: '',
-              vuln: '',
-            },
-          });
+          return (
+            <div>
+              <Breadcrumb.Section>
+                <Link to='/'>Home</Link>
+              </Breadcrumb.Section>
+            </div>
+          );
       }
     }
+    return (
+      <div>
+        <Breadcrumb.Section>
+          <Link to='/'>Home</Link>
+        </Breadcrumb.Section>
+      </div>
+    );
   }
 
-  renderBreadcrumbHistory() {
-    // Improve this with new routes
+  renderBreadcrumbHistory = () => {
     const { history } = this.state;
     return (
       <Segment size='tiny' style={{ marginBottom: 0 }}>
         <Breadcrumb size='tiny'>
-          <Breadcrumb.Section><Link to='/'>Home</Link></Breadcrumb.Section>
-          { history.audit && <Breadcrumb.Divider icon='right angle' /> }
-          { history.audit && <Breadcrumb.Section><Link to={`/audit/${history.audit}`}>Audit {history.audit}</Link></Breadcrumb.Section> }
-          { history.scan && <Breadcrumb.Divider icon='right angle' /> }
-          { history.scan && <Breadcrumb.Section><Link to={`/scan/${history.scan}`}>Scan {history.scan}</Link></Breadcrumb.Section> }
-          { history.machine && <Breadcrumb.Divider icon='right angle' /> }
-          { history.machine && <Breadcrumb.Section><Link to={`/machine/${history.machine}`}>Machine {history.machine}</Link></Breadcrumb.Section> }
-          { history.vuln && <Breadcrumb.Divider icon='right angle' /> }
-          { history.vuln && <Breadcrumb.Section><Link to={`/vulnerability/${history.vuln}`}>Vulnerability {history.vuln}</Link></Breadcrumb.Section> }
+          {history}
         </Breadcrumb>
       </Segment>
     );
   }
-  render() {
+  render = () => {
     const { fetchLoading, fetchError } = this.props;
     return (
       <div>
@@ -176,10 +387,14 @@ Layout.propTypes = {
     acronym: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   fetchAudits: () => dispatch(FETCH_AUDITS()),
+  fetchProfileInfo: () => dispatch(FETCH_PROFILE_INFO()),
   reset: () => dispatch(RESET_STATE_STORE()),
 });
 
@@ -188,6 +403,11 @@ const mapStateToProps = state => ({
   fetchLoading: state.audits.fetchLoading,
   fetchError: state.audits.fetchError,
   client: state.profile.info,
+  scans: state.scans.list,
+  pages: state.pages.list,
+  machines: state.machines.list,
+  vulnerabilities: state.vulnerabilities.list,
+  webvulnerabilities: state.webvulnerabilities.list,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Layout);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Layout));

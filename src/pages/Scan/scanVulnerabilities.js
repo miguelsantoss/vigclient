@@ -50,6 +50,7 @@ class ScanVulns extends Component {
         <Table.Row>
           <Table.HeaderCell>IP Address</Table.HeaderCell>
           <Table.HeaderCell>Source</Table.HeaderCell>
+          <Table.HeaderCell />
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -83,7 +84,8 @@ class ScanVulns extends Component {
       return (
         <Table.Row key={machine.machine_id}>
           <Table.Cell>{machines[machineIndex].ip_address}</Table.Cell>
-          <Table.Cell><Link to={`/vulnerability/${machine.vuln_id}`}>Vulnerabilities</Link></Table.Cell>
+          <Table.Cell><Link to={`/machine/${machine.machine_id}`}>Vulnerabilities</Link></Table.Cell>
+          <Table.Cell><Link to={`/vulnerability/${machine.vuln_id}`}>Info</Link></Table.Cell>
         </Table.Row>
       );
     });
@@ -225,7 +227,7 @@ ScanVulns.propTypes = {
         service: PropTypes.string.isRequired,
       })).isRequired,
     })).isRequired,
-  }),
+  }).isRequired,
 };
 
 ScanVulns.defaultProps = {
@@ -237,7 +239,12 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = (state, ownProps) => ({
-  scan: _.find(state.scans.list, { id: parseInt(ownProps.match.params.id, 10) }),
+  scan: _.find(state.scans.list, { id: parseInt(ownProps.match.params.id, 10) }) || {
+    category: '',
+    id: parseInt(ownProps.match.params.id, 10),
+    machines: [],
+    vulnerabilities: [],
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ScanVulns);
