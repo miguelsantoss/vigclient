@@ -2,10 +2,10 @@ import _ from 'lodash';
 
 import { APP_INIT, RESET_STATE } from '../../actions/common';
 import {
-  FETCH_SCAN_BY_ID_SUCCESS,
-  FETCH_SCAN_BY_ID_LOADING,
-  FETCH_SCAN_BY_ID_FAIL,
-} from '../../actions/scans';
+  FETCH_MACHINE_BY_ID_SUCCESS,
+  FETCH_MACHINE_BY_ID_LOADING,
+  FETCH_MACHINE_BY_ID_FAIL,
+} from '../../actions/machines';
 
 const initialState = {
   list: [],
@@ -13,14 +13,14 @@ const initialState = {
 
 export default function audits(state = initialState, action) {
   let list;
-  let scan;
+  let machine;
   let index;
   switch (action.type) {
     case APP_INIT:
       return {
         ...state,
       };
-    case FETCH_SCAN_BY_ID_LOADING:
+    case FETCH_MACHINE_BY_ID_LOADING:
       list = _.cloneDeep(state.list);
       index = _.findIndex(list, { id: parseInt(action.result.id, 10) });
 
@@ -32,8 +32,10 @@ export default function audits(state = initialState, action) {
           id: parseInt(action.result.id, 10),
           fetchError: false,
           fetchLoading: true,
-          category: '',
-          machines: [],
+          ip_address: '',
+          hostname: '',
+          dns_name: '',
+          operating_system: '',
           vulnerabilities: [],
         });
       }
@@ -42,24 +44,24 @@ export default function audits(state = initialState, action) {
         ...state,
         list,
       };
-    case FETCH_SCAN_BY_ID_SUCCESS:
-      scan = action.result;
-      scan.fetchError = false;
-      scan.fetchLoading = false;
+    case FETCH_MACHINE_BY_ID_SUCCESS:
+      machine = action.result;
+      machine.fetchError = false;
+      machine.fetchLoading = false;
 
       list = _.cloneDeep(state.list);
-      index = _.findIndex(list, { id: scan.id });
+      index = _.findIndex(list, { id: machine.id });
       if (index !== -1) {
-        list[index] = scan;
+        list[index] = machine;
       } else {
-        list.push(scan);
+        list.push(machine);
       }
 
       return {
         ...state,
         list,
       };
-    case FETCH_SCAN_BY_ID_FAIL:
+    case FETCH_MACHINE_BY_ID_FAIL:
       list = _.cloneDeep(state.list);
       index = _.findIndex(list, { id: parseInt(action.result.id, 10) });
 

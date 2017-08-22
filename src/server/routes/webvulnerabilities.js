@@ -12,9 +12,13 @@ router.get('/:id', (req, res) => {
   WebVulnerabilities.query({
     select: ['*'],
     where: { id },
-  }).fetch().then((vuln) => {
+  }).fetch({ withRelated: 'pages.audits' }).then((vuln) => {
     const vulnItem = vuln.toJSON();
     if (vulnItem.client_id === userId) {
+      vulnItem.audit_id = vulnItem.pages.audits.id;
+      vulnItem.audit_date = vulnItem.pages.audits.created_at;
+      vulnItem.page_url = vulnItem.pages.url;
+      delete vulnItem.pages;
       delete vulnItem.client_id;
       delete vulnItem.created_at;
       delete vulnItem.updated_at;

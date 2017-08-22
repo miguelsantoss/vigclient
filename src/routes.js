@@ -10,6 +10,7 @@ import Audit from './pages/Audits/Audit';
 import Page from './pages/Page';
 import Scan from './pages/Scan';
 import ScanVulnerabilities from './pages/Scan/scanVulnerabilities';
+import Machine from './pages/Machine';
 import Vulnerability from './pages/Vulnerability';
 import WebVulnerability from './pages/Vulnerability/webvulnerability';
 import Home from './pages/Home';
@@ -30,6 +31,7 @@ const Routes = () => (
           <Route path='/scan/:id/vulnerabilities' component={requireAuth(ScanVulnerabilities)} />
           <Route path='/scan/:id' component={requireAuth(Scan)} />
           <Route path='/page/:id' component={requireAuth(Page)} />
+          <Route path='/machine/:id' component={requireAuth(Machine)} />
           <Route path='/vulnerability/:id' component={requireAuth(Vulnerability)} />
           <Route path='/webvulnerability/:id' component={requireAuth(WebVulnerability)} />
           <Route component={PageNotFound} status={404} />
@@ -39,5 +41,4 @@ const Routes = () => (
   </BrowserRouter>
 );
 
-// <Route path='/machine/:id' component={requireAuth(MachineWrapper)} />
 export default Routes;

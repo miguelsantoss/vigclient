@@ -9,14 +9,17 @@ router.get('/:id', (req, res) => {
   const id = req.params.id;
   const userId = req.currentUser.id;
   Pages.query({
-    select: ['id', 'url', 'client_id'],
+    select: ['id', 'url', 'client_id', 'audit_id'],
     where: { id },
-  }).fetch({ withRelated: 'webVulnerabilities' }).then((page) => {
+  }).fetch({ withRelated: ['audits', 'webVulnerabilities'] }).then((page) => {
     const pageItem = page.toJSON();
     if (pageItem.client_id === userId) {
       delete pageItem.client_id;
-      pageItem.webVulnerabilities.forEach((vuln) => {
-        if (vuln.risk_factor === 4) vuln.risk_factor = 3;
+      pageItem.audit_date = pageItem.audits.created_at;
+      delete pageItem.audits;
+      for (let i = 0; i < pageItem.webVulnerabilities.length; i += 1) {
+        const vuln = pageItem.webVulnerabilities[i];
+        if (vuln.risk_factor > 3) vuln.risk_factor = 3;
         delete vuln.source;
         delete vuln.source_id;
         delete vuln.status;
@@ -27,7 +30,7 @@ router.get('/:id', (req, res) => {
         delete vuln.content_revised;
         delete vuln.created_at;
         delete vuln.updated_at;
-      });
+      }
       pageItem.webVulnerabilities.sort((a, b) => {
         if (a.risk_factor < b.risk_factor) return 1;
         if (a.risk_factor > b.risk_factor) return -1;

@@ -16,13 +16,18 @@ router.get('/:id', (req, res) => {
       'output', 'description', 'category', 'client_id',
     ],
     where: { id },
-  }).fetch({ withRelated: 'clients' }).then((vuln) => {
+  }).fetch({ withRelated: ['clients', 'machines.scan'] }).then((vuln) => {
     const vulnItem = vuln.toJSON();
     delete vulnItem.created_at;
     delete vulnItem.updated_at;
     if (vulnItem.clients.id === userId) {
       delete vulnItem.clients;
       if (vulnItem.risk_factor > 3) vulnItem.risk_factor = 3;
+      vulnItem.scan_id = vulnItem.machines.scan.id;
+      vulnItem.scan_network = vulnItem.machines.scan.network;
+      vulnItem.machine_ip = vulnItem.machines.ip_address;
+      vulnItem.audit_id = vulnItem.machines.scan.audit_id;
+      delete vulnItem.machines;
       vulnItem.machinesWithVuln = [vulnItem.machine_id];
       Vulnerabilities.query({
         select: ['category', 'id', 'machine_id', 'vid', 'title',

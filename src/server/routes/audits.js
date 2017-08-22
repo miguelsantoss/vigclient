@@ -12,30 +12,32 @@ router.get('/:id', (req, res) => {
     where: { id: req.params.id },
   }).fetch({ withRelated: ['scans', 'pages'] }).then((audits) => {
     const auditItem = audits.toJSON();
-    if (auditItem.client_id !== userId) {
-      res.status(404).json({});
-    } else {
+    if (auditItem.client_id === userId) {
       if (auditItem.scans) {
-        auditItem.scans.forEach((scan) => {
+        for (let i = 0; i < auditItem.scans.length; i += 1) {
+          const scan = auditItem.scans[i];
           delete scan.locked;
           delete scan.state;
           delete scan.audit_id;
           delete scan.client_id;
           delete scan.created_at;
           delete scan.updated_at;
-        });
+        }
       }
       if (auditItem.pages) {
-        auditItem.pages.forEach((page) => {
+        for (let i = 0; i < auditItem.pages.length; i += 1) {
+          const page = auditItem.pages[i];
           delete page.locked;
           delete page.state;
           delete page.audit_id;
           delete page.client_id;
           delete page.created_at;
           delete page.updated_at;
-        });
+        }
       }
       res.json(auditItem);
+    } else {
+      res.status(404).json({});
     }
   });
 });
@@ -47,28 +49,31 @@ router.get('/', (req, res) => {
     where: { client_id: userId },
   }).fetchAll({ withRelated: ['scans', 'pages'] }).then((audits) => {
     const auditList = audits.toJSON();
-    auditList.forEach((audit) => {
-      if (audit.scans && audit.scans.length !== 0) {
-        audit.scans.forEach((scan) => {
+    for (let i = 0; i < auditList.length; i += 1) {
+      const auditItem = auditList[i];
+      if (auditItem.scans) {
+        for (let j = 0; j < auditItem.scans.length; j += 1) {
+          const scan = auditItem.scans[j];
           delete scan.locked;
           delete scan.state;
           delete scan.audit_id;
           delete scan.client_id;
           delete scan.created_at;
           delete scan.updated_at;
-        });
+        }
       }
-      if (audit.pages && audit.pages !== 0) {
-        audit.pages.forEach((page) => {
+      if (auditItem.pages) {
+        for (let j = 0; j < auditItem.pages.length; j += 1) {
+          const page = auditItem.pages[j];
           delete page.locked;
           delete page.state;
           delete page.audit_id;
           delete page.client_id;
           delete page.created_at;
           delete page.updated_at;
-        });
+        }
       }
-    });
+    }
     auditList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
     res.json(auditList);
   });
