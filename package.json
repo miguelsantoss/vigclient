@@ -60,6 +60,7 @@
     "babel-runtime": "6.23.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
     "chalk": "1.1.3",
+    "concurrently": "^3.5.0",
     "css-loader": "0.28.1",
     "dotenv": "4.0.0",
     "eslint": "3.19.0",
@@ -95,8 +96,9 @@
     "why-did-you-update": "^0.0.8"
   },
   "scripts": {
-    "start": "babel-node scripts/start.js",
-    "start:server": "cross-env NODE_ENV=development nodemon src/server/index.js --exec babel-node",
+    "client": "babel-node scripts/start.js",
+    "server": "cross-env NODE_ENV=development nodemon src/server/index.js --exec babel-node",
+    "start": "concurrently --kill-others \"yarn run client\" \"yarn run server\"",
     "build": "babel-node scripts/build.js",
     "test": "babel-node scripts/test.js --env=jsdom"
   },
