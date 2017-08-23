@@ -105,14 +105,11 @@
   "proxy": "http://localhost:8080",
   "babel": {
     "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "current"
-          }
+      ["env", {
+        "targets": {
+          "browsers": ["last 2 versions", "safari >= 7"]
         }
-      ],
+      }],
       "stage-2",
       "react"
     ],
