@@ -7,12 +7,24 @@ import config from '../config';
 
 const app = express();
 
-if (process.env.NODE_ENV === 'production') app.use(morgan('combined'));
-else app.use(morgan('dev'));
+// Don't expose any software information
+app.disable('x-powered-by');
 
+// Use morgan for logging
+// FIXME: log into file for prod?
+if (app.get('env') === 'production') {
+  app.use(morgan('combined'));
+} else {
+  app.use(morgan('dev'));
+}
+
+// Use body parser to parse json from messages
 app.use(bodyParser.json());
+
+// Use Gzip to compress the responses
 app.use(compression());
 app.use('/api', routes);
+// app.use(render);
 
 const server = app.listen(config.port, () => {
   const port = server.address().port;
